@@ -20,4 +20,41 @@
 
 ***
 
+## Faculty Research Profile: Selected Publications
+
+This section provides a structured bibliography of research contributions by faculty members, categorized by publication type.
+
+### I. Journal Articles
+
+| Author(s) | Title | Journal / Publication | Year |
+| :--- | :--- | :--- | :--- |
+| Alam, Md Ariful, et al. | Analyzing the Impact of Opportunistic Maintenance Optimization on Manufacturing Industries in Bangladesh | BenchCouncil Transactions on Benchmarks, Standards and Evaluations | 2024 |
+| Md Hasan Ali, et al. | Time Series Long-Term Forecasting of Per Capita Electricity Consumption for Bangladesh | ASM Science Journal | 2021 |
+| Palash Saha, Md Ariful Alam | Smart Management Scheme for the Efficient Control of Industrial Inventory | American Journal of Industrial and Business Management | 2022 |
+| Md. Al Amin, et al. | Optimization of Design Parameters for Achieving Highest Impact Strength of Rice straw Based Polymer Composite | Int. Journal of Emerging Engineering Research and Technology | 2017 |
+| Ahasan Habib, et al. | Cladding of titanium and magnesium alloy by explosive welding using underwater shockwave technique | Materials Science Forum | 2013 |
+| Ruma, M. Ahasan Habib, et al. | Treatment of Wastewater by Underwater Discharge in Gas Bubbling Water | Int. Journal of Renewable Energy and Environmental Engineering | 2015 |
+| Ruma, M. Ahasan Habib, et al. | A Survey of Non-thermal plasma and their generation methods | Int. Journal of Renewable Energy and Environmental Engineering | 2016 |
+| Sudipa Sarker, M. Ahasan Habib, et al. | Application of QFD for Improving Customer Perceived Quality of Synthetic Fiber | Global Journal of Management and Business Research | 2010 |
+| Benjir Ahmed, M. Ahasan Habib, et al. | Android Apps Controlled ROBO Car by Microcontroller using Bluetooth | Int. Journal of Industrial Electronics, Control and Robotic | 2018 |
+| M. Ahasan Habib, Ruma | Energy Calculation of Joining of Dissimilar Metals by Using Numerical Simulation Method | Int. Journal of Renewable Energy & Environmental Engineering | 2017 |
+| M. Ahasan Habib, Ruma, et al. | Joining of Titanium and Magnesium by Conventional Explosive Welding Method | Int. Journal of Renewable Energy & Environmental Engineering | 2017 |
+| Ruma, M. Ahasan Habib, et al. | Physical and Chemical Effects of Underwater Discharge with a Variation in Solution Conductivity | DUET Journal | 2017 |
+| Nurunnabi, Kazi Nazmul Islam, et al. | Efficiency Losses of a Modern Loom with Analytical Explanation | Scholars Journal of Engineering and Technology | 2018 |
+| M. Ahasan Habib, et al. | Identification and Reduction of Waste in an Industry (Ventura Leatherware Mfy Bd Ltd.) Using VSM | American Journal of Engineering Research | 2021 |
+| Ruma, M. Ahasan Habib, et al. | Generation of High Voltage Discharge Plasma for Wastewater Treatment | Int. Journal of Advanced Research in Science, Engineering and Technology | 2020 |
+
+### II. International Conference Proceedings
+
+| Author(s) | Title | Conference / Venue | Year |
+| :--- | :--- | :--- | :--- |
+| Md Ariful Alam, et al. | Impact of Fiber Orientation on the Mechanical Properties of Rice Straw-Glass Fiber Reinforced Polymer Composites | Int. Conf. on Industrial Engineering and Operations Management, Istanbul | 2022 |
+| Md Firoz Kabir, et al. | Plastic Recycling from Municipal Solid Waste in Jashore City of Bangladesh | 11th Annual Int. Conf. on Industrial Engineering and Operations Management, Singapore | 2021 |
+| Ahasan Habib, et al. | Explosive welding of titanium and magnesium alloy using conventional and underwater shockwave technique | XII Int. Symposium on Explosive Production of New Materials, Poland | 2014 |
+| Rafat Mahmud Hridoy, et al. | Implications of Tpm in Domestic Based Ready Made Garments Industry in Bangladesh During Corona Pandemic | 11th Annual Int. Conf. on Industrial Engineering and Operations Management, Singapore | 2021 |
+| M. Ahasan Habib, et al. | Explosive Welding of Titanium and Magnesium Alloy Using Interlayer | 63rd Japanese Joint Conference for the Technology of Plastic, Japan | 2012 |
+| M. Ahasan Habib, et al. | High Quality Yarn Production Using QFD: Bangladesh Perspective | Int. Conf. on Mechanical, Industrial and Energy Engineering, Khulna | 2013 |
+
+***
+
 *Source: [BAUST Journal Office](https://www.baust.edu.bd/administration/offices/journal-office/)*

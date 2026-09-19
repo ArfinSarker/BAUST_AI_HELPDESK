@@ -45,11 +45,22 @@ def structure_extracted_text(raw_text: str) -> str:
     """
     Pass raw OCR/PDF text through Gemini to clean noise, remove icon artifacts,
     and organize strictly into clear Markdown sections.
+    For large multi-page documents, preserves 100% lossless full-text without truncation.
     """
     if not raw_text or len(raw_text.strip()) < 10:
         return raw_text
 
     cleaned_pretext = clean_raw_icon_artifacts(raw_text)
+
+    # For large documents (> 4000 chars), preserve 100% of the text losslessly to prevent LLM output truncation
+    if len(cleaned_pretext) > 4000:
+        # Check if top header is missing and add one if needed
+        if not cleaned_pretext.strip().startswith("#"):
+            lines = [l.strip() for l in cleaned_pretext.splitlines() if l.strip()]
+            first_line = lines[0] if lines else "Document"
+            if len(first_line) < 80 and not first_line.startswith("---"):
+                cleaned_pretext = f"# {first_line}\n\n" + cleaned_pretext
+        return cleaned_pretext
 
     prompt = f"""
 You are an expert university document digitization and data organization assistant for Bangladesh Army University of Science and Technology (BAUST).
@@ -244,6 +255,10 @@ def merge_into_existing_document(existing_text: str, new_text: str) -> str:
         return new_text
     if not new_text or not new_text.strip():
         return existing_text
+
+    # If combined size is large (> 4000 chars), append cleanly to prevent LLM truncation and preserve 100% of data
+    if len(existing_text) + len(new_text) > 4000:
+        return f"{existing_text.strip()}\n\n---\n\n## Additional Information & Updates\n\n{new_text.strip()}"
 
     prompt = f"""
 You are an expert Knowledge Base Editor for Bangladesh Army University of Science and Technology (BAUST).

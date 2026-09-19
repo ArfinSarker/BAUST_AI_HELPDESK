@@ -1,39 +1,145 @@
 # Undergraduate Examination Policy & Academic Regulations
 # Bangladesh Army University of Science and Technology (BAUST)
-
-## Academic Calendar & Term Structure
-*   Each academic year consists of two regular terms (Winter and Summer).
-*   Each term spans **26 weeks**:
-    *   7 weeks: Classes (Part 1)
-    *   1 week: Mid-term Examination
-    *   7 weeks: Classes (Part 2)
-    *   2 weeks: Preparatory Leave (PL)
-    *   3 weeks: Final Term Examination
-    *   3 weeks: Industrial Training / Term Vacation
-    *   2 weeks: Referred / Backlog Examination & Result Publication
+**Saidpur Cantonment, Saidpur, Nilphamari**
 
 ---
 
-## Grading Scheme & Grade Point Average (GPA)
+## Overview
+BAUST is a private university sponsored by the Bangladesh Army Welfare Trust (est. 15 Feb 2015). This policy governs the academic conduct, evaluation, and examination procedures for all undergraduate programs under the Private University Act 2010.
+
+---
+
+## Academic Calendar & Term Structure
+Each academic level consists of two regular terms (Term-I and Term-II). Each term spans **26 weeks**:
+
+| Sl. No. | Events | Duration (Weeks) |
+| :--- | :--- | :--- |
+| 1 | Classes before Mid Term | 7 |
+| 2 | Mid Term Examination | 1 |
+| 3 | Mid Term Break/ Vacation | 1 |
+| 4 | Classes after Mid Term | 7 |
+| 5 | Preparatory Leave for Term Final | 2 |
+| 6 | Term Final Examination | 3 |
+| 7 | Industrial Attachment/Vacation/Result Pub. | 3 |
+| 8 | Referred/ Improvement/ Backlog Exam | 2 |
+
+---
+
+## Course Pattern & Credit Structure
+*   **Designation System:** Two to four-letter code + four-digit number.
+    *   1st digit: Level | 2nd digit: Term | 3rd digit: Dept use | 4th digit: Area/Group.
+    *   Last digit: Odd (Theory), Even (Sessional).
+*   **Credit Assignment:**
+    *   Theoretical: 1 lecture hour/week = 1 credit hr.
+    *   Sessional/Laboratory: 2 class hours/week = 1 credit hr.
+
+---
+
+## Grading Scheme & Performance Evaluation
 
 | Numerical Marks | Letter Grade | Grade Point | Assessment |
 | :--- | :--- | :--- | :--- |
 | **80% and above** | **A+** | **4.00** | Outstanding |
-| **75% to 79%** | **A** | **3.75** | Excellent |
-| **70% to 74%** | **A-** | **3.50** | Very Good |
-| **65% to 69%** | **B+** | **3.25** | Good |
-| **60% to 64%** | **B** | **3.00** | Satisfactory |
-| **55% to 59%** | **B-** | **2.75** | Above Average |
-| **50% to 54%** | **C+** | **2.50** | Average |
-| **45% to 49%** | **C** | **2.25** | Below Average |
-| **40% to 44%** | **D** | **2.00** | Pass |
-| **Less than 40%** | **F** | **0.00** | Fail |
+| **75% to below 80%** | **A** | **3.75** | Excellent |
+| **70% to below 75%** | **A-** | **3.50** | Very Good |
+| **65% to below 70%** | **B+** | **3.25** | Good |
+| **60% to below 65%** | **B** | **3.00** | Satisfactory |
+| **55% to below 60%** | **B-** | **2.75** | Above Average |
+| **50% to below 55%** | **C+** | **2.50** | Average |
+| **45% to below 50%** | **C** | **2.25** | Below Average |
+| **40% to below 45%** | **D** | **2.00** | Pass |
+| **Below 40%** | **F** | **0.00** | Fail |
+
+*   **Special Grades:** I (Incomplete), W (Withdrawal), X (Continuation).
+
+---
+
+## Distribution of Marks
+### Theory Courses
+*   Class Performance: 5% | Class Tests: 15% | Assignments/Presentations: 5% | Mid-Term: 15% | Final Exam: 60%
+
+### Sessional Courses
+*   **Lab-based:** Attendance 25%, Report 15%, Mid-term 20%, Final 30%, Viva 10%.
+*   **Project-based:** Attendance 25%, Report/Programming 15%, Mid-term 20%, Final 30%, Viva/Presentation 10%.
+
+---
+
+## Examination & Attendance Policies
+*   **Attendance Requirements:**
+    *   **75% attendance:** Mandatory to sit for the final exam.
+    *   **60% - 74% attendance:** Fine required to sit for the final exam.
+    *   **Below 60%:** Not allowed to sit for the final exam.
+*   **Examination Coordination:** The Office of the Controller of Examination is the central coordinating body for all examinations at BAUST.
+*   **Conduct:** No name on answer scripts, no electronic devices. Unfair means result in expulsion/cancellation.
+*   **Rounding:** Marks rounded to nearest whole number; GPA/CGPA rounded to two decimal places.
 
 ---
 
 ## Term Promotion & Academic Progression Rules
-1. **Theory Courses:** A student must pass a minimum required number of theory courses each term. A maximum of **2 failed theory courses** is allowed to be carried forward as Referred/Backlog for promotion to the next term.
-2. **Sessional (Laboratory) Courses:** Students **MUST pass all sessional/laboratory courses**. Failing any sessional course results in year loss or term retention.
+1. **Theory Courses:** Must pass 2/4, 3/5, or 4/6 courses.
+2. **Sessional (Laboratory) Courses:** Maximum two failed courses allowed.
 3. **Degree Completion Criteria:**
-   *   Minimum Cumulative Grade Point Average (CGPA) required for graduation: **2.20**.
-   *   Maximum time limit to complete the 4-year B.Sc. Engineering degree: **6 academic years**.
+   *   Minimum CGPA required for graduation: **2.20**.
+   *   Maximum time limit: **6 academic years (12 terms)**.
+   *   **Honors:** CGPA 3.75+ (Engineering/BBA).
+   *   **Distinction:** CGPA 3.75+ (English).
+   *   **Dean's List:** GPA 3.75+ in two consecutive terms.
+   *   **Gold Medal:** 1st position in batch, CGPA ≥ 3.75, no 'F' grades, and no disciplinary records.
+
+---
+
+## Examination Fees & Registration
+*   **Mid-Term Make-up:** Tk 500.
+*   **Referred/Improvement/Backlog:** Registration Fee: Tk 1,000/course; New continuous assessment for backlog: Tk 5,000/course.
+*   **Special Backlog:** Available for final-year students with max 12 credits remaining (30 days after final results).
+*   **Late Registration:** Penalty of Tk 500 per week.
+
+---
+
+## Notices & Policies
+### Final Examination Results (Winter 2025 & Summer 2025)
+**Ref:** BAUST/CoE-003/2016/0645 | **Date:** 05/02/2026
+
+The results of the Final Examination Winter 2025 (Regular) and Summer 2024 (Special) held from 14/12/2025 to 05/01/2026, along with the results of Referred/Improvement/Backlog examinations held from 25/01/2026 to 29/01/2026, are published.
+
+*   **Controller of Examinations:** Lt Col Syed Salahuddin Nayan, SUP, BGBM, BGOM, psc, Inf (Retd)
+*   **Deputy Controller of Examinations:** Muhammad Solaiman
+
+---
+
+## Admission Information
+### 3.1 Eligibility Criteria (B.Sc. Engg.)
+*   **SSC/HSC:** Minimum GPA 3.5 in both, with a total minimum GPA of 7.5.
+*   **O/A Level:** Minimum 5 subjects in O Level and 3 subjects (Math, Physics, Chemistry) in A Level with minimum C grade in all subjects.
+*   **Break of Study:** Candidates with more than one year break are ineligible.
+
+### 3.2 Admission Test Structure
+| Subject | Weightage |
+| :--- | :--- |
+| Mathematics | 30% |
+| Physics | 30% |
+| Chemistry | 30% |
+| English | 10% |
+
+### 3.3 Final Selection Criteria
+*   **Written Admission Test:** 75% | **GPA of SSC/Equivalent:** 10% | **GPA of HSC/Equivalent:** 15%
+
+---
+
+## Department of Industrial and Production Engineering (IPE)
+### 2.1 Departmental Contact
+*   **Head of Department:** Department of Industrial and Production Engineering (IPE)
+*   **Email:** headipe@baust.edu.bd | **Mobile:** +8801769675565
+
+### 2.2 Laboratory Facilities
+1. Machine Shop and Production Process Lab | 2. Foundry and Welding Shop | 3. Engineering Drawing Lab | 4. CAD and Simulation Lab | 5. Materials Handling & Maintenance Engineering Lab | 6. Ergonomics & Safety Management Lab | 7. Measurement, Instrumentation and Quality Control Lab | 8. Metallurgy Lab | 9. Strength of Materials Lab | 10. Mechanics of Machinery Lab | 11. Fluid Mechanics and Machinery Lab | 12. Thermodynamics & Heat Transfer Lab
+
+### 2.3 Result Summaries (IPE)
+*(Full result datasets for all levels are available in the official university records.)*
+
+---
+
+## Administrative Contact
+*   **University Website:** [www.baust.edu.bd](http://www.baust.edu.bd)
+*   **General Email:** info@baust.edu.bd
+*   **Admission Office:** Room No. 104, Administration Building, BAUST, Saidpur.

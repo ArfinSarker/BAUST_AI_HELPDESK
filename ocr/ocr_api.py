@@ -103,34 +103,69 @@ Output ONLY the extracted, structured Markdown.
 
 def extract_text_from_pdf(file_path: str) -> str:
     """
-    Extracts text from PDF files.
-    1. First attempts high-fidelity digital text extraction across ALL pages using pypdf.
-    2. If the PDF contains no text (i.e. scanned images/handouts), falls back to Gemini Multimodal Vision.
-    3. Final fallback to OCR.Space.
+    Extracts text from PDF files using an industry-grade multi-engine pipeline:
+    1. Primary: PyMuPDF (fitz) — ultra-fast, handles 500+ pages, preserves text flow, tables, and unicode.
+    2. Secondary: pdfplumber — high precision for table structures and complex layouts.
+    3. Tertiary: pypdf — robust digital stream parser.
+    4. Scanned PDF fallback: Gemini Multimodal Vision / page-by-page OCR.
     """
-    # 1. Primary: Extract all digital text from all pages using pypdf
+    extracted_text = ""
+
+    # 1. Primary Engine: PyMuPDF (pymupdf)
+    try:
+        import pymupdf
+        doc = pymupdf.open(file_path)
+        pages_text = []
+        for i, page in enumerate(doc):
+            page_str = page.get_text("text").strip()
+            if page_str:
+                pages_text.append(f"--- Page {i+1} ---\n{page_str}")
+        doc.close()
+        if pages_text:
+            combined = "\n\n".join(pages_text).strip()
+            if len(combined) > 50:
+                return combined
+    except Exception as e:
+        print(f"[PyMuPDF Extraction Exception] {file_path}: {e}")
+
+    # 2. Secondary Engine: pdfplumber
+    try:
+        import pdfplumber
+        with pdfplumber.open(file_path) as pdf:
+            pages_text = []
+            for i, page in enumerate(pdf.pages):
+                page_str = page.extract_text()
+                if page_str and page_str.strip():
+                    pages_text.append(f"--- Page {i+1} ---\n{page_str.strip()}")
+            if pages_text:
+                combined = "\n\n".join(pages_text).strip()
+                if len(combined) > 50:
+                    return combined
+    except Exception as e:
+        print(f"[pdfplumber Extraction Exception] {file_path}: {e}")
+
+    # 3. Tertiary Engine: pypdf
     try:
         from pypdf import PdfReader
         reader = PdfReader(file_path)
-        extracted_pages = []
+        pages_text = []
         for i, page in enumerate(reader.pages):
-            page_text = page.extract_text()
-            if page_text and page_text.strip():
-                extracted_pages.append(f"--- Page {i+1} ---\n{page_text.strip()}")
-
-        full_pdf_text = "\n\n".join(extracted_pages).strip()
-        # If substantial text was extracted, return it (lossless and handles 100+ pages)
-        if len(full_pdf_text) > 80:
-            return full_pdf_text
+            page_str = page.extract_text()
+            if page_str and page_str.strip():
+                pages_text.append(f"--- Page {i+1} ---\n{page_str.strip()}")
+        if pages_text:
+            combined = "\n\n".join(pages_text).strip()
+            if len(combined) > 50:
+                return combined
     except Exception as e:
         print(f"[pypdf Extraction Exception] {file_path}: {e}")
 
-    # 2. Scanned / image PDF fallback: Gemini Multimodal Vision
+    # 4. Scanned / Image PDF fallback: Gemini Multimodal Vision
     gemini_result = gemini_multimodal_extract(file_path, "application/pdf")
     if gemini_result and len(gemini_result.strip()) > 20:
         return gemini_result
 
-    # 3. Last fallback: OCR.Space
+    # 5. Final fallback: OCR.Space
     return image_to_text(file_path, is_pdf=True)
 
 

@@ -1,15 +1,49 @@
 # Department of Industrial and Production Engineering (IPE)
 # Bangladesh Army University of Science and Technology (BAUST)
 
+**Document Version:** April 2026 (Updated based on 18th Academic Council Meeting)
+
 ## Department Overview
 The Department of Industrial and Production Engineering (IPE) at BAUST provides an advanced, industry-aligned curriculum combining core mechanical/manufacturing engineering principles with modern industrial management, automation, operations research, and quality engineering.
 
 ---
 
-## Head of the Department
-*   **Head:** Prof. Dr. Imtiaz Ahmed Choudhury / Md. Ariful Alam
+## General Information
+### Introduction
+BAUST was established on 15 February 2015 by the Bangladesh Armed Forces to provide high-quality technical education. The university is located at Saidpur Cantonment, Saidpur, Nilphamari. The university offers four-year Bachelor of Science (B.Sc.) degrees in various engineering disciplines.
+
+### Academic Objectives
+*   To provide undergraduate education in CSE, EEE, ME, IPE, and CE.
+*   To produce skilled, disciplined, and self-motivated engineers.
+*   To foster research and development in science and technology.
+
+---
+
+## Departmental Administration
+### Head of the Department
+*   **Head:** Md. Ariful Alam (Assistant Professor & Head)
 *   **Official Email:** headipe@baust.edu.bd
-*   **Official Phone:** +8801769675565 / +8801733543389
+*   **Official Phone:** +8801769675565
+*   **Website:** [www.baust.edu.bd](http://www.baust.edu.bd)
+*   **General Email:** info@baust.edu.bd
+*   **Location:** Saidpur Cantonment, Saidpur, Nilphamari
+
+### Editorial Committee (IPE)
+*   **Md. Ariful Alam**, Assistant Professor & Head, IPE, BAUST
+*   **Dr. Imtiaz Ahmed Choudhury**, Professor, IPE, BAUST
+*   **Md. Ragib Abid**, Lecturer, IPE, BAUST
+*   **Hrittik Mural**, Lecturer, IPE, BAUST
+*   **Md. Mushiur Rahman**, Lecturer, IPE, BAUST
+*   **Md. Mahabub-A-Khoda**, Lecturer, IPE, BAUST
+*   **Abdul Halim**, Lecturer, IPE, BAUST
+*   **Parth Pratim Das Pritam**, Lecturer, IPE, BAUST
+*   **Nadim Mahmud**, Lecturer, IPE, BAUST
+*   **A.S.M. Shahriar Hossain Alvee**, Lecturer, IPE, BAUST
+
+### Industrial Specialists
+*   Shah Sufi Nur Mohammad
+*   Md. Ashraful Alam Chowdhury
+*   Md. Atiqure Rahman
 
 ---
 
@@ -19,7 +53,7 @@ The Department of Industrial and Production Engineering (IPE) at BAUST provides 
 | :--- | :--- | :--- | :--- | :--- |
 | **Prof. Dr. Imtiaz Ahmed Choudhury** | Professor & Dean, Faculty of ME | +8801769675557 | dean_me@baust.edu.bd | PhD, CEng (UK) |
 | **Prof. Dr. Md Shameem Reza** | Professor & Treasurer | +8801769662723 | treasurer@baust.edu.bd | PhD (RU) |
-| **Md. Ariful Alam** | Assistant Professor | +8801769675566 | arif.ipe@baust.edu.bd | B.Sc in IPE (KUET), M.Sc in IPE (KUET) |
+| **Md. Ariful Alam** | Assistant Professor & Head | +8801769675566 | arif.ipe@baust.edu.bd | B.Sc in IPE (KUET), M.Sc in IPE (KUET) |
 | **Md. Ragib Abid** | Lecturer | 01819754317 | abid@baust.edu.bd | B.Sc in IPE (KUET), M.Sc (Ongoing) |
 | **Hrittik Mural** | Lecturer | 01786106369 | hrittikmuralarnab1998@gmail.com | B.Sc in IPE (CUET), M.Sc (Ongoing) |
 | **Md. Mahabub-A-Khoda** | Lecturer | 01717977861 | mahabub_ipe@baust.edu.bd | B.Sc in IPE (KUET), M.Sc (Ongoing) |
@@ -31,8 +65,8 @@ The Department of Industrial and Production Engineering (IPE) at BAUST provides 
 
 ---
 
-## Adjunct Faculty Members
-*   **Dr. Sultana Parveen** (Professor, Dept. of IPE, BUET) - Email: sparveen@ipe.buet.ac.bd
+## External Faculty Members
+*   **Dr. A.K.M Masud** (Professor, Dept. of IPE, BUET)
 *   **Dr. Abdullahil Azeem** (Professor, Dept. of IPE, BUET) - Email: azeem@ipe.buet.ac.bd
 
 ---
@@ -40,14 +74,6 @@ The Department of Industrial and Production Engineering (IPE) at BAUST provides 
 ## Faculty Members on Study Leave
 *   **Md Mehedi Hasan** (Lecturer) - PhD Candidate, Auburn University, USA
 *   **Md. Injamamul Haque Protyai** (Lecturer) - PhD Student, University of Arkansas, USA
-
----
-
-## Former / Ex-Faculty Members
-*   **Md. Mushiur Rahman** (Lecturer)
-*   **Parth Pratim Das Pritam** (Lecturer)
-*   **Nadim Mahmud** (Lecturer)
-*   **Md. Firoz Kabir** (Assistant Professor)
 
 ---
 
@@ -59,16 +85,118 @@ The Department of Industrial and Production Engineering (IPE) at BAUST provides 
 
 ---
 
-## Departmental Laboratory Facilities
-1. Materials Handling & Maintenance Engineering Lab (Admin Building, Ground Floor)
-2. Measurement, Instrumentation and Quality Control Lab (Academic Building, 1st Floor)
-3. Foundry and Welding Shop (Newly Extended Campus)
-4. Metallurgy Lab (Academic Building, Ground Floor)
-5. Engineering Drawing Lab (Academic Building, Ground Floor)
-6. Strength of Materials Lab (Academic Building, Ground Floor)
-7. Fluid Mechanics and Machinery Lab (Academic Building, Ground Floor)
-8. Thermodynamics & Heat Transfer Lab (Academic Building, Ground Floor)
-9. Mechanics of Machinery Lab (Academic Building, Ground Floor)
-10. Ergonomics & Safety Management Lab (Academic Building, 1st Floor)
-11. Machine Shop and Production Process Lab (Academic Building, Ground Floor)
-12. CAD and Simulation Lab (Academic Building, 1st Floor)
+## Departmental Laboratory & Workshop Facilities
+1. Machine Shop and Production Process Lab
+2. Foundry and Welding Shop
+3. Engineering Drawing Lab
+4. CAD and Simulation Lab
+5. Materials Handling & Maintenance Engineering Lab
+6. Ergonomics & Safety Management Lab
+7. Measurement, Instrumentation and Quality Control Lab
+8. Metallurgy Lab
+9. Strength of Materials Lab
+10. Mechanics of Machinery Lab
+11. Fluid Mechanics and Machinery Lab
+12. Thermodynamics & Heat Transfer Lab
+
+---
+
+## Admission Information
+### Programs Offered
+| Faculty | Department | Program | Offered Since |
+| :--- | :--- | :--- | :--- |
+| Electrical and Computer Engineering | CSE | B.Sc. Engg. in CSE | 2015 |
+| Electrical and Computer Engineering | EEE | B.Sc. Engg. in EEE | 2015 |
+| Electrical and Computer Engineering | ICT | B.Sc. Engg. in ICT | 2022* |
+| Mechanical Engineering | ME | B.Sc. Engg. in ME | 2015 |
+| Mechanical Engineering | IPE | B.Sc. Engg. in IPE | 2016 |
+| Civil Engineering | CE | B.Sc. Engg. in CE | 2019 |
+| Business Studies | Business Admin | BBA | 2017 |
+| Business Studies | AIS | BBA in AIS | 2022* |
+| Sciences & Humanities | English | BA (Hons) in English | 2017 |
+
+*\*Subject to UGC approval*
+
+### Admission Qualifications (B.Sc. Engg.)
+1.  **HSC/Alim:** Minimum GPA 3.0 (with additional subject).
+2.  **SSC/Dakhil:** Minimum GPA 3.0.
+3.  **Combined GPA:** Minimum 7.0 (SSC + HSC).
+4.  **GCE O/A Level:** Minimum C Grade in 5 O-Level subjects; Minimum C Grade in 2 A-Level subjects (Math, Physics/Chemistry). Total GPA 6.0.
+5.  **Diploma Holders:** Minimum CGPA 3.0 in Diploma and GPA 3.0 in SSC.
+6.  **Direct Admission:** Applicants with a total GPA of 9.0 or more in SSC/HSC are eligible for direct admission.
+
+### Admission Test Syllabus (100 Marks, 2 Hours)
+*   **Format:** Written and MCQ
+*   **Mathematics:** 40%
+*   **Physics:** 30%
+*   **Chemistry:** 20%
+*   **English:** 10%
+
+### Tuition Fee Waivers
+*   **Freedom Fighters' Children:** 3% seats (100% waiver).
+*   **Remote/Undeveloped Areas:** 3% seats (100% waiver).
+*   **Armed Forces Personnel (Children/Spouse):** 10% waiver.
+*   **Sibling:** 20% waiver for one sibling.
+*   **Diploma Holders:** 15 credits waiver (for CGPA 3.00+).
+*   **Extra-Meritorious Students:**
+    *   5.00+5.00 (both without additional): 30%
+    *   5.00+5.00 (one without additional): 20%
+    *   5.00+5.00 (both with additional): 10%
+
+---
+
+## Examination & Grading Policy
+### Grading System
+| Grade | Grade Points | Numerical Markings |
+| :--- | :--- | :--- |
+| A+ | 4.00 | 80% and above |
+| A | 3.75 | 75% to below 80% |
+| A- | 3.50 | 70% to below 75% |
+| B+ | 3.25 | 65% to below 70% |
+| B | 3.00 | 60% to below 65% |
+| B- | 2.75 | 55% to below 60% |
+| C+ | 2.50 | 50% to below 55% |
+| C | 2.25 | 45% to below 50% |
+| D | 2.00 | 40% to below 45% |
+| F | 0.00 | Below 40% |
+
+### Theory Marks Distribution
+*   **Class Performance:** 05%
+*   **Class Tests:** 15%
+*   **Assignments/Presentations:** 05%
+*   **Mid-Term Assessment:** 15%
+*   **Final Examination:** 60%
+
+---
+
+## Curriculum Requirements
+### Credit Hour Requirements
+| Category | Credit Hours |
+| :--- | :--- |
+| IPE Core Courses | 91.75 |
+| IPE Optional Courses | 6.00 |
+| Arts and Science Courses | 27.50 |
+| ME Department Courses | 22.25 |
+| CSE Department Courses | 4.50 |
+| EEE Department Courses | 9.00 |
+| Industrial Practice | 1.50 |
+| **Total** | **162.50** |
+
+---
+
+## BAUST Industrial and Production Engineering (IPE) Alumni Overview
+### Summary
+The Department of IPE at BAUST has established a strong professional footprint across various economic sectors in Bangladesh. Graduates are actively contributing to the RMG, FMCG, electronics, pharmaceuticals, automotive, and logistics industries.
+
+### Alumni Career & Higher Study Details
+For detailed records and real-time updates regarding BAUST IPE Alumni, please visit the official [Alumni Database](https://docs.google.com/spreadsheets/d/11JoBPnMv5_Nmb7ca2x3Qy_1RmUPrGH7Hb2vVXLGpnjA/edit?gid=650105720#gid=650105720).
+
+---
+
+## Contact Information
+**Alumni Coordination:** For updates or profile additions, please contact: **info.ipe@baust.edu.bd**
+
+---
+
+## Disclaimer
+*This document is for guidance purposes only. Information is subject to change at any time without prior notification. The Department of IPE and BAUST bear no responsibility for inconveniences or expenditure caused by changes to this bulletin.*

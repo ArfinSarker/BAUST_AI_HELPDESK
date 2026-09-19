@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BAUST Knowledge Base | Admin Portal</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Immediate Theme Initializer (Prevents Flickering/Flash) -->
+  <script>
+    (function() {
+      try {
+        var saved = localStorage.getItem("baust_theme");
+        var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        var theme = saved || (prefersDark ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      } catch (e) {}
+    })();
+  </script>
+
+  <style>
+    /* =========================================
+       THEME VARIABLES (DAY & NIGHT MODE)
+       ========================================= */
+    :root, [data-theme="light"] {
+      --bg-base: #F8FAFC;
+      --primary: #0F3460;
+      --primary-dark: #0A192F;
+      --accent: #1E6091;
+      --accent-green: #2A9D8F;
+      --danger: #DC2626;
+      --surface: #FFFFFF;
+      --border: #CBD5E1;
+      --text: #0F172A;
+      --text-muted: #64748B;
+      --card-title: #0A192F;
+      --input-bg: #F1F5F9;
+      --input-border: #94A3B8;
+      --table-stripe: #F8FAFC;
+      --dropzone-bg: #F8FAFC;
+      --dropzone-border: #94A3B8;
+      --dropzone-hover-bg: #EFF6FF;
+      --dropzone-hover-border: #2563EB;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --shadow: 0 10px 25px -5px rgba(15, 52, 96, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+    }
+
+    [data-theme="dark"] {
+      --bg-base: #080D1A;
+      --primary: #38BDF8;
+      --primary-dark: #070B14;
+      --accent: #38BDF8;
+      --accent-green: #10B981;
+      --danger: #EF4444;
+      --surface: #0F172A;
+      --border: rgba(56, 189, 248, 0.22);
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+      --card-title: #38BDF8;
+      --input-bg: #141F36;
+      --input-border: rgba(56, 189, 248, 0.35);
+      --table-stripe: #131E35;
+      --dropzone-bg: rgba(15, 23, 42, 0.8);
+      --dropzone-border: rgba(56, 189, 248, 0.35);
+      --dropzone-hover-bg: rgba(56, 189, 248, 0.08);
+      --dropzone-hover-border: #38BDF8;
+      --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.7), 0 0 20px rgba(56, 189, 248, 0.07);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      height: 100%;
+      background-color: var(--bg-base);
+      transition: background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-base);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1), color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 50% 0%, #0F1D38 0%, #080D1A 60%, #04070E 100%);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 0;
+      transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="dark"] body::before {
+      opacity: 1;
+    }
+
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-base); }
+    ::-webkit-scrollbar-thumb { background: var(--input-border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+    /* Navbar */
+    .admin-navbar {
+      position: relative;
+      z-index: 50;
+      background: var(--primary-dark);
+      color: white;
+      padding: 14px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.35s ease, border-color 0.35s ease;
+    }
+
+    [data-theme="dark"] .admin-navbar {
+      background: rgba(15, 23, 42, 0.94);
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+      backdrop-filter: blur(12px);
+    }
+
+    .admin-brand { display: flex; align-items: center; gap: 12px; }
+
+    .admin-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #1E6091, #2A9D8F);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 17px;
+      color: white;
+    }
+
+    [data-theme="dark"] .admin-logo {
+      background: linear-gradient(135deg, #2563EB, #06B6D4);
+      box-shadow: 0 0 12px rgba(6, 182, 212, 0.4);
+    }
+
+    .admin-title h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .admin-title p { font-size: 11px; color: #94A3B8; }
+    .admin-actions { display: flex; align-items: center; gap: 10px; }
+
+    .nav-btn {
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      border: none;
+    }
+
+    .nav-btn.secondary {
+      background: rgba(255, 255, 255, 0.12);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .nav-btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-1px);
+    }
+
+    [data-theme="dark"] .nav-btn.secondary {
+      background: #141F36;
+      border-color: rgba(56, 189, 248, 0.3);
+      color: #38BDF8;
+    }
+
+    [data-theme="dark"] .nav-btn.secondary:hover {
+      background: #1C2B4B;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+    }
+
+    .nav-btn.danger {
+      background: rgba(239, 68, 68, 0.18);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #FECACA;
+    }
+
+    .nav-btn.danger:hover {
+      background: var(--danger);
+      color: white;
+    }
+
+    /* Dashboard Layout */
+    .dashboard-container {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      width: 100%;
+      margin: 24px auto;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* Flash Alerts */
+    .flash-messages { display: flex; flex-direction: column; gap: 10px; }
+
+    .flash-alert {
+      padding: 12px 18px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .flash-alert.success { background: #ECFDF5; border: 1px solid #A7F3D0; color: #065F46; }
+    [data-theme="dark"] .flash-alert.success { background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.35); color: #34D399; }
+
+    .flash-alert.error { background: #FEF2F2; border: 1px solid #FECACA; color: #991B1B; }
+    [data-theme="dark"] .flash-alert.error { background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.35); color: #F87171; }
+
+    .flash-alert.info { background: #EFF6FF; border: 1px solid #BFDBFE; color: #1E40AF; }
+    [data-theme="dark"] .flash-alert.info { background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.35); color: #38BDF8; }
+
+    /* KPI Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 22px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
+      transition: background-color 0.35s ease, border-color 0.35s ease;
+    }
+
+    .stat-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--accent);
+    }
+
+    .stat-card.green::before { background: var(--accent-green); }
+
+    [data-theme="dark"] .stat-card::before { background: #38BDF8; box-shadow: 0 0 10px #38BDF8; }
+    [data-theme="dark"] .stat-card.green::before { background: #10B981; box-shadow: 0 0 10px #10B981; }
+
+    .stat-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); }
+    .stat-value { font-family: 'Outfit', sans-serif; font-size: 28px; font-weight: 700; color: var(--text); }
+    .stat-sub { font-size: 11px; color: var(--text-muted); }
+
+    /* Action Panels */
+    .panels-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+    .panel-card {
+      position: relative;
+      z-index: 10;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      transition: background-color 0.35s ease, border-color 0.35s ease;
+    }
+
+    .panel-header h2 { font-family: 'Outfit', sans-serif; font-size: 18px; color: var(--card-title); font-weight: 700; display: flex; align-items: center; gap: 8px; }
+    .panel-header p { font-size: 12px; color: var(--text-muted); margin-top: 4px; line-height: 1.4; }
+
+    /* Enhanced Inputs & Form Styling */
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label { font-size: 13px; font-weight: 600; color: var(--text); }
+
+    /* Improved Document Upload Dropzone */
+    .file-dropzone {
+      position: relative;
+      border: 2px dashed var(--dropzone-border);
+      border-radius: var(--radius-md);
+      padding: 24px 16px;
+      text-align: center;
+      background-color: var(--dropzone-bg);
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .file-dropzone:hover {
+      border-color: var(--dropzone-hover-border);
+      background-color: var(--dropzone-hover-bg);
+    }
+
+    [data-theme="dark"] .file-dropzone:hover {
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
+    }
+
+    .dropzone-icon {
+      font-size: 32px;
+      margin-bottom: 6px;
+      transition: transform 0.2s ease;
+    }
+
+    .file-dropzone:hover .dropzone-icon {
+      transform: translateY(-3px);
+    }
+
+    .dropzone-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .dropzone-subtext {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .file-input-hidden {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    /* File Name Display Box */
+    .file-selection-info {
+      display: none;
+      margin-top: 10px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text);
+      word-break: break-all;
+    }
+
+    .text-input, .textarea-input {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid var(--input-border);
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 13px;
+      background: var(--input-bg);
+      color: var(--text);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .text-input:focus, .textarea-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25);
+    }
+
+    .textarea-input { resize: vertical; min-height: 110px; }
+
+    /* Button Customization */
+    .btn-submit {
+      background: linear-gradient(135deg, #0F3460, #1E6091);
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 10px rgba(15, 52, 96, 0.2);
+    }
+
+    .btn-submit:hover { transform: translateY(-1px); }
+    .btn-submit:active { transform: translateY(0); }
+
+    [data-theme="dark"] .btn-submit {
+      background: linear-gradient(135deg, #2563EB 0%, #06B6D4 100%);
+      box-shadow: 0 4px 14px rgba(6, 182, 212, 0.35);
+    }
+
+    /* Tables */
+    .table-card {
+      position: relative;
+      z-index: 10;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: background-color 0.35s ease, border-color 0.35s ease;
+    }
+
+    .table-header {
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .table-header h2 { font-family: 'Outfit', sans-serif; font-size: 17px; color: var(--card-title); }
+    .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+    th { background: var(--input-bg); padding: 12px 18px; color: var(--text-muted); font-weight: 600; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    td { padding: 12px 18px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(56, 189, 248, 0.04); }
+    [data-theme="dark"] tr:hover td { background: #141F36; }
+
+    .file-badge { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; color: var(--primary); }
+
+    .btn-delete {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: var(--danger);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-delete:hover {
+      background: var(--danger);
+      color: white;
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+    }
+
+    /* Preview Card */
+    .preview-card {
+      background: var(--input-bg);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      border: 1px solid var(--border);
+      font-family: monospace;
+      font-size: 12px;
+      white-space: pre-wrap;
+      max-height: 250px;
+      overflow-y: auto;
+      word-break: break-word;
+      color: var(--text);
+    }
+
+    [data-theme="dark"] .preview-card { background: #080D1A; color: #7DD3FC; }
+
+    /* Responsive Breakdown */
+    @media (max-width: 768px) {
+      .admin-navbar { padding: 10px 16px; flex-wrap: wrap; gap: 10px; }
+      .admin-title h1 { font-size: 15px; }
+      .admin-title p { display: none; }
+      .admin-actions { width: 100%; justify-content: flex-end; }
+      .dashboard-container { margin: 14px auto; padding: 0 12px; gap: 16px; }
+      .stats-grid, .panels-grid { grid-template-columns: 1fr; gap: 12px; }
+      .panel-card { padding: 16px 14px; }
+      .table-header { padding: 14px 16px; flex-direction: column; align-items: flex-start; }
+      th, td { padding: 10px 12px; font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Admin Navbar -->
+  <header class="admin-navbar">
+    <div class="admin-brand">
+      <div class="admin-logo">B</div>
+      <div class="admin-title">
+        <h1>BAUST Knowledge Portal</h1>
+        <p>Administrative Control & Vector Database Management</p>
+      </div>
+    </div>
+    <div class="admin-actions">
+      <!-- Theme Switcher Button -->
+      <button id="themeToggleBtn" class="nav-btn secondary" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+        <span id="themeIcon">🌙</span>
+        <span id="themeLabel">Night</span>
+      </button>
+
+      <a href="/" class="nav-btn secondary" target="_blank">
+        💬 Student Chat ↗
+      </a>
+      <a href="/logout" class="nav-btn danger">
+        🚪 Logout
+      </a>
+    </div>
+  </header>
+
+  <main class="dashboard-container">
+
+    <!-- Flash Notifications -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <div class="flash-alert {{ category }}">
+              <span>{{ message }}</span>
+              <button onclick="this.parentElement.remove()" style="background:none;border:none;cursor:pointer;color:inherit;font-weight:bold;">✕</button>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- KPI Overview -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-label">Active Knowledge Documents</span>
+        <span class="stat-value">{{ documents|length }}</span>
+        <span class="stat-sub">Managed in knowledge_base/</span>
+      </div>
+      <div class="stat-card green">
+        <span class="stat-label">Vector Database Chunks</span>
+        <span class="stat-value">{{ total_chunks }}</span>
+        <span class="stat-sub">FAISS Cosine Similarity Index</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">AI Generation Model</span>
+        <span class="stat-value" style="font-size: 19px;">{{ model_name }}</span>
+        <span class="stat-sub">Google GenAI Active</span>
+      </div>
+    </section>
+
+    <!-- Upload & Manual Entry Panels -->
+    <section class="panels-grid">
+
+      <!-- Panel 1: Document Upload (Improved Day & Night UI) -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <h2>📄 Upload University Document</h2>
+          <p>Supports <strong>PDF</strong>, <strong>Plain Text (.txt)</strong>, and <strong>Images (PNG/JPG)</strong>. Automatic text extraction and vector sync.</p>
+        </div>
+
+        <form id="uploadForm" method="POST" enctype="multipart/form-data" onsubmit="handleUploadSubmit(event)">
+          <input type="hidden" name="action" value="upload">
+          
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label for="docNameInput">Document Title / Name (Optional)</label>
+            <input 
+              type="text" 
+              id="docNameInput"
+              name="doc_name" 
+              class="text-input" 
+              placeholder="e.g. Message_From_Chief_of_Army_Staff"
+            >
+            <span style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">
+              Will be saved with underscores (e.g., <code>Message_From_Chief_of_Army_Staff.txt</code>).
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label>Select File(s)</label>
+            <div class="file-dropzone" onclick="document.getElementById('fileInput').click()">
+              <div class="dropzone-icon">📂</div>
+              <div class="dropzone-text">Click or Drag & Drop file(s) here</div>
+              <div class="dropzone-subtext">PDFs, TXT, PNG, JPG (Multiple files supported)</div>
+              
+              <input 
+                type="file" 
+                name="image" 
+                id="fileInput" 
+                class="file-input-hidden" 
+                required 
+                accept=".pdf,.txt,.png,.jpg,.jpeg" 
+                multiple
+                onchange="updateFileLabel(this)"
+              >
+            </div>
+            <!-- File Name Display Box -->
+            <div id="selectedFileInfo" class="file-selection-info"></div>
+          </div>
+
+          <button type="submit" id="uploadBtn" class="btn-submit" style="margin-top: 14px; width: 100%;">
+            ⚡ Upload & Sync to AI Database
+          </button>
+        </form>
+      </div>
+
+      <!-- Panel 2: Direct Text Notice Composer -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <h2>✍️ Publish Direct Notice / Policy</h2>
+          <p>Quickly paste or type an urgent announcement, date change, or tuition fee update without needing a file.</p>
+        </div>
+
+        <form method="POST">
+          <input type="hidden" name="action" value="direct_notice">
+
+          <div class="form-group">
+            <label for="noticeTitle">Notice Title</label>
+            <input type="text" id="noticeTitle" name="title" class="text-input" placeholder="e.g. Admission_Requirements_2026" required>
+            <span style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">
+              Saved as <code>[Title].txt</code> (spaces are converted to underscores).
+            </span>
+          </div>
+
+          <div class="form-group" style="margin-top: 10px;">
+            <label for="noticeContent">Notice Content & Instructions</label>
+            <textarea id="noticeContent" name="content" class="textarea-input" placeholder="Enter full admission details, requirements, dates, or contact info..." required></textarea>
+          </div>
+
+          <button type="submit" class="btn-submit" style="margin-top: 14px; width: 100%;">
+            📝 Save & Rebuild AI Index
+          </button>
+        </form>
+      </div>
+
+    </section>
+
+    <!-- Extraction Preview (If Available) -->
+    {% if text %}
+    <section class="panel-card">
+      <div class="panel-header">
+        <h2>🔍 Latest Text Extraction Preview</h2>
+        <p>Text successfully extracted from your uploaded file and committed to memory:</p>
+      </div>
+      <div class="preview-card">{{ text }}</div>
+    </section>
+    {% endif %}
+
+    <!-- Managed Knowledge Base Table -->
+    <section class="table-card">
+      <div class="table-header">
+        <h2>📚 Managed Knowledge Base Files ({{ documents|length }})</h2>
+        <form method="POST" action="/admin/reindex">
+          <button type="submit" class="btn-submit" style="padding: 8px 16px; font-size: 12px;" title="Rebuild Vector Index">
+            🔄 Rebuild / Sync All Vectors
+          </button>
+        </form>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Document Name</th>
+              <th>Size</th>
+              <th>Last Modified</th>
+              <th>Status</th>
+              <th style="text-align: right;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for doc in documents %}
+            <tr>
+              <td>
+                <span class="file-badge">📄 {{ doc.name }}</span>
+              </td>
+              <td>{{ doc.size_kb }} KB</td>
+              <td>{{ doc.modified }}</td>
+              <td>
+                <span style="color: #10B981; font-size: 11px; font-weight: 600; background: rgba(16, 185, 129, 0.15); padding: 3px 8px; border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.3);">
+                  Indexed
+                </span>
+              </td>
+              <td style="text-align: right;">
+                <!-- Reliable Delete Form Action -->
+                <form method="POST" action="/admin/delete/{{ doc.name }}" onsubmit="return confirmDelete('{{ doc.name }}');" style="display:inline;">
+                  <button type="submit" class="btn-delete">
+                    🗑️ Delete
+                  </button>
+                </form>
+              </td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="5" style="text-align: center; padding: 30px; color: var(--text-muted);">
+                No documents found in knowledge_base/. Upload a document above to get started.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // Theme Switcher Logic
+    function updateThemeUI(theme) {
+      const themeIcon = document.getElementById("themeIcon");
+      const themeLabel = document.getElementById("themeLabel");
+
+      if (theme === "dark") {
+        document.documentElement.setAttribute("data-theme", "dark");
+        if (themeIcon) themeIcon.textContent = "☀️";
+        if (themeLabel) themeLabel.textContent = "Day";
+      } else {
+        document.documentElement.setAttribute("data-theme", "light");
+        if (themeIcon) themeIcon.textContent = "🌙";
+        if (themeLabel) themeLabel.textContent = "Night";
+      }
+    }
+
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute("data-theme");
+      const nextTheme = (currentTheme === "dark") ? "light" : "dark";
+      localStorage.setItem("baust_theme", nextTheme);
+      updateThemeUI(nextTheme);
+    }
+
+    // Selected File Label Feedback
+    function updateFileLabel(input) {
+      const infoBox = document.getElementById('selectedFileInfo');
+      if (input.files && input.files.length > 0) {
+        if (input.files.length === 1) {
+          infoBox.textContent = `📎 Selected File: ${input.files[0].name}`;
+        } else {
+          infoBox.textContent = `📎 Selected ${input.files.length} Files`;
+        }
+        infoBox.style.display = 'block';
+      } else {
+        infoBox.style.display = 'none';
+      }
+    }
+
+    // Upload Submit Loading State
+    function handleUploadSubmit(event) {
+      const fileInput = document.getElementById('fileInput');
+      if (!fileInput.files.length) {
+        event.preventDefault();
+        alert('Please select at least one file to upload.');
+        return;
+      }
+
+      const uploadBtn = document.getElementById('uploadBtn');
+      uploadBtn.innerHTML = '⏳ Uploading & Syncing... Please wait';
+      uploadBtn.style.opacity = '0.75';
+      uploadBtn.style.pointerEvents = 'none';
+    }
+
+    // Reliable Delete Confirmation
+    function confirmDelete(docName) {
+      return confirm(`Are you sure you want to delete "${docName}" from the knowledge base?\nThis action will update the AI vector index automatically.`);
+    }
+
+    // Sync button UI on initial load
+    document.addEventListener("DOMContentLoaded", function() {
+      const activeTheme = document.documentElement.getAttribute("data-theme") || "light";
+      updateThemeUI(activeTheme);
+    });
+  </script>
+</body>
+</html>

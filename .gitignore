@@ -1,0 +1,17 @@
+# Python environment & cache
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment Variables & Secrets (CRITICAL)
+.env
+
+# Upload batches & temporary files
+uploads/*
+!uploads/.gitkeep
+
+# Operating system files
+.DS_Store
+Thumbs.db

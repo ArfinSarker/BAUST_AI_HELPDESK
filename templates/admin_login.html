@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Admin Login | BAUST AI Help Desk</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Immediate Theme Initializer (Prevents Flash of Unstyled Content) -->
+  <script>
+    (function() {
+      try {
+        var saved = localStorage.getItem("baust_theme");
+        var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        if (saved === "dark" || (!saved && prefersDark)) {
+          document.documentElement.setAttribute("data-theme", "dark");
+        } else {
+          document.documentElement.setAttribute("data-theme", "light");
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <style>
+    /* =========================================
+       THEME VARIABLES & MODERN PALETTE
+       ========================================= */
+    :root, [data-theme="light"] {
+      --bg-gradient: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
+      --surface: #FFFFFF;
+      --surface-border: #E2E8F0;
+      --primary: #2563EB;
+      --primary-hover: #1D4ED8;
+      --header-color: #0F172A;
+      --text: #1E293B;
+      --text-muted: #64748B;
+      --input-bg: #F8FAFC;
+      --input-border: #CBD5E1;
+      --input-focus-ring: rgba(37, 99, 235, 0.2);
+      --card-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+      --btn-text: #FFFFFF;
+      --radius-lg: 20px;
+      --radius-md: 12px;
+    }
+
+    [data-theme="dark"] {
+      --bg-gradient: linear-gradient(135deg, #030712 0%, #0F172A 50%, #030712 100%);
+      --surface: #0F172A;
+      --surface-border: rgba(56, 189, 248, 0.2);
+      --primary: #38BDF8;
+      --primary-hover: #0284C7;
+      --header-color: #F8FAFC;
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+      --input-bg: #1E293B;
+      --input-border: #334155;
+      --input-focus-ring: rgba(56, 189, 248, 0.25);
+      --card-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.1);
+      --btn-text: #0F172A;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      min-height: 100vh;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+      transition: background 0.35s ease, color 0.35s ease;
+    }
+
+    /* Ambient background glow */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 50% 10%, rgba(56, 189, 248, 0.12) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Top Navigation / Controls */
+    .top-controls {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      z-index: 20;
+    }
+
+    .theme-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(12px);
+      color: #F8FAFC;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .theme-toggle-btn:hover {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    /* Login Card Container */
+    .login-card {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 420px;
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 40px 36px;
+      box-shadow: var(--card-shadow);
+      border: 1px solid var(--surface-border);
+      animation: cardFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: background-color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    @keyframes cardFadeIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .brand-icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 16px;
+      background: linear-gradient(135deg, #2563EB, #06B6D4);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 26px;
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+    }
+
+    .login-header h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 22px;
+      color: var(--header-color);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .login-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    /* Alert / Flash Box */
+    .alert-box {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #EF4444;
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .alert-box.success {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: #10B981;
+    }
+
+    /* Form Fields */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-control {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--input-border);
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-family: inherit;
+      background: var(--input-bg);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .input-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--input-focus-ring);
+    }
+
+    /* Password Toggle Icon Button */
+    .toggle-password-btn {
+      position: absolute;
+      right: 12px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 14px;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s ease;
+    }
+
+    .toggle-password-btn:hover {
+      color: var(--text);
+    }
+
+    /* Submit Button */
+    .btn-login {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary);
+      color: var(--btn-text);
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-login:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+    }
+
+    .btn-login:active {
+      transform: translateY(0);
+    }
+
+    /* Card Footer */
+    .login-footer {
+      text-align: center;
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--surface-border);
+    }
+
+    .back-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s ease;
+    }
+
+    .back-link:hover {
+      color: var(--primary);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      body { padding: 16px; }
+      .login-card { padding: 30px 22px; }
+      .top-controls { top: 16px; right: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Theme Toggle -->
+  <div class="top-controls">
+    <button id="themeToggleBtn" class="theme-toggle-btn" onclick="toggleTheme()" type="button" aria-label="Toggle Dark/Light Mode">
+      <span id="themeIcon">🌙</span>
+      <span id="themeLabel">Night</span>
+    </button>
+  </div>
+
+  <!-- Login Card -->
+  <div class="login-card">
+    <div class="login-header">
+      <div class="brand-icon">B</div>
+      <h1>BAUST Administrator</h1>
+      <p>Sign in to manage AI knowledge & notices</p>
+    </div>
+
+    <!-- Handles standard error parameter & Flask flash messages -->
+    {% if error %}
+    <div class="alert-box">
+      <span>⚠️</span>
+      <span>{{ error }}</span>
+    </div>
+    {% endif %}
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert-box {{ 'success' if category == 'success' else '' }}">
+            <span>{{ '✅' if category == 'success' else '⚠️' }}</span>
+            <span>{{ message }}</span>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('admin_login') }}">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <div class="input-wrapper">
+          <input 
+            type="text" 
+            id="username" 
+            name="username" 
+            class="input-control" 
+            placeholder="e.g. admin" 
+            required 
+            autocomplete="username"
+            autofocus
+          >
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-wrapper">
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            class="input-control" 
+            placeholder="••••••••" 
+            required 
+            autocomplete="current-password"
+          >
+          <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility()" aria-label="Toggle password visibility">
+            <span id="eyeIcon">👁️</span>
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-login">
+        <span>🔒 Sign In to Admin Panel</span>
+      </button>
+    </form>
+
+    <div class="login-footer">
+      <a href="{{ url_for('home') }}" class="back-link">
+        ← Back to Student Help Desk
+      </a>
+    </div>
+  </div>
+
+  <script>
+    /* Theme Toggle Logic */
+    function syncThemeUI(theme) {
+      const themeIcon = document.getElementById("themeIcon");
+      const themeLabel = document.getElementById("themeLabel");
+
+      if (theme === "dark") {
+        document.documentElement.setAttribute("data-theme", "dark");
+        if (themeIcon) themeIcon.textContent = "☀️";
+        if (themeLabel) themeLabel.textContent = "Day";
+        localStorage.setItem("baust_theme", "dark");
+      } else {
+        document.documentElement.setAttribute("data-theme", "light");
+        if (themeIcon) themeIcon.textContent = "🌙";
+        if (themeLabel) themeLabel.textContent = "Night";
+        localStorage.setItem("baust_theme", "light");
+      }
+    }
+
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute("data-theme") || "light";
+      const nextTheme = (currentTheme === "dark") ? "light" : "dark";
+      syncThemeUI(nextTheme);
+    }
+
+    /* Show/Hide Password Logic */
+    function togglePasswordVisibility() {
+      const passwordInput = document.getElementById("password");
+      const eyeIcon = document.getElementById("eyeIcon");
+      
+      if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        eyeIcon.textContent = "🙈";
+      } else {
+        passwordInput.type = "password";
+        eyeIcon.textContent = "👁️";
+      }
+    }
+
+    /* Sync Theme UI state on DOM Load */
+    document.addEventListener("DOMContentLoaded", function() {
+      const activeTheme = document.documentElement.getAttribute("data-theme") || "light";
+      syncThemeUI(activeTheme);
+    });
+  </script>
+
+</body>
+</html>

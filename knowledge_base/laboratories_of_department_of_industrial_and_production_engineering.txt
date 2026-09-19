@@ -1,0 +1,64 @@
+# Department of Industrial and Production Engineering (IPE) - Laboratory Facilities
+
+The Department of IPE at BAUST is equipped with state-of-the-art laboratory facilities designed to bridge the gap between theoretical knowledge and real-world industrial applications. Students gain hands-on experience in manufacturing processes, automation (PLC/Robotics), and advanced simulation software (CAD/CAM, MATLAB, ANSYS, Arena).
+
+---
+
+## Laboratory Directory
+
+| Laboratory Name | Location |
+| :--- | :--- |
+| **Materials Handling & Maintenance Engineering Lab** | Ground Floor, Admin Building |
+| **Measurement, Instrumentation and Quality Control Lab** | 1st Floor, Academic Building |
+| **Foundry and Welding Shop** | Newly Extended Campus |
+| **Metallurgy Lab** | Ground Floor, Academic Building |
+| **Engineering Drawing Lab** | Ground Floor, Academic Building |
+| **Strength of Materials Lab** | Ground Floor, Academic Building |
+| **Fluid Mechanics and Machinery Lab** | Ground Floor, Academic Building |
+| **Thermodynamics & Heat Transfer Lab** | Ground Floor, Academic Building |
+| **Mechanics of Machinery Lab** | Ground Floor, Academic Building |
+| **Ergonomics & Safety Management Lab** | 1st Floor, Academic Building |
+| **Machine Shop and Production Process Lab** | Ground Floor, Academic Building |
+| **CAD and Simulation Lab** | 1st Floor, Academic Building |
+
+---
+
+## Detailed Laboratory Descriptions
+
+### Materials Handling & Maintenance Engineering Lab
+Equipped with modern material hauling appliances including screw, belt, roller, and chain conveyors. Designed to teach students the essence of industrial environments and the design of custom material handling systems and facility layouts.
+
+### Measurement, Instrumentation and Quality Control Lab
+A hub for practical innovation featuring Robotics Trainers (ROBOTEK II), Programmable Logic Controllers (PLC), Large Tool Maker’s Microscope, Temperature and Pressure Measurement Instruments, Industrial Mechanism Trainers, and Propeller Assembly.
+
+### Foundry and Welding Shop
+Located at the Newly Extended Campus, this facility supports metal casting, molding, melting, and various welding processes (arc and gas). It focuses on industrial safety procedures and material behavior.
+
+### Metallurgy Lab
+Contains ten modern metallurgical microscopes for internal grain structure analysis and a modern furnace for heat treatment and property testing at varying temperatures.
+
+### Engineering Drawing Lab
+Provides 60 well-furnished drawing tables. Students utilize manual drafting tools including T-squares, French curves, compasses, and precision scales to define engineering requirements.
+
+### Strength of Materials Lab
+Equipped with a Universal Testing Machine (UTM), Charpy Impact Testing Machine, and other instruments to conduct tensile, compression, bending, impact, and hardness tests.
+
+### Fluid Mechanics and Machinery Lab
+Focuses on fluid statics and dynamics, flow measurement, pipe flow losses, and the performance characteristics of pumps and turbines.
+
+### Thermodynamics & Heat Transfer Lab
+Features experimental setups for boilers, engines, refrigeration and air-conditioning systems, heat exchangers, and studies on conduction, convection, and radiation.
+
+### Mechanics of Machinery Lab
+Utilizes demonstration models to analyze cams and followers, gear trains, governors, flywheels, and the balancing of rotating/reciprocating masses.
+
+### Ergonomics & Safety Management Lab
+Equipped with instruments to measure workplace vibration, noise, illumination, and temperature. Focuses on human–machine interaction and occupational health and safety (OHS) risk assessment.
+
+### Machine Shop and Production Process Lab
+Facilitates the production of finished parts using lathes, shapers, planners, and milling machines, allowing students to operate industrial-grade manufacturing tools.
+
+### CAD and Simulation Lab
+Dedicated to computer-aided design and manufacturing.
+*   **Software Suite:** ANSYS 14.0, AutoCAD 2017, SOLIDWORKS 2016, MATLAB 2014.
+*   **Hardware:** LCD Mounting Projector.

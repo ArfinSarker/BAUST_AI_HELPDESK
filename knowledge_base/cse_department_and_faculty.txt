@@ -1,0 +1,425 @@
+## Department of Computer Science and Engineering (CSE)
+
+## Laboratory Facilities
+
+The following laboratories are maintained by the Department of Computer Science and Engineering at Bangladesh Army University of Science and Technology (BAUST) to support academic research and practical learning.
+
+| Laboratory Name | Official Link |
+| :--- | :--- |
+| Computer Programming and Operating System Lab | [View Lab Details](https://baust.edu.bd/cse/facilities/laboratories/computer-programming-and-operating-system-lab/) |
+| Database and Data Warehouse Lab | [View Lab Details](https://baust.edu.bd/cse/facilities/laboratories/database-and-data-warehouse-lab-2/) |
+| Digital and Embedded System Lab | [View Lab Details](https://baust.edu.bd/cse/facilities/laboratories/digital-and-embedded-system-lab-2/) |
+| Microprocessor and Interfacing Lab | [View Lab Details](https://baust.edu.bd/cse/facilities/laboratories/microprocessor-and-interfacing-lab-2/) |
+| Network and Hardware Lab | [View Lab Details](https://baust.edu.bd/cse/facilities/laboratories/network-and-hardware-lab/) |
+
+## Current / Active Faculty Members (Permanent & contractual active teachers)
+
+### Professor Dr. S.M. Jahangir Alam
+- **Designation**: Professor
+- **Department**: Computer Science and Engineering
+- **Phone**: 01766128002
+- **Email**: jahangir@baust.edu.bd
+- **Education / Qualifications**: Ph.D. (Doctor of Engineering; Specialized in AI & Computer Vision); Xiamen University
+- **Current Status**: Active
+
+### Dr. Engr. Mohammed Sowket Ali
+- **Designation**: Associate Professor
+- **Department**: Computer Science and Engineering
+- **Phone**: 01769662712 (Official), 01791895371 (Personal)
+- **Email**: sowket@baust.edu.bd (Official), sowket@gmail.com (Personal)
+- **Education / Qualifications**: PhD. and M.Engg. (South Korea), B.Sc. Engg., FIEB, FBCS, Senior Member- IACSIT
+- **Current Status**: Active
+
+### Engr. Md. Mamun Hossain
+- **Designation**: Associate Professor
+- **Department**: Computer Science and Engineering
+- **Phone**: 01769662713 (Official), 01717690847 (Personal)
+- **Email**: mhossain@baust.edu.bd, mamunsust12@gmail.com
+- **Education / Qualifications**: Ph.D. (Pursuing) in CSE, RUET, M.Sc. (Thesis) in CSE & B.Sc. Engg. in CSE, SUST.
+- **Current Status**: Active
+
+### Dr. Md Nakib Hayat Chowdhury
+- **Designation**: Associate Professor and Head
+- **Department**: Computer Science and Engineering
+- **Phone**: 01703899959 (Personal), 01769675560 (HoD)
+- **Email**: nakib@baust.edu.bd, hdcse@baust.edu.bd
+- **Education / Qualifications**: Research Fellow, ICTP, Trieste, Italy; PhD in Biomedical Engineering, UKM, Malaysia
+- **Current Status**: Active
+
+### Taher Muhammad Mahdee
+- **Designation**: Associate Professor
+- **Department**: Computer Science and Engineering
+- **Phone**: 01769662717 (Official), 01717244737 (Personal)
+- **Email**: mahdee@baust.edu.bd, t.mahdee@gmail.com
+- **Education / Qualifications**: Ph.D. (Pursuing) in CSE, Rajshahi University (RU); M.Sc. (Thesis), Rajshahi University (RU); B.Sc. (Hons) in CSE, Rajshahi University (RU)
+- **Current Status**: Active
+
+### Fatema Tuz Zohra
+- **Designation**: Assistant Professor
+- **Department**: Computer Science and Engineering
+- **Phone**: 01728646700
+- **Email**: fatema@baust.edu.bd, fatematuzzohramishu@gmail.com
+- **Education / Qualifications**: B.Sc. Engg in CSE, CUET; M.Sc. in CSE, Jahangirnagar University
+- **Current Status**: Active
+
+### Ashrafun Zannat
+- **Designation**: Assistant Professor
+- **Department**: Computer Science and Engineering
+- **Phone**: 01623687772
+- **Email**: spzannat@baust.edu.bd
+- **Education / Qualifications**: Ph.D. (Pursuing) in ICT, BUET; M.Sc. in ICT, BUET; B.Sc. in CSE, CUET
+- **Current Status**: Active
+
+### Ananna Hoque Shathi
+- **Designation**: Assistant Professor
+- **Department**: Computer Science and Engineering
+- **Phone**: 01759585645
+- **Email**: anannahoque.cse10@gmail.com
+- **Education / Qualifications**: M.Sc. Engg. in CSE, RUET; B.Sc. in CSE, RUET
+- **Current Status**: Active
+
+### Md. Mahadi Hasan
+- **Designation**: Assistant Professor
+- **Department**: Computer Science and Engineering
+- **Phone**: 01303516351
+- **Email**: mahadihasan@baust.edu.bd, mahadihasan1604020@gmail.com
+- **Education / Qualifications**: Ph.D. (Pursuing) in CSE, RUET; M.Sc. Engg. in CSE, RUET
+- **Current Status**: Active
+
+### Munira Akter Mou
+- **Designation**: Lecturer
+- **Department**: Computer Science and Engineering
+- **Phone**: 01717016355
+- **Email**: mou@baust.edu.bd
+- **Education / Qualifications**: M.Sc. Engg. in CSE, KUET (Pursuing); B.Sc. in CSE, BAUST
+- **Current Status**: Active
+
+### Anite Halim Sagor
+- **Designation**: Lecturer | Professor Under Officer (PUO), BNCC
+- **Department**: Computer Science and Engineering
+- **Phone**: 01784055149 (Official), 01575602354 (Personal)
+- **Email**: ahsagor@baust.edu.bd, anitehalim@gmail.com
+- **Education / Qualifications**: B.Sc. Engg. in CSE, BAUST; M.Sc. Engg. in CSE, KUET (Pursuing)
+- **Current Status**: Active
+
+### Md Zahim Hassan
+- **Designation**: Lecturer & Program Coordinator
+- **Department**: Computer Science and Engineering
+- **Phone**: 01736393334
+- **Email**: zahimhassan@baust.edu.bd
+- **Education / Qualifications**: M.Sc.(Engg.) in CSE, RUET (On-going); B.Sc.(Engg.) in CSE, KUET
+- **Current Status**: Active
+
+### Shifa Tasmiah Tisha
+- **Designation**: Lecturer
+- **Department**: Computer Science and Engineering
+- **Phone**: 01750391581
+- **Email**: stisha@baust.edu.bd
+- **Education / Qualifications**: B.Sc. Engg. in CSE, CUET; M.Sc. Engg. in CSE, CUET (Ongoing)
+- **Current Status**: Active
+
+### Mst. Sabrina Zaman
+- **Designation**: Lecturer
+- **Department**: Computer Science and Engineering
+- **Phone**: 01318049895
+- **Email**: sabrina@baust.edu.bd
+- **Education / Qualifications**: M.Sc. Engg. in CSE, KUET (Ongoing); B.Sc. Engg. in CSE, BAUST
+- **Current Status**: Active
+
+### Saad Ahmed
+- **Designation**: Lecturer
+- **Department**: Computer Science and Engineering
+- **Phone**: 01724407189
+- **Email**: saadahmed@baust.edu.bd
+- **Education / Qualifications**: M.Sc.(Engg.) in CSE, RUET (Ongoing); B.Sc. Engg. in CSE, BAUST
+- **Current Status**: Active
+
+### Md. Osama
+- **Designation**: Lecturer
+- **Department**: Computer Science and Engineering
+- **Phone**: 01994177881
+- **Email**: osama_cse@baust.edu.bd
+- **Education / Qualifications**: M.Sc. Engg. in CSE, RUET (Ongoing); B.Sc. Engg. in CSE, CUET
+- **Current Status**: Active
+
+### Sunayana Ghosh
+- **Designation**: Lecturer
+- **Department**: Computer Science and Engineering
+- **Phone**: 01723911582
+- **Email**: sunayana@baust.edu.bd, sg.sunayana101@gmail.com
+- **Education / Qualifications**: M.Sc. (Engg.) in CSE, RUET (On-going); B.Sc. Engg. in CSE, RUET
+- **Current Status**: Active
+
+### A K Z Rasel Rahman
+- **Designation**: Lecturer
+- **Department**: Computer Science and Engineering
+- **Phone**: 01701133689
+- **Email**: rasel@baust.edu.bd, rasel17716@cseku.ac.bd
+- **Education / Qualifications**: B.Sc. in CSE, KU; M.Sc. in CSE, KU
+- **Current Status**: Active
+
+### Abdullah Al Asif
+- **Designation**: Lecturer
+- **Department**: Computer Science and Engineering
+- **Phone**: 01343132304, 01836218266 (WhatsApp)
+- **Email**: aasif@baust.edu.bd, abdullahalasif2001.info@gmail.com
+- **Education / Qualifications**: M.Sc. Engg. in CSE, RUET (On-going); B.Sc. Engg. in CSE, RUET
+- **Current Status**: Active
+
+### S. M Golam Rifat
+- **Designation**: Lecturer
+- **Department**: Computer Science and Engineering
+- **Phone**: 01759810833 (WhatsApp)
+- **Email**: golamrifat@baust.edu.bd, golamrifat@gmail.com
+- **Education / Qualifications**: M.Sc. Engg. in CSE, RUET (On-going); B.Sc. Engg. in CSE, RUET
+- **Current Status**: Active
+
+### Maskur Al Shal Sabil
+- **Designation**: Lecturer
+- **Department**: Computer Science and Engineering
+- **Phone**: 01783015123
+- **Email**: maskur@baust.edu.bd, sabilhasan2018@gmail.com
+- **Education / Qualifications**: B.Sc.(Engg.) in ICT, MBSTU; M.Sc. (On-going), MBSTU
+- **Current Status**: Active
+
+### Roman Raihan
+- **Designation**: Lecturer
+- **Department**: Computer Science and Engineering
+- **Phone**: 01780972506
+- **Email**: roman@baust.edu.bd, raihan.baust@gmail.com
+- **Education / Qualifications**: M.Sc.(Engr.) in CSE, RUET (On-going); B.Sc. (Engr.) in CSE, SUST
+- **Current Status**: Active
+
+### Md. Minhazul Islam
+- **Designation**: Lecturer
+- **Department**: Computer Science and Engineering
+- **Phone**: 01714501019
+- **Email**: minhaz@baust.edu.bd, minhaz7553@gmail.com
+- **Education / Qualifications**: M.Sc. Engg. in CSE, RUET (On-going); B.Sc. Engg. in CSE, RUET
+- **Current Status**: Active
+
+### Md. Rakib Trofder
+- **Designation**: Lecturer
+- **Department**: Computer Science and Engineering
+- **Phone**: 01939649428
+- **Email**: trofder@baust.edu.bd, mdrakibtrofder@gmail.com
+- **Education / Qualifications**: M.Sc. Engg. in CSE, RUET (On-going); B.Sc. in SE, DU
+- **Current Status**: Active
+
+### Iqramul Islam
+- **Designation**: Lecturer
+- **Department**: Computer Science & Engineering (CSE)
+- **Phone**: 01745098256
+- **Email**: iqramul@baust.edu.bd, iqramul.learn@gmail.com
+- **Education / Qualifications**: B.Sc. (Engr.) in CSE, SUST
+- **Current Status**: Active
+
+### Khandker Moniruzzaman
+- **Designation**: Lecturer
+- **Department**: Computer Science & Engineering (CSE)
+- **Phone**: 01904159229
+- **Email**: moniruzzaman@baust.edu.bd, kmsehab130@gmail.com
+- **Education / Qualifications**: B.Sc. (Engr.) in CSE, RUET
+- **Current Status**: Active
+
+### Gourab Chandra Biswas
+- **Designation**: Lecturer
+- **Department**: Computer Science & Engineering (CSE)
+- **Phone**: 01785794036
+- **Email**: gourabbiswas@baust.edu.bd, gourabbiswas338@gmail.com
+- **Education / Qualifications**: B.Sc. (Engr.) in CSE, CUET
+- **Current Status**: Active
+
+### MD. Rabby Hossain
+- **Designation**: Lecturer
+- **Department**: Computer Science & Engineering (CSE)
+- **Phone**: 01324145340
+- **Email**: riyadcse@baust.edu.bd, riyadsdp333@gmail.com
+- **Education / Qualifications**: B.Sc. (Engr.) in CSE, BUET
+- **Current Status**: Active
+
+### Md. Sirajul Islam
+- **Designation**: Lecturer
+- **Department**: Computer Science and Engineering (CSE)
+- **Phone**: 01796144906
+- **Email**: sirajul.islam@baust.edu.bd
+- **Education / Qualifications**: B.Sc. (Engg.) in CSE, CUET
+- **Current Status**: Active
+
+## Faculty Members on Study Leave
+
+### Engr. Md. Al-Hasan
+- **Designation**: Associate Professor
+- **Department**: Computer Science and Engineering
+- **Phone**: 01722774004
+- **Email**: al-hasan@baust.edu.bd, hasan07cse@gmail.com
+- **Education / Qualifications**: PhD Fellow IC SETEP, RGD (ADB), UGC, BAU; M.Sc. in CSE, B.Sc. in CSE (CUET)
+- **Current Status**: On Study Leave
+
+### Md. Khalid Syfullah
+- **Designation**: Lecturer
+- **Department**: Computer Science and Engineering
+- **Phone**: 01769675591
+- **Email**: khalidsyfullah@baust.edu.bd, khalidsyfullah3@gmail.com
+- **Education / Qualifications**: Ph.D. (Pursuing), Southern Illinois University, USA; B.Sc. Engg. in CSE, KUET
+- **Current Status**: On Study Leave (Southern Illinois University, USA)
+
+### Engr. Md. Moazzem Hossain
+- **Designation**: Assistant Professor
+- **Department**: Computer Science and Engineering
+- **Phone**: 01719363034
+- **Email**: moazzem@baust.edu.bd, moazzem.cse10@gmail.com
+- **Education / Qualifications**: Ph.D. in CSE (Pursuing) KFUPM, Saudi Arabia; M.Sc. Engg. in CSE (RUET), B.Sc.
+- **Current Status**: On Study Leave (KFUPM, Saudi Arabia)
+
+### Engr. Hasan Muhammad Kafi
+- **Designation**: Assistant Professor
+- **Department**: Computer Science and Engineering
+- **Phone**: 01718781841, 01978781841
+- **Email**: kafi@baust.edu.bd, engr.kafi@gmail.com
+- **Education / Qualifications**: Ph.D. in CSE (Pursuing) BUET, M.Sc. Engg. in ICT (BUET), B.Sc. Engg. in CSE (CUET)
+- **Current Status**: On Study Leave
+
+### URMI SAHA
+- **Designation**: Lecturer
+- **Department**: Computer Science and Engineering
+- **Phone**: 01784573535
+- **Email**: sahaurmi@baust.edu.bd
+- **Education / Qualifications**: Ph.D. (Pursuing), Wake Forest University, USA; B. Sc. in CSE (CUET)
+- **Current Status**: On Study Leave (Wake Forest University, USA)
+
+## Ex-Faculty / Former Faculty Members
+
+### Alifa Shanzidah Manarat
+- **Designation**: Lecturer
+- **Department**: Computer Science and Engineering
+- **Phone**: 01839073895
+- **Email**: manarat@baust.edu.bd
+- **Education / Qualifications**: M.Sc. Engg. in CSE, RUET (On-going); B.Sc. Engg. in CSE, RUET
+- **Current Status**: Ex-Faculty
+
+### Md. Zahid Hassan
+- **Designation**: Assistant Professor
+- **Department**: Computer Science and Engineering
+- **Phone**: 01750548251, 01769675561
+- **Email**: zahidhassan956@gmail.com, zahid@baust.edu.bd
+- **Education / Qualifications**: B.Sc. in CSE (CUET), M.Sc. in CSE (CUET)
+- **Current Status**: Ex-Faculty
+
+### Md. Nahid Anam Opu
+- **Designation**: Lecturer
+- **Department**: Computer Science and Engineering
+- **Phone**: 01701892939
+- **Email**: nahidanam.ece@gmail.com, opu@baust.edu.bd
+- **Education / Qualifications**: B.Sc. in Electrical & Computer Engineering (ECE), RUET
+- **Current Status**: Ex-Faculty
+
+### Abu Saleh Musa Miah
+- **Designation**: Assistant Professor
+- **Department**: Computer Science and Engineering
+- **Phone**: 01734264899
+- **Email**: musa@baust.edu.bd, abusalehcse.ru@gmail.com
+- **Education / Qualifications**: Ph.D. (Pursuing), University of Aizu, Japan; B.Sc. in CSE, RU
+- **Current Status**: Ex-Faculty
+
+### Naimur Rahman
+- **Designation**: Lecturer (Contractual)
+- **Department**: Computer Science and Engineering
+- **Phone**: 01751099887
+- **Email**: naimur.rahman.rs@gmail.com
+- **Education / Qualifications**: B.Sc. Eng. (CSE), KUET
+- **Current Status**: Ex-Faculty
+
+## Adjunct Faculty Members
+
+### Dr. M. Kaykobad
+- **Designation**: Professor
+- **Department**: Computer Science and Engineering
+- **Phone**: N/A
+- **Email**: N/A
+- **Education / Qualifications**: Ph.D., The Flinders University of South Australia; M.Engg., Computer Applications
+- **Current Status**: Adjunct Faculty
+
+### Dr. Md. Saidur Rahman
+- **Designation**: Professor
+- **Department**: Computer Science and Engineering
+- **Phone**: N/A
+- **Email**: N/A
+- **Education / Qualifications**: Ph.D., Information Sciences Tohoku University, Japan; M.Sc., Information
+- **Current Status**: Adjunct Faculty
+
+### Professor Dr. Md. Mahbubur Rahman
+- **Designation**: Professor
+- **Department**: Computer Science and Engineering
+- **Phone**: 01919727111
+- **Email**: mahbubcse@yahoo.com
+- **Education / Qualifications**: B.Sc. Engg. (BUET), M. Engg. (Thailand), Ph.D. (JAIST, Japan)
+- **Current Status**: Adjunct Faculty
+
+### Lt Col Dr. Muhammad Nazrul Islam, PhD
+- **Designation**: Associate Professor
+- **Department**: Computer Science and Engineering
+- **Phone**: 01725560099
+- **Email**: nazrulturku@gmail.com
+- **Education / Qualifications**: B.Sc. Engg. (IUT), M. Sc. Engg. (ITALY), Ph.D. (Abo Akademi University, FINLAND)
+- **Current Status**: Adjunct Faculty
+
+## Teaching Assistants
+
+### Md. Abdullah
+- **Designation**: Teaching Assistant
+- **Department**: Computer Science and Engineering
+- **Phone**: 01315272398
+- **Email**: mamunz1527@gmail.com
+- **Education / Qualifications**: B.Sc. (Engg.) in CSE, BAUST
+- **Current Status**: Active
+
+## Officers, Technical Staff & Support Staff (Lab Technicians, Computer Operators, Messengers, etc.)
+
+### Md. Foyezul Hoque
+- **Designation**: Lab Technician
+- **Department**: Computer Science and Engineering
+- **Phone**: 01768626250
+- **Email**: foyezul970@gmail.com
+- **Education / Qualifications**: N/A
+- **Current Status**: Active
+
+### Md. Masud Rana
+- **Designation**: Lab Technician
+- **Department**: Computer Science and Engineering
+- **Phone**: 01723181718
+- **Email**: masud@baust.edu.bd
+- **Education / Qualifications**: B.Sc. Engg. in EEE, BUBT
+- **Current Status**: Active
+
+### Md. Masud Rana Hanif
+- **Designation**: Lab Technician
+- **Department**: Computer Science and Engineering
+- **Phone**: 01975517123
+- **Email**: masud311322@gmail.com
+- **Education / Qualifications**: B.Sc. Engg. in CSE, BUBT
+- **Current Status**: Active
+
+### Rukshana Afros
+- **Designation**: Lab Assistant
+- **Department**: Computer Science and Engineering
+- **Phone**: 01796733060
+- **Email**: rukshanaafros@gmail.com
+- **Education / Qualifications**: N/A
+- **Current Status**: Active
+
+### Sgt. Nur Mohammad (Retd)
+- **Designation**: Computer Operator
+- **Department**: Computer Science and Engineering
+- **Phone**: 01710110620
+- **Email**: nurmohammadranju@gmail.com
+- **Education / Qualifications**: HSC
+- **Current Status**: Active
+
+### Md. Rahmat khan
+- **Designation**: Messenger
+- **Department**: Computer Science and Engineering
+- **Phone**: 01717595722
+- **Email**: rahmatkhansdp2001@gmail.com
+- **Education / Qualifications**: HSC
+- **Current Status**: Active

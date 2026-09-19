@@ -1,0 +1,65 @@
+# Department of Electrical and Electronic Engineering (EEE)
+# Bangladesh Army University of Science and Technology (BAUST)
+
+## Department Overview
+The Department of Electrical and Electronic Engineering (EEE) at BAUST provides state-of-the-art education, theoretical foundations, and laboratory-driven skills in circuits, power systems, electronics, telecommunications, signal processing, and control engineering.
+
+*   **Dean, Faculty of ECE:** Brig Gen Mohammad Mobarak Hossain Majumder, psc (vc@baust.edu.bd)
+*   **Head of Department:** Dr. Mst. Rubina Aktar (Associate Professor)
+    *   **Official Email:** hdeee@baust.edu.bd, rubina@baust.edu.bd
+    *   **Contact:** +8801751185796 (Personal), +8801769675590 (Official)
+    *   **Qualifications:** PhD in EEE (RUET), M.Sc. Engg. in EEE (BUET), B.Sc. Engg. in EEE (RUET)
+
+---
+
+## Active Faculty Members
+
+| Name | Designation | Phone | Email | Qualifications |
+| :--- | :--- | :--- | :--- | :--- |
+| **Muhammad Khairuzzaman** | Assistant Professor | 01711505991 | mkhzaman@baust.edu.bd | MS in EE (Lamar, USA), B.Sc in EEE (BUET) |
+| **Mafin Muntasir Rahman** | Assistant Professor | +8801762355745 | mafin@baust.edu.bd | B.Sc. in EEE (RUET) |
+| **Mst. Humayra Khanom** | Assistant Professor | 01619474749 | humayra.khanom@baust.edu.bd | M.Sc. in EEE (KUET), B.Sc. in EEE (KUET) |
+| **Azra Sadia Sultana** | Assistant Professor | 01912991530 | azra.sadia@baust.edu.bd | M.Sc. in EEE, B.Sc. in EEE |
+| **Nawshad Ahmed** | Assistant Professor | 01716438251 | nawshad@baust.edu.bd | M.Sc. in EEE (RUET), B.Sc. in EEE (RUET) |
+| **Sifat Hossain** | Assistant Professor | 01753685642 | sifat@baust.edu.bd | M.Sc. Engg. in ECE (KUET), B.Sc. Engg. in EEE (BAUST) |
+| **Md. Shahriar Kabir** | Assistant Professor | 01722667509 | mkabir@baust.edu.bd | M.S. in BMPT (DU), B.Sc. in EEE (KUET) |
+| **Md. Mehedi Hasan** | Assistant Professor | 01912108926 | mehedihasan_eee@baust.edu.bd | M.Sc. in EEE (RUET), B.Sc. in EEE (RUET) |
+| **Md. Hasib Mahbub** | Assistant Professor | 01750768195 | hasibmahbub@baust.edu.bd | M.Sc. Engg. in EEE (IUT), B.Sc. Engg. in EEE (IUT) |
+| **Md. Yah-Ya Ul Haque** | Assistant Professor | 01746201738 | ahyahaque@baust.edu.bd | M.Sc. in EEE (RUET), B.Sc. in EEE (RUET) |
+| **Thuifique Alam** | Lecturer | +8801823187014 | thuifique@baust.edu.bd | M.Sc. Engg. in EEE (KUET - Ongoing), B.Sc. in EEE (KUET) |
+| **Md Atiq Shariar** | Lecturer | 01835331811 | atiqizaz@baust.edu.bd | B.Sc. in EEE (RUET) |
+| **Md. Rifkat Jahin** | Lecturer & Prog. Coord. | 01303005779 | rifkat@baust.edu.bd | B.Sc. in EEE |
+| **S.M.A. Jayed Bin Jabbar Sajib** | Lecturer | 01706786416 | sajib@baust.edu.bd | B.Sc in EEE (CUET) |
+| **Sanzida Rahman** | Lecturer | +8801850576590 | sanzida191sr@gmail.com | B.Sc. in EEE (RUET) |
+| **Jahanara Pritha** | Lecturer | +8801556307860 | jahanarapritha46@gmail.com | B.Sc. Engg. in EEE (KUET) |
+| **Mahin Anjum** | Lecturer | 01601212792 | mahin.anjum@baust.edu.bd | M.Sc. in EEE (BUET - Ongoing), B.Sc in EEE (BUET) |
+| **Noor Md. Zuhaer Ahanaf** | Teaching Assistant | +8801705121460 | zuhaer.ahanaf10@gmail.com | B.Sc. Engg. in EEE (BAUST) |
+
+---
+
+## Adjunct Faculty Members (EEE)
+*   **Air Cdre Mohammed Hossam-E-Haider, PhD** (Professor) - Email: haider8400@yahoo.com (B.Sc. in EEE, DUET; M.Sc. in EEE, BUET)
+*   **Dr. Md. Zahurul Islam Sarkar** (Professor) - Email: islam89118@gmail.com (PhD in EEE, Queen’s University Belfast, UK)
+
+---
+
+## Faculty Members on Study Leave
+*   **Ashrafun Naher Pinky** (Associate Professor) - M.Sc. in EEE (RUET)
+*   **Redwan Ahmad** (Assistant Professor) - M.Sc. in CME (CTU, Czech Republic)
+*   **Mir Mehedi Al Hammadi** (Assistant Professor) - M.Sc. in EEE (KUET)
+*   **Omar Faruqe** (Lecturer) - MIST
+
+---
+
+## Lab Technical & Support Staff
+*   **Md. Alawal Kabir** (Lab Technician): 01788-604387
+*   **Sabbir Kabir Sohag** (Lab Technician): 01722-440522
+*   **Md. Aktarul Islam** (Lab Assistant): 01782227160
+*   **Md. Arafat Sarker** (Lab Assistant): 01737894494
+*   **Shajalal Sarker** (Lab Assistant): 01778438808
+*   **Md. Ali Chowdhery** (Lab Assistant): 01312480177
+
+---
+
+## EEE Laboratories Summary
+DC Circuit Lab, AC Circuit Lab, Electronics Lab, Measurement and Instrumentations Lab, Electrical Machine Lab, Power System Lab, Switchgear and Protection Lab, Communication Lab, Computer and Simulation Lab, Digital Logic Design Lab, Power Electronics Lab.

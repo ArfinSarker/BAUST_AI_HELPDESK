@@ -24,7 +24,7 @@ The following laboratories are maintained by the Department of Computer Science 
 
 ### Dr. Engr. Mohammed Sowket Ali
 - **Designation**: Associate Professor
-- **Department**: Computer Science and Engineering
+- **Department**: Computer Science and Engineering / Faculty of ECE
 - **Phone**: 01769662712 (Official), 01791895371 (Personal)
 - **Email**: sowket@baust.edu.bd (Official), sowket@gmail.com (Personal)
 - **Education / Qualifications**: PhD. and M.Engg. (South Korea), B.Sc. Engg., FIEB, FBCS, Senior Member- IACSIT
@@ -160,7 +160,6 @@ The following laboratories are maintained by the Department of Computer Science 
 
 ### Abdullah Al Asif
 - **Designation**: Lecturer
-- **Department**: Computer Science and Engineering
 - **Phone**: 01343132304, 01836218266 (WhatsApp)
 - **Email**: aasif@baust.edu.bd, abdullahalasif2001.info@gmail.com
 - **Education / Qualifications**: M.Sc. Engg. in CSE, RUET (On-going); B.Sc. Engg. in CSE, RUET
@@ -422,4 +421,4 @@ The following laboratories are maintained by the Department of Computer Science 
 - **Phone**: 01717595722
 - **Email**: rahmatkhansdp2001@gmail.com
 - **Education / Qualifications**: HSC
-- **Current Status**: Active
+- **Current Status**: Active

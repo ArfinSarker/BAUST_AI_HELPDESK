@@ -27,11 +27,54 @@ The Department of Electrical and Electronic Engineering maintains modern laborat
 
 ---
 
-## 2. Department of Industrial and Production Engineering (IPE) - Laboratory Facilities
+## 2. Department of Industrial and Production Engineering (IPE)
 
+### Overview
+Industrial and Production Engineering (IPE) is the branch of engineering dedicated to the maximum utilization of limited resources. In a competitive global market, IPE focuses on increasing productivity, reducing costs, and enhancing quality and management. BAUST launched the IPE undergraduate program in 2016 to meet the growing demand for industrial engineers in sectors such as garments, textiles, pharmaceuticals, steel, and cement.
+
+### Accreditation & Recognition
+The Department of Industrial & Production Engineering (IPE) at BAUST is officially accredited by the **Institution of Engineers, Bangladesh (IEB)** under the **Board of Accreditation for Engineering and Technical Education (BAETE)**. This program is recognized under the **Washington Accord**, affirming its compliance with internationally recognized standards of engineering education.
+
+| Criteria | Status |
+| :--- | :--- |
+| **Accrediting Body** | IEB-BAETE |
+| **International Recognition** | Washington Accord |
+| **Program Focus** | Outcome-Based Education (OBE) |
+
+### Vision and Mission
+*   **Vision:** To provide world-class education, serve as a model of excellence in research and administrative services, and prepare students for successful careers in industry and academia.
+*   **Mission:**
+    *   **Quality Education:** To offer high-quality, modern industrial engineering education and engage in creative research.
+    *   **Professional Development:** To nurture professionals with solid technical capability, critical thinking, ethical values, and social responsibility.
+    *   **Societal Impact:** To develop graduates who demonstrate continuous improvement in professional knowledge and problem-solving abilities.
+    *   **Leadership:** To instill leadership qualities by integrating people, information, materials, and equipment to produce innovative and efficient organizations.
+    *   **Global Standards:** To foster an environment of innovation and technical proficiency, ensuring students are equipped to excel in the modern industrial landscape while maintaining the highest ethical standards.
+
+### Program Educational Objectives (PEOs)
+*   **PEO-1:** Successfully utilize industrial engineering knowledge and techniques to solve complex real-world problems.
+*   **PEO-2:** Contribute to the design and improvement of efficiency, productivity, and quality in industrial or public sectors.
+*   **PEO-3:** Serve as managers or leaders who act as change agents for sustainable development.
+*   **PEO-4:** Pursue advanced professional degrees, higher studies, research, or engineering certifications.
+
+### Program Outcomes (POs)
+| Outcome | Description |
+| :--- | :--- |
+| **PO1** | Apply knowledge of math, science, and engineering fundamentals to complex problems. |
+| **PO2** | Identify, formulate, and analyze complex engineering problems using first principles. |
+| **PO3** | Design creative solutions for complex systems with consideration for public health, safety, and sustainability. |
+| **PO4** | Conduct investigations using research methods, design of experiments, and data analysis. |
+| **PO5** | Apply modern engineering and IT tools, including prediction and modeling. |
+| **PO6** | Evaluate sustainable development impacts on society, economy, and the environment. |
+| **PO7** | Apply ethical principles and commit to professional norms and diversity. |
+| **PO8** | Function effectively as an individual and as a leader in diverse, multi-disciplinary teams. |
+| **PO9** | Communicate effectively on complex activities with the engineering community and society. |
+| **PO10** | Apply engineering management and economic decision-making principles. |
+| **PO11** | Recognize the need for independent, life-long learning and adaptability. |
+| **PO12** | Demonstrate the competence to transform opportunities into new business ventures. |
+
+### Laboratory Facilities
 The Department of IPE bridges theoretical engineering principles with real-world manufacturing, industrial automation (PLC/Robotics), and computer-aided engineering simulation (CAD/CAM, MATLAB, ANSYS, Arena).
 
-### IPE Laboratory Directory
 | Laboratory Name | Location | Key Equipment / Focus |
 | :--- | :--- | :--- |
 | **Materials Handling & Maintenance Engineering Lab** | Ground Floor, Admin Building | Conveyor systems (screw, belt, roller, chain), custom material handling & layout design |
@@ -46,6 +89,18 @@ The Department of IPE bridges theoretical engineering principles with real-world
 | **Ergonomics & Safety Management Lab** | 1st Floor, Academic Building | Workplace vibration, noise, illumination & temperature measurement, OHS risk assessment |
 | **Machine Shop and Production Process Lab** | Ground Floor, Academic Building | Industrial lathes, shapers, planners, milling machines for precision part fabrication |
 | **CAD and Simulation Lab** | 1st Floor, Academic Building | Software: ANSYS 14.0, AutoCAD 2017, SOLIDWORKS 2016, MATLAB 2014; LCD mounting projectors |
+
+### Admission & General Info
+*   **Why Choose IPE at BAUST?** Outcome Based Education (OBE), industry-aligned curriculum, well-equipped labs, professional exposure, merit scholarships, and 100% hall facilities.
+*   **Admission Requirements:** 
+    *   **HSC/Alim/Equivalent:** Science group (Physics, Chemistry, Math) with min GPA 3.0; Total GPA (SSC+HSC) ≥ 7.0.
+    *   **GCE A-Level:** Physics, Chemistry, Math with min GPA 3.0; Total GPA (O+A) ≥ 6.0.
+    *   **Direct Admission:** Total GPA (SSC+HSC) ≥ 9.0.
+*   **Contact:** 
+    *   **Location:** Saidpur Cantonment, Saidpur, Bangladesh
+    *   **Email:** info.ipe@baust.edu.bd
+    *   **Mobile:** +8801769675565 (WhatsApp Available)
+    *   **Facebook:** [Department of Industrial and Production Engineering – IPE BAUST, Saidpur](https://www.facebook.com)
 
 ---
 

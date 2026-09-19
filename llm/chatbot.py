@@ -152,27 +152,41 @@ You are the Chief Knowledge Base Architect for Bangladesh Army University of Sci
 EXISTING KNOWLEDGE BASE FILES AND THEIR CURRENT SECTIONS:
 {files_str}
 
-NEWLY INGESTED CONTENT (NOTICE / POLICY / UPDATE / FORM / INFO):
+NEWLY INGESTED CONTENT (NOTICE / POLICY / SYLLABUS / FACULTY DIRECTORY / FORM / INFO):
 {sample_new_snippet}
 
 TASK:
-Analyze the new content and determine if it belongs to one of the EXISTING files (as an update, section, policy, notice, rule, addendum, or expansion), OR if it represents a completely NEW domain.
+Analyze the new content and determine if it belongs to one of the EXISTING files, OR if it represents a distinct department, policy, or domain that requires a NEW file.
 
-MATCHING & MERGING POLICY:
-1. **Notices, Policies, Rules, Circulars, and Guidelines:**
-   - Admission notices, circulars, fees, entrance test, dates, eligibility -> match existing admission file.
-   - Hall notices, hostel rules, curfew policies, seat allotment, provost contacts -> match existing residential halls file.
-   - Campus policies, fire safety policies, WiFi/internet rules, cafeteria notices, daycare guidelines, transport/bus policies, health & security rules -> match existing campus facilities/services file.
-   - Library notices, membership policies, book borrowing rules, library timings -> match library file (or campus facilities).
-   - Department policies, teacher lists, faculty leave updates, lab manuals/guidelines -> match department/lab files.
-   - University vision, mission, why BAUST, objectives, motto, administration -> match brief history/about BAUST file.
+STRICT DEPARTMENT & TOPIC ROUTING RULES:
+1. **DEPARTMENT ISOLATION (CRITICAL)**:
+   - Each academic department MUST have its own independent file!
+   - Computer Science & Engineering (CSE) -> `cse_department_and_faculty.txt` (ONLY for CSE teachers, labs, and notices).
+   - Electrical & Electronic Engineering (EEE) -> `eee_department_and_faculty.txt` (NEVER put inside CSE!).
+   - Industrial & Production Engineering (IPE) -> `ipe_department_and_faculty.txt` (NEVER put inside CSE!).
+   - Information & Communication Technology (ICT/ICE) / ECE -> `ict_and_ece_department_and_faculty.txt`.
+   - Mechanical Engineering (ME) -> `me_department_and_faculty.txt`.
+   - Civil Engineering (CE) -> `ce_department_and_faculty.txt`.
+   - Business Administration (BBA / AIS) -> `bba_department_and_faculty.txt`.
+   - English (BA / MA) -> `english_department_and_faculty.txt`.
+   - **RULE**: If the new content belongs to a department whose file does NOT exist in the existing files list above, output `NEW: <dept>_department_and_faculty`. NEVER dump non-CSE departments into `cse_department_and_faculty.txt`!
 
-2. **Aggressive Thematic Consolidation:**
-   - If an existing file's domain or sections logically cover this topic, ALWAYS match that file rather than creating a fragmented single-purpose file.
-   - You MUST output the EXACT filename from the existing files list.
+2. **ACADEMIC & EXAMINATION POLICIES**:
+   - Examination policy, term calendar, grading scheme, promotion rules, degree requirements -> `undergraduate_examination_policy.txt` (NEVER put inside brief history!).
 
-3. **Genuinely New Domains:**
-   - Only return `NEW` if the topic is totally unrelated to any existing files (e.g. Alumni Association, Sports Tournament, Blood Donation Club).
+3. **ADMISSIONS & FINANCIAL AID**:
+   - Admission circulars, eligibility criteria, marks distribution, tuition fee waivers, scholarships -> `admission_information.txt`.
+
+4. **ADMINISTRATION, RESEARCH & LEADERSHIP**:
+   - Administration contacts & phone directory -> `administrative_contact_directory.txt`.
+   - Research & Publication Cell, newsletters, journal editorial board -> `research_and_publication_cell.txt`.
+   - University history, vision, mission, VC honor board, motto -> `brief_history_of_baust.txt`.
+   - VC / Chief of Army Staff speeches -> `messages_from_leadership.txt`.
+
+5. **CAMPUS FACILITIES & RESIDENTIAL HALLS**:
+   - Library, WiFi, Cafeteria, Daycare, Fire Safety -> `campus_facilities_and_services.txt`.
+   - Student halls, hostel rules, provosts, assistant provosts -> `residential_halls_and_facilities.txt`.
+   - Engineering laboratory setups (EEE, IPE, ME) -> `engineering_laboratories_facilities.txt`.
 
 OUTPUT FORMAT (STRICT):
 If MATCH:

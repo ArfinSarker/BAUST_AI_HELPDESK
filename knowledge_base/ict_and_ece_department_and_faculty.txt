@@ -1,0 +1,53 @@
+# Department of Information and Communication Technology (ICT / ICE) & Faculty of ECE
+# Bangladesh Army University of Science and Technology (BAUST)
+
+## Program Overview
+The Information and Communication Technology (ICT) / Information & Communication Engineering (ICE) program at BAUST offers a comprehensive curriculum spanning Computer Science fundamentals, Artificial Intelligence & Machine Learning, Web & Mobile Development, Cybersecurity, Wireless & Telecommunication, and Cloud Networks.
+
+*   **Head of Department (ICT/ICE):** Engr. Md. Mamun Hossain (Associate Professor)
+    *   **Official Phone:** 01769675577
+    *   **Personal Phone:** 01717690847
+    *   **Official Email:** headict@baust.edu.bd, mhossain@baust.edu.bd
+    *   **Personal Email:** mamunsust12@gmail.com
+    *   **Qualifications:** Ph.D. Researcher in CSE (RUET); M.Sc. (Thesis) & B.Sc. Engg. in CSE (SUST)
+
+---
+
+## Active Faculty Members
+
+| Name | Designation | Phone | Email | Qualifications |
+| :--- | :--- | :--- | :--- | :--- |
+| **Brig Gen Mohammad Mobarak Hossain Majumder** | Dean, Faculty of ECE | - | vc@baust.edu.bd | B.Sc. & M.Sc. in ME (BUET) |
+| **Tasmim** | Lecturer | 01703830359 | tasmim@baust.edu.bd | B.Sc. Engg. in ECE (RUET) |
+| **Md. Abdun Noor Polok** | Lecturer & Program Coordinator | 01521403890 | poloknoor@baust.edu.bd | B.Sc. in ICE (BAUET) |
+| **Asif Idris Tuhin** | Lecturer | 01787380880 | tuhin@baust.edu.bd | B.Sc. Engg. in CSE (SUST) |
+| **Tazrian Billah** | Lecturer | 01957721943 | tazrian@baust.edu.bd | B.Sc. in CSE (BAUST) |
+| **Meftahul Jannat** | Lecturer | 01716155607 | meftahul.jannat@baust.edu.bd | B.Sc. Engg. in ETE (RUET) |
+| **Humaira Fairooz Moohy** | Lecturer | 01844260298 | humaira@baust.edu.bd | B.Sc. in ETE (CUET) |
+| **Nusrat Nizam Suzana** | Lecturer | 01312808305 | nusrat.suzana.bup20@gmail.com | M.Sc. (Thesis) and B.Sc. in ICE (BUP) |
+| **Md. Sirazul Islam Sobuj** | Lecturer | 01631903266 | sirazcse116@gmail.com | B.Sc. Engg. in CSE (SUST) |
+
+---
+
+## Adjunct Faculty Members
+*   **Lt Col Prof. Dr. Md Shameem Reza (Retd)** (Professor): 01769662723 | treasurer@baust.edu.bd | PhD (RU)
+*   **Dr. Kazi Mohammad Anamoul Haque** (Associate Professor): 01769675597 / 01312807977 | dkmah@baust.edu.bd | Ph.D. (SUST)
+*   **Md. Abu Rayhan** (Associate Professor): 01769662710 / 01723757146 | aburayhan@baust.edu.bd | M.Sc. (Thesis), RU
+*   **Irfan Raju** (Assistant Professor): 01743810588 | irfan@baust.edu.bd | M.Sc. (Thesis) in Mathematics (RU)
+
+---
+
+## Faculty Members on Study Leave
+*   **Tasmim:** M.Sc. Engg. in CSE, RUET (On-going)
+*   **Md. Abdun Noor Polok:** M.Sc. Engg. In CSE, KUET (Pursuing)
+*   **Asif Idris Tuhin:** M.Sc. Engg. in CSE, RUET (Ongoing)
+*   **Humaira Fairooz Moohy:** M.Sc. in ETE, CUET (Ongoing)
+*   **Md. Sirazul Islam Sobuj:** MSc (Engg.) in CSE, SUST (Pursuing)
+*   **Md. Abu Rayhan:** Pursuing PhD (CUET)
+
+---
+
+## Lab Technical & Administrative Staff
+*   **Md. Sakhawad Hossain** (Lab Technician): 01765964284 | sakhawat.text@gmail.com
+*   **MD. Khushbul Alam** (Lab Technician): 01773941177 | khushbulalam@gmail.com
+*   **Airin Aktar** (Office Assistant): 01767868698

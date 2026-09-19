@@ -21,11 +21,11 @@ Applications are invited from interested applicants of Bangladeshi Nationals for
 ## Application Procedure: 
 1. **Instructions for Online Application:**
    - **Portal:** [https://admission.baust.edu.bd](https://admission.baust.edu.bd) or [www.baust.edu.bd](http://www.baust.edu.bd)
-   - **Step-1:** Pay Admission Test Fee by bKash:  
-     ➢ Dial *247# 
+   - **Step-1:** Pay Admission Test Fee by bKash/TAP:  
+     ➢ Dial *247# (bKash) or use TAP app
      ➢ Press 4 for Payment 
      ➢ Merchant Wallet No. > 01769675556 
-     ➢ Amount Tk. 762 (Tk.750 + bKash Charge) 
+     ➢ Amount Tk. 762 (Tk.750 + Charge) 
      ➢ Reference No. > 1 
      ➢ Counter No. > 1 
      ➢ Save the transaction ID and use it in the application form. 
@@ -42,7 +42,7 @@ Applications are invited from interested applicants of Bangladeshi Nationals for
    ❖ Collect your Admit card before Admission Test. For any query, contact: 01769675588.
 
 ## Qualifications for Application: 
-1. **B.Sc. Engg. in CSE/EEE/ME/IPE/CE/ICT:**
+1. **B.Sc. Engg. in CSE/EEE/ME/CE/ICT:**
    - Applicants who have passed HSC/Alim or equivalent or A level or equivalent examinations with at least GP 3.0 in Mathematics are eligible to apply, if he/she fulfills the following conditions: 
    - HSC/Alim or equivalent examination in Science Group with Mathematics, Physics and Chemistry with minimum GPA 3.0 (with additional subject). The total GPA of SSC/Dakhil or equivalent and HSC/Alim or equivalent should be at least 7.0 (with additional subject).  
    - GCE applicants at A-Level with at least two subjects and must have GPA 3.0. The total GPA of GCE O-Level and A-Level should be at least 7.0. However, the candidate must not have any F grade in any subject of both of the levels. 
@@ -50,7 +50,13 @@ Applications are invited from interested applicants of Bangladeshi Nationals for
    - Applicants who have passed HSC or equivalent in 2023, 2024 and 2025 are eligible to apply. 
    - **NB:** Applicants who have obtained a total GPA of 9.0 or more together in HSC/Alim or equivalent and SSC/Dakhil or equivalent are eligible for direct admission (without Admission Test).
 
-2. **BBA, BBA in AIS and BA (Hons) in English:**
+2. **B.Sc. Engg. in IPE:**
+   - **HSC/Alim or Equivalent:** Science Group (Math, Physics, Chemistry) with minimum GPA 3.0 (with additional subject). Combined GPA of SSC/Dakhil and HSC/Alim must be at least 7.0.
+   - **GCE (A-Level/O-Level):** Physics, Mathematics, Chemistry, and Functional English required. Minimum GPA 3.0 at A-Level. Combined GPA of O-Level and A-Level must be at least 6.0. No 'F' grade permitted.
+   - **Diploma Holders:** Minimum CGPA of 3.00.
+   - **Direct Admission:** Applicants with a total GPA of 9.0 or more (combined SSC/Dakhil and HSC/Alim) are eligible for direct admission.
+
+3. **BBA, BBA in AIS and BA (Hons) in English:**
    - Applicants who have passed HSC/Alim or equivalent or A level or equivalent examinations are eligible to apply, if he/she fulfills the following conditions: 
    - HSC/Alim or equivalent examination with minimum GPA of 3.0 (with additional subject). The total GPA of HSC/Alim or equivalent and SSC/Dakhil or equivalent should be at least 6.0 (with additional subject). 
    - GCE O/A Level Examination: At least GPA 3.0 in both GCE O-Level and GCE A-Level. The total GPA in GCE A-Level and O-Level should be at least 6.0. The candidate must not have any F grade in any subject of the both levels. 
@@ -62,14 +68,34 @@ Applications are invited from interested applicants of Bangladeshi Nationals for
 - **BBA & BBA in AIS:** English (35), General Knowledge (30), Analytical Ability (35). Total: 100 (1hr, MCQ).
 - **BA (Hons) in English:** English Language and Vocabulary (30), Comprehension and English Writing (30), General Knowledge (Bangladesh Affairs) (20), General Knowledge (Foreign Affairs) (20). Total: 100 (1hr, MCQ).
 
-## Selection Criteria: 
-The merit list will be based on: Written test (60%), GPA of SSC/O level/equivalent (20%), and GPA of HSC/A level/equivalent (20%). Selected names will be published on the university website and notice board.
+## Selection & Admission Formalities: 
+- **Selection Criteria:** The merit list will be based on: Written test (60%), GPA of SSC/O level/equivalent (20%), and GPA of HSC/A level/equivalent (20%). Selected names will be published on the university website and notice board.
+- **Admission Formalities:** Selected candidates must complete admission formalities within the prescribed timeframe; failure to do so results in automatic cancellation.
+- **Class Attendance:** Failure to attend classes within two weeks of the academic program's commencement results in admission cancellation and forfeiture of all fees.
+- **Waiting List:** Merit-based waiting lists will be published as required.
+
+## Required Documents for Admission:
+- Original certificates and transcripts of SSC/Dakhil and HSC/Alim.
+- Three copies of recent passport-sized colored photographs (attested by a Class-I Gazetted Officer).
+- Character certificate from the head of the last attended institute.
+- Nationality certificate from UP Chairman/Municipality/City Corporation.
+- **Quota-Specific:** Freedom Fighter certificate (Ministry of Freedom Fighters Affairs), Tribal Citizen certificate (UP Chairman/DC), or Military Personnel certificate (Commanding Officer/CORO/Naval/Air Secretary).
 
 ## Medical & Dope Test: 
-Candidates must deposit Blood Group, CBC, HBs.Ag, and Urine R/E test reports during admission. BAUST ensures a drug-free campus; students must undergo a Dope Test during admission.
+Candidates must undergo a medical check-up at the BAUST Medical Center. Required test reports: Blood Group, CBC, HBs.Ag, and Urine R/E. BAUST ensures a drug-free campus; students must undergo a Dope Test during admission.
 
 ## Tuition Fees and Payment Procedure: 
-(Refer to official fee structure table for detailed credit-based costs).
+- **General:** Refer to official fee structure table for detailed credit-based costs.
+- **IPE Program Fee Structure:**
+  | Program | Admission Fee (Incl. 1st Sem) | Per Semester (Remaining 7) | Total (Incl. 5k Caution Money) |
+  | :--- | :--- | :--- | :--- |
+  | **B.Sc. in IPE** | TK 65,000 | TK 90,000 | TK 6,95,000 |
+
+- **Bank Payment Details (Trust Bank Ltd):**
+  - **Branch:** Saidpur Cantonment
+  - **Routing Number:** 240730822
+  - **Account Name:** Bangladesh Army University and Science and Technology (BAUST), Saidpur
+  - **Account Number:** 0060-0210001280
 
 ## Hall Facilities: 
 Available in close proximity for both male and female students. Female students are not allowed to stay outside the University Female Hall without their family.
@@ -82,10 +108,9 @@ Available in close proximity for both male and female students. Female students 
 **Admission Office:** Bangladesh Army University of Science and Technology (BAUST), Saidpur Cantonment.
 **Phone:** +8802588878203 
 **Helpline:** 01769675588, 01769675554 
-**Email:** admission@baust.edu.bd
+**IPE Dept Contact:** +8801769675565 (WhatsApp), +8801729141848
+**Email:** admission@baust.edu.bd | **IPE Email:** info.ipe@baust.edu.bd
 **Website:** [www.baust.edu.bd](http://www.baust.edu.bd) / [https://admission.baust.edu.bd](https://admission.baust.edu.bd)
-
-*Program-specific contacts available on the official website.*
 
 **Registrar**
 Bangladesh Army University of Science and Technology (BAUST) 

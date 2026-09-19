@@ -294,63 +294,49 @@ def admin():
             if not uploaded_files or not any(f.filename for f in uploaded_files):
                 flash("No files selected. Please choose at least one document.", "error")
             else:
-                combined_text = ""
-                first_filename = None
-                processed_count = 0
+                processed_files = []
+                last_preview_text = ""
 
-                # Create a unique subfolder for this upload batch
-                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                batch_folder_name = f"batch_{timestamp}"
-                if custom_doc_name:
-                    batch_folder_name = f"{sanitize_filename(custom_doc_name)}_{timestamp}"
-                
-                batch_path = os.path.join(UPLOAD_FOLDER, batch_folder_name)
-                os.makedirs(batch_path, exist_ok=True)
-
+                # Process each uploaded document independently and place it into its appropriate topic
                 for uploaded_file in uploaded_files:
                     if not uploaded_file or not uploaded_file.filename:
                         continue
-
-                    if not first_filename:
-                        first_filename = uploaded_file.filename
 
                     clean_raw_name = sanitize_filename(uploaded_file.filename)
                     save_path = os.path.join(batch_path, clean_raw_name)
                     uploaded_file.save(save_path)
 
-                    # Extract text using multi-format extractor
+                    # Extract text using multi-format extractor (PDF, Image, TXT)
                     extracted_text = extract_text_from_file(save_path)
 
-                    if extracted_text and not extracted_text.startswith("Error"):
-                        if processed_count > 0:
-                            combined_text += f"\n\n--- Content from {uploaded_file.filename} ---\n\n"
-                        combined_text += extracted_text
-                        processed_count += 1
-                    else:
+                    if not extracted_text or extracted_text.startswith("Error"):
                         flash(f"Text extraction failed for '{uploaded_file.filename}': {extracted_text}", "error")
+                        continue
 
-                if combined_text.strip():
-                    # Apply AI structuring to format faculty/staff categories automatically
-                    structured_text = structure_extracted_text(combined_text.strip())
+                    # Apply AI structuring to format the extracted text
+                    structured_text = structure_extracted_text(extracted_text.strip())
+                    if not structured_text:
+                        structured_text = extracted_text.strip()
 
                     merged_into_existing = False
                     target_filename = None
 
-                    # Step 1: Always check first if the content belongs to an existing knowledge base file
+                    # Check which knowledge base file this specific document belongs to
                     matched_file, suggested_stem = find_matching_knowledge_file(structured_text, KNOWLEDGE_FOLDER)
-                    
+
                     if matched_file:
-                        # Existing file matched -> Merge into that file regardless of whether user typed a name
                         target_filename = matched_file
                         merged_into_existing = True
                     else:
-                        # No existing file matched -> Create a new file
-                        # If the user supplied a custom title/filename, use it (in clean snake_case); otherwise use suggested_stem
-                        if custom_doc_name:
+                        # If user gave a custom title and only 1 file was uploaded, use custom title
+                        if custom_doc_name and len(uploaded_files) == 1:
                             base_stem = format_document_stem(custom_name=custom_doc_name, extracted_text=structured_text)
                             target_filename = f"{base_stem}.txt"
                         else:
-                            target_filename = f"{suggested_stem}.txt"
+                            file_stem = os.path.splitext(clean_raw_name)[0]
+                            stem_to_use = suggested_stem if (suggested_stem and suggested_stem != "document") else file_stem
+                            base_stem = format_document_stem(custom_name=stem_to_use, extracted_text=structured_text)
+                            target_filename = f"{base_stem}.txt"
 
                     target_txt_path = os.path.join(KNOWLEDGE_FOLDER, target_filename)
 
@@ -367,25 +353,24 @@ def admin():
                     with open(target_txt_path, "w", encoding="utf-8") as f:
                         f.write(final_text)
 
-                    # Store preview of the structured file in session
-                    session["ocr_preview"] = final_text[:1500] + ("..." if len(final_text) > 1500 else "")
+                    last_preview_text = final_text
+                    processed_files.append((uploaded_file.filename, target_filename, merged_into_existing))
 
-                    # Rebuild and reload vector store once after all files are processed
+                if processed_files:
+                    # Store preview of the last structured file in session
+                    session["ocr_preview"] = last_preview_text[:1500] + ("..." if len(last_preview_text) > 1500 else "")
+
+                    # Rebuild and reload vector store once after all files in batch are processed
                     build_result = build_vector_store()
                     reload_vector_store()
 
-                    if merged_into_existing:
-                        flash(
-                            f"Content automatically identified as related to '{target_filename}' and merged into it! "
-                            f"Total chunks: {build_result.get('total_chunks', 0)}",
-                            "success"
-                        )
-                    else:
-                        flash(
-                            f"Successfully combined {processed_count} file(s) into a new document '{target_filename}' and indexed into AI memory! "
-                            f"Total chunks: {build_result.get('total_chunks', 0)}",
-                            "success"
-                        )
+                    for orig_name, tgt_name, was_merged in processed_files:
+                        if was_merged:
+                            flash(f"'{orig_name}' automatically identified and merged into '{tgt_name}'", "success")
+                        else:
+                            flash(f"'{orig_name}' categorized and saved as '{tgt_name}'", "success")
+
+                    flash(f"Successfully processed {len(processed_files)} document(s). Vector database synchronized (Total chunks: {build_result.get('total_chunks', 0)}).", "info")
 
         # Case 2: Direct Text Notice
         elif action == "direct_notice":

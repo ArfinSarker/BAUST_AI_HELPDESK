@@ -1,0 +1,39 @@
+# Undergraduate Examination Policy & Academic Regulations
+# Bangladesh Army University of Science and Technology (BAUST)
+
+## Academic Calendar & Term Structure
+*   Each academic year consists of two regular terms (Winter and Summer).
+*   Each term spans **26 weeks**:
+    *   7 weeks: Classes (Part 1)
+    *   1 week: Mid-term Examination
+    *   7 weeks: Classes (Part 2)
+    *   2 weeks: Preparatory Leave (PL)
+    *   3 weeks: Final Term Examination
+    *   3 weeks: Industrial Training / Term Vacation
+    *   2 weeks: Referred / Backlog Examination & Result Publication
+
+---
+
+## Grading Scheme & Grade Point Average (GPA)
+
+| Numerical Marks | Letter Grade | Grade Point | Assessment |
+| :--- | :--- | :--- | :--- |
+| **80% and above** | **A+** | **4.00** | Outstanding |
+| **75% to 79%** | **A** | **3.75** | Excellent |
+| **70% to 74%** | **A-** | **3.50** | Very Good |
+| **65% to 69%** | **B+** | **3.25** | Good |
+| **60% to 64%** | **B** | **3.00** | Satisfactory |
+| **55% to 59%** | **B-** | **2.75** | Above Average |
+| **50% to 54%** | **C+** | **2.50** | Average |
+| **45% to 49%** | **C** | **2.25** | Below Average |
+| **40% to 44%** | **D** | **2.00** | Pass |
+| **Less than 40%** | **F** | **0.00** | Fail |
+
+---
+
+## Term Promotion & Academic Progression Rules
+1. **Theory Courses:** A student must pass a minimum required number of theory courses each term. A maximum of **2 failed theory courses** is allowed to be carried forward as Referred/Backlog for promotion to the next term.
+2. **Sessional (Laboratory) Courses:** Students **MUST pass all sessional/laboratory courses**. Failing any sessional course results in year loss or term retention.
+3. **Degree Completion Criteria:**
+   *   Minimum Cumulative Grade Point Average (CGPA) required for graduation: **2.20**.
+   *   Maximum time limit to complete the 4-year B.Sc. Engineering degree: **6 academic years**.

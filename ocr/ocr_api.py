@@ -102,29 +102,35 @@ Output ONLY the extracted, structured Markdown.
 
 
 def extract_text_from_pdf(file_path: str) -> str:
-    """Extract text from PDF pages using Gemini Vision first, falling back to pypdf & OCR.Space."""
-    # 1. Primary: Gemini Multimodal Vision for PDF
-    gemini_result = gemini_multimodal_extract(file_path, "application/pdf")
-    if gemini_result and len(gemini_result.strip()) > 20:
-        return gemini_result
-
-    # 2. Local fallback using pypdf
+    """
+    Extracts text from PDF files.
+    1. First attempts high-fidelity digital text extraction across ALL pages using pypdf.
+    2. If the PDF contains no text (i.e. scanned images/handouts), falls back to Gemini Multimodal Vision.
+    3. Final fallback to OCR.Space.
+    """
+    # 1. Primary: Extract all digital text from all pages using pypdf
     try:
         from pypdf import PdfReader
         reader = PdfReader(file_path)
         extracted_pages = []
-        for page in reader.pages:
-            text = page.extract_text()
-            if text and text.strip():
-                extracted_pages.append(text.strip())
+        for i, page in enumerate(reader.pages):
+            page_text = page.extract_text()
+            if page_text and page_text.strip():
+                extracted_pages.append(f"--- Page {i+1} ---\n{page_text.strip()}")
 
-        full_text = "\n\n".join(extracted_pages).strip()
-        if full_text:
-            return full_text
+        full_pdf_text = "\n\n".join(extracted_pages).strip()
+        # If substantial text was extracted, return it (lossless and handles 100+ pages)
+        if len(full_pdf_text) > 80:
+            return full_pdf_text
     except Exception as e:
-        print(f"[pypdf Extraction Error] {file_path}: {e}")
+        print(f"[pypdf Extraction Exception] {file_path}: {e}")
 
-    # 3. Last fallback to OCR.Space
+    # 2. Scanned / image PDF fallback: Gemini Multimodal Vision
+    gemini_result = gemini_multimodal_extract(file_path, "application/pdf")
+    if gemini_result and len(gemini_result.strip()) > 20:
+        return gemini_result
+
+    # 3. Last fallback: OCR.Space
     return image_to_text(file_path, is_pdf=True)
 
 

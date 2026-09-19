@@ -46,6 +46,15 @@ ADMIN_USER = os.getenv("ADMIN_USER", "admin")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "baust123")
 
 
+@app.after_request
+def add_no_cache_headers(response):
+    """Disable aggressive browser caching to ensure instant updates for all users."""
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
+
+
 def sanitize_filename(filename):
     """Sanitize filename using werkzeug and regex to prevent path traversal or malformed paths."""
     clean = secure_filename(filename)

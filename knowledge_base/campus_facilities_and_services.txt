@@ -1,69 +1,91 @@
 # Bangladesh Army University of Science and Technology (BAUST)
-## Campus Facilities, Infrastructure & Services
+# Campus Facilities, Infrastructure & Services
 
 ---
 
 ## 1. Digital Infrastructure & Connectivity
 BAUST provides high-speed internet access to support the academic and research needs of students, faculty, and staff.
-*   **Availability:** 24/7 access.
-*   **Coverage:** Entire campus premises and all residential halls.
-*   **Multimedia Facilities:** All classrooms are equipped with modern multimedia projectors to facilitate the visualization of theoretical concepts, animations, and e-books. Specialized multimedia support is also integrated into computer programming and simulation laboratories.
+*   **Availability:** 24/7 access across entire campus and all residential halls.
+*   **Coverage:** Entire campus premises, academic buildings, and residential hostels.
+*   **Multimedia Facilities:** All classrooms are equipped with modern multimedia projectors to facilitate interactive teaching, visualization of theoretical concepts, animations, and digital learning. Specialized multimedia support is also integrated into programming and simulation laboratories.
 
 ---
 
 ## 2. University Cafeteria Services
 The BAUST cafeteria provides a well-furnished, hygienic dining environment for the university community.
-
-### Overview
 *   **Target Audience:** Students, Faculty Members, and Administrative Staff.
 *   **Operational Hours:** During official university working hours.
 
-### Available Services
+### Available Meal Services
 | Service Category | Offerings |
 | :--- | :--- |
-| **Breakfast** | Available during morning hours |
+| **Breakfast** | Nutritious breakfast items available during morning hours |
 | **Lunch** | Full meal options during midday break |
-| **Beverages** | Tea and various refreshments |
-| **Fast Food** | Selection of snacks and quick-service items |
+| **Beverages** | Tea, coffee, and various refreshments |
+| **Fast Food & Snacks** | Selection of hygienic snacks and quick-service items |
 
 ---
 
 ## 3. BAUST Daycare Centre
-A dedicated facility designed to support the children of faculty members and staff.
-
-### Location & Logistics
-*   **Building:** Bir Protik Taramon Bibi Hall
-*   **Floor:** Ground Floor
-
-### Services & Curriculum
-*   **Developmental Focus:** Guided instruction, early childhood development, and creative play.
-*   **Curriculum Highlights:**
-    *   Identification of primary colors.
-    *   Introduction to basic food groups.
-    *   Learning parts of the human body.
-*   **Facilities:** Dedicated spaces for recreation, rest, and creative craft-making sessions.
-
-*Note: For enrollment or operational inquiries, please contact the BAUST Administrative Office or the Bir Protik Taramon Bibi Hall administration.*
+A dedicated facility designed to support the young children of faculty members and staff.
+*   **Location:** Ground Floor, Bir Protik Taramon Bibi Hall
+*   **Developmental Focus:** Guided instruction, early childhood development, socialization, and creative play.
+*   **Curriculum Highlights:** Identification of primary colors, basic food groups, human body parts, alphabets, and numbers.
+*   **Facilities:** Dedicated spaces for indoor recreation, rest, and creative craft-making sessions.
 
 ---
 
 ## 4. Fire Safety Policy & Infrastructure
-BAUST maintains a comprehensive fire safety framework to ensure the security of the university community and assets.
+BAUST maintains a comprehensive fire safety framework to ensure the highest security for the university community and physical assets.
+*   **Risk Management:** Regular fire risk assessments and proactive hazard mitigation strategies.
+*   **Staff Training:** Mandatory training on fire safety and the operation of extinguishing equipment.
+*   **Emergency Preparedness:** Evacuation plans, emergency exit drills, and periodic safety equipment maintenance.
 
-### University Commitments
-*   **Risk Management:** Regular fire risk assessments and mitigation strategies.
-*   **Training:** Staff training on fire safety and the use of extinguishing equipment.
-*   **Emergency Preparedness:** Implementation of evacuation plans, regular testing of procedures, and maintenance of safety equipment.
-*   **Compliance:** Regular inspections and active liaison with local fire authorities.
-
-### Campus Fire Safety Infrastructure
+### Campus Fire Safety Equipment
 | Infrastructure Component | Purpose |
 | :--- | :--- |
-| **Fire Extinguishers** | Immediate fire suppression |
-| **Fire Hydrants** | High-volume water supply for firefighting |
-| **Fire Lanes** | Unobstructed access for emergency vehicles |
-| **Fire Alarm Pull Stations** | Immediate notification of fire emergencies |
-| **Emergency Fire Exit Doors** | Safe and rapid evacuation routes |
-| **Evacuation Plans** | Strategic guidance for building clearance |
+| **Fire Extinguishers** | Immediate fire suppression throughout all buildings |
+| **Fire Hydrants** | High-volume water supply for emergency firefighting |
+| **Fire Lanes** | Dedicated unobstructed access routes for emergency vehicles |
+| **Fire Alarm Pull Stations** | Immediate acoustic notification of fire emergencies |
+| **Emergency Fire Exit Doors** | Safe, illuminated, and rapid evacuation routes |
+| **Evacuation Plans** | Strategic guidance posted across all floor levels |
 
-*Note: For further information or to report a safety concern, please contact the University Administration or the Proctorial Office.*
+---
+
+## 5. BAUST Central Library & Resource Guide
+The Central Library serves as the premier knowledge hub of BAUST, supporting undergraduate study, faculty teaching, and multidisciplinary research.
+
+*   **Website:** [library.baust.edu.bd](http://library.baust.edu.bd)
+*   **Mission:** To provide comprehensive resources and cutting-edge services in support of research, teaching, and learning.
+*   **Vision:** To build a world-class Knowledge Resource Centre leveraging 21st-century digital technologies.
+
+### Library Operating Hours
+| Season | Period | Timing (Sunday – Thursday) | Saturday Timing |
+| :--- | :--- | :--- | :--- |
+| **Summer** | 01 March – 14 November | 08:00 AM – 06:00 PM | 10:00 AM – 02:00 PM |
+| **Winter** | 15 November – 28 February | 08:30 AM – 04:30 PM | 10:00 AM – 02:00 PM |
+
+### Membership & Access
+*   **Eligibility:** All registered students, faculty members, and administrative officers are entitled to library membership.
+*   **Registration:** Membership is created automatically upon admission and renewed each semester upon course registration.
+
+### Digital Resources & Consortia
+*   **BAS-LiCoB (Library Consortium of Bangladesh):** Access to American Institute of Physics (AIP), APS, ASCE, ASME, Cambridge University Press (CUP), De Gruyter, EBSCO, Oxford Journals, Project MUSE, Springer, and Nature Publishing Group.
+*   **UDL Consortium:** Access to 3,500+ WILEY Online Books in perpetual lifetime mode.
+*   **Open Access Resources:** AGORA, ARDI, HINARI, DOAB, Bangladesh Journals Online, and 500+ Indian open-access journals.
+
+### Departmental Book Collections
+Collections available for all departments: CSE, EEE, ME, IPE, CE, Business Administration (BBA), and English.
+
+### Library Rules & Code of Conduct
+*   **Belongings:** Bags, jackets, and umbrellas must be kept in the pigeonholes near the security desk.
+*   **Conduct:** Group study, gossiping, eating, drinking, and smoking are strictly prohibited in the reading rooms.
+*   **Mobile Policy:** Mobile phones must remain switched off or silent inside the library.
+*   **Book Issuance:** No books are issued for home reading within the last 30 minutes of daily closing.
+
+### Library Administration & Contact
+*   **Deputy Librarian:** Md. Saiful Alom Milon
+*   **Office Phone:** 01769662699
+*   **Personal Phone:** 01992371721
+*   **Email:** central_library@baust.edu.bd

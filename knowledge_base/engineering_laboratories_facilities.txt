@@ -1,0 +1,71 @@
+# Bangladesh Army University of Science and Technology (BAUST)
+# Engineering Department Laboratory Facilities
+
+BAUST maintains state-of-the-art laboratory facilities across all engineering departments to support undergraduate education, experimental learning, hands-on simulation, and advanced scientific research.
+
+---
+
+## 1. Department of Electrical and Electronic Engineering (EEE) - Laboratory Facilities
+
+The Department of Electrical and Electronic Engineering maintains modern laboratories for circuit analysis, power systems, electronics, and telecommunications.
+
+| Laboratory Name | Focus Area & Description |
+| :--- | :--- |
+| **DC Circuit Laboratory** | Fundamental Circuit Analysis & DC Network Theorems |
+| **AC Circuit Laboratory** | Alternating Current Systems, RLC Circuits & Power Factor |
+| **Electronics Laboratory** | Semiconductor Devices, Diode/Transistor Circuits & Amplifiers |
+| **Measurement and Instrumentations Laboratory** | Precision Measurement, Sensors & Transducers |
+| **Electrical Machine Laboratory** | AC/DC Motors, Generators & Transformers Testing |
+| **Power System Laboratory** | Power Generation, Transmission Line Modeling & Distribution |
+| **Switchgear and Protection Laboratory** | Protective Relays, Circuit Breakers & System Fault Analysis |
+| **Communication Laboratory** | Signal Processing, Modulation & Digital Telecommunications |
+| **Computer and Simulation Laboratory** | Software-based Circuit Simulation (SPICE/MATLAB) |
+| **Digital Logic Design Lab** | Digital Systems, FPGA & Microprocessor Interfacing |
+| **Power Electronics Lab** | Power Conversion, Inverters, Rectifiers & Motor Drives |
+
+*Source: BAUST EEE Laboratory Facilities ([https://baust.edu.bd/eee/facilities/laboratories/](https://baust.edu.bd/eee/facilities/laboratories/))*
+
+---
+
+## 2. Department of Industrial and Production Engineering (IPE) - Laboratory Facilities
+
+The Department of IPE bridges theoretical engineering principles with real-world manufacturing, industrial automation (PLC/Robotics), and computer-aided engineering simulation (CAD/CAM, MATLAB, ANSYS, Arena).
+
+### IPE Laboratory Directory
+| Laboratory Name | Location | Key Equipment / Focus |
+| :--- | :--- | :--- |
+| **Materials Handling & Maintenance Engineering Lab** | Ground Floor, Admin Building | Conveyor systems (screw, belt, roller, chain), custom material handling & layout design |
+| **Measurement, Instrumentation and Quality Control Lab** | 1st Floor, Academic Building | Robotics Trainers (ROBOTEK II), PLC Trainers, Large Tool Maker’s Microscope, Pressure/Temp Sensors |
+| **Foundry and Welding Shop** | Newly Extended Campus | Metal casting, molding, arc & gas welding, industrial safety & material behavior |
+| **Metallurgy Lab** | Ground Floor, Academic Building | 10 modern metallurgical microscopes for grain structure analysis, high-temp heat treatment furnace |
+| **Engineering Drawing Lab** | Ground Floor, Academic Building | 60 drawing tables, manual drafting tools (T-squares, French curves, compasses, scales) |
+| **Strength of Materials Lab** | Ground Floor, Academic Building | Universal Testing Machine (UTM), Charpy Impact Tester, tensile/compression/hardness testers |
+| **Fluid Mechanics and Machinery Lab** | Ground Floor, Academic Building | Fluid statics/dynamics, flow measurement, pipe losses, performance of pumps & turbines |
+| **Thermodynamics & Heat Transfer Lab** | Ground Floor, Academic Building | Experimental setups for boilers, IC engines, refrigeration & HVAC, heat exchangers |
+| **Mechanics of Machinery Lab** | Ground Floor, Academic Building | Cams & followers, gear trains, governors, flywheels, rotating/reciprocating mass balancing |
+| **Ergonomics & Safety Management Lab** | 1st Floor, Academic Building | Workplace vibration, noise, illumination & temperature measurement, OHS risk assessment |
+| **Machine Shop and Production Process Lab** | Ground Floor, Academic Building | Industrial lathes, shapers, planners, milling machines for precision part fabrication |
+| **CAD and Simulation Lab** | 1st Floor, Academic Building | Software: ANSYS 14.0, AutoCAD 2017, SOLIDWORKS 2016, MATLAB 2014; LCD mounting projectors |
+
+---
+
+## 3. Department of Mechanical Engineering (ME) - Laboratory Facilities
+
+The Department of Mechanical Engineering provides comprehensive laboratory infrastructure covering thermal sciences, fluid dynamics, design, and manufacturing technology.
+
+| Laboratory Name | Description & Focus Area |
+| :--- | :--- |
+| **CAD and Simulation Lab** | Computer-Aided Design (CAD), Solid Modeling & FEA Simulation |
+| **Drawing Lab** | Engineering Graphics, Orthographic Projection & Technical Drawing |
+| **Fluid Mechanics and Machinery Lab** | Fluid dynamics, pipe flow measurement, pumps & hydraulic turbines |
+| **Heat Engine Lab** | Internal combustion (IC) engines, thermal power systems & engine testing |
+| **Machine Shop and Production Process Lab** | Heavy-duty machining, turning, milling, shaping, and parts fabrication |
+| **Measurement and Instrumentation Lab** | Precision measurement, calibration, sensor instrumentation & metrology |
+| **Mechanics of Machinery Lab** | Kinematics and dynamics of mechanisms, vibration & gear trains |
+| **Metallic Materials Lab** | Metallography, material property testing & microstructural analysis |
+| **Refrigeration and Air Conditioning Lab** | HVAC systems, vapour-compression refrigeration & thermal comfort |
+| **Strength of Materials Lab** | Stress-strain analysis, tensile/compression testing & mechanical strength |
+| **Thermodynamics Lab** | First & second laws of thermodynamics, steam properties & heat transfer |
+| **Welding Shop** | Industrial joining, arc welding, gas welding & fabrication safety |
+
+*Source: BAUST ME Department Laboratories ([https://baust.edu.bd/me/facilities/laboratories/](https://baust.edu.bd/me/facilities/laboratories/))*

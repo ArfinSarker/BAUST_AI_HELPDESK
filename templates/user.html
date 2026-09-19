@@ -667,32 +667,6 @@
       padding: 6px 2px;
     }
 
-    .mic-btn {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 15px;
-      flex-shrink: 0;
-      transition: all 0.2s ease;
-    }
-
-    .mic-btn:hover {
-      background: var(--chip-hover-bg);
-      color: var(--accent);
-    }
-
-    .mic-btn.recording {
-      background: #EF4444;
-      color: white;
-      animation: pulse 1.2s infinite;
-    }
 
     .send-btn {
       width: 36px;
@@ -887,7 +861,7 @@
             <p>হ্যালো! 👋 আমি <strong>BAUST AI Help Desk</strong>-এর অফিসিয়াল সহকারী।</p>
             <p>আমি <strong>বাংলাদেশ আর্মি ইউনিভার্সিটি অব সায়েন্স অ্যান্ড টেকনোলজি (BAUST), সৈয়দপুর</strong>-এর ভর্তি, অনুষদ ও বিভাগসমূহ, শিক্ষকবৃন্দ, ফি কাঠামো, পরীক্ষার নীতিমালা, আবাসিক হল এবং যেকোনো সাধারণ বিষয়ে সাহায্য করতে পারি।</p>
             <p style="font-size: 13px; color: var(--text-muted); margin-top: 6px;">
-              💡 <em>আপনার যেকোনো প্রশ্ন নিচে লিখুন অথবা মুখে বলে সেন্ড করুন।</em>
+              💡 <em>আপনার যেকোনো প্রশ্ন নিচে লিখে শুরু করুন।</em>
             </p>
           </div>
         </div>
@@ -935,9 +909,6 @@
             autocomplete="off"
             required
           >
-          <button type="button" id="micBtn" class="mic-btn" onclick="toggleVoiceInput()" title="Voice Input (বাংলা / English)">
-            🎙️
-          </button>
           <button type="submit" id="sendBtn" class="send-btn" title="Send message">
             ➤
           </button>
@@ -955,12 +926,9 @@
     const chatMessages = document.getElementById("chatMessages");
     const questionInput = document.getElementById("questionInput");
     const sendBtn = document.getElementById("sendBtn");
-    const micBtn = document.getElementById("micBtn");
     const typingIndicator = document.getElementById("typingIndicator");
 
     let conversationHistory = [];
-    let isRecording = false;
-    let recognition = null;
 
     // =========================================
     // THEME CONTROLLER
@@ -1079,52 +1047,6 @@
       window.speechSynthesis.speak(utterance);
     }
 
-    // Voice Input
-    function toggleVoiceInput() {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRecognition) {
-        alert("Voice recognition is not supported in this browser. Please try Chrome or Edge.");
-        return;
-      }
-
-      if (isRecording) {
-        if (recognition) recognition.stop();
-        return;
-      }
-
-      recognition = new SpeechRecognition();
-      recognition.lang = 'bn-BD';
-      recognition.interimResults = false;
-      recognition.maxAlternatives = 1;
-
-      recognition.onstart = () => {
-        isRecording = true;
-        micBtn.classList.add("recording");
-        micBtn.title = "Listening...";
-      };
-
-      recognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        if (transcript) {
-          questionInput.value = transcript;
-          sendMessage(transcript);
-        }
-      };
-
-      recognition.onerror = (event) => {
-        console.warn("Speech recognition error:", event.error);
-        isRecording = false;
-        micBtn.classList.remove("recording");
-      };
-
-      recognition.onend = () => {
-        isRecording = false;
-        micBtn.classList.remove("recording");
-        micBtn.title = "Voice Input";
-      };
-
-      recognition.start();
-    }
 
     function clearChat() {
       if (confirm("Clear current conversation?")) {

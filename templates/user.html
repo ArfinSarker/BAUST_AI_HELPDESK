@@ -878,7 +878,6 @@
             {{ answer | safe }}
             <div class="bubble-actions">
               <button class="action-icon-btn" onclick="copyText(this)">📋 Copy</button>
-              <button class="action-icon-btn" onclick="speakText(this)">🔊 Listen</button>
             </div>
           </div>
         </div>
@@ -990,7 +989,6 @@
           ${htmlContent}
           <div class="bubble-actions">
             <button class="action-icon-btn" onclick="copyText(this)">📋 Copy</button>
-            <button class="action-icon-btn" onclick="speakText(this)">🔊 Listen</button>
           </div>
         </div>
       `;
@@ -1006,7 +1004,7 @@
 
     function copyText(button) {
       const bubble = button.closest('.bubble');
-      const textToCopy = bubble.innerText.replace("📋 Copy", "").replace("🔊 Listen", "").trim();
+      const textToCopy = bubble.innerText.replace("📋 Copy", "").trim();
       navigator.clipboard.writeText(textToCopy).then(() => {
         const originalText = button.innerHTML;
         button.innerHTML = "✅ Copied!";
@@ -1014,37 +1012,6 @@
           button.innerHTML = originalText;
         }, 2000);
       });
-    }
-
-    // Speech Synthesis
-    function speakText(button) {
-      if (!('speechSynthesis' in window)) {
-        alert("Text-to-speech is not supported on your browser.");
-        return;
-      }
-
-      if (window.speechSynthesis.speaking) {
-        window.speechSynthesis.cancel();
-        button.innerHTML = "🔊 Listen";
-        return;
-      }
-
-      const bubble = button.closest('.bubble');
-      const text = bubble.innerText.replace("📋 Copy", "").replace("🔊 Listen", "").trim();
-
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 1.0;
-      
-      utterance.onend = () => {
-        button.innerHTML = "🔊 Listen";
-      };
-
-      utterance.onerror = () => {
-        button.innerHTML = "🔊 Listen";
-      };
-
-      button.innerHTML = "⏹️ Stop";
-      window.speechSynthesis.speak(utterance);
     }
 
 

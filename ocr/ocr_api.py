@@ -76,10 +76,10 @@ Output ONLY the extracted, structured Markdown.
 """
 
         models_to_try = [
-            os.getenv("GEMINI_MODEL", "gemini-3.1-flash-lite"),
-            "gemini-3.1-flash-lite",
-            "gemini-3.5-flash",
-            "gemini-3.6-flash"
+            os.getenv("GEMINI_MODEL", "gemini-flash-latest"),
+            "gemini-flash-latest",
+            "gemini-flash-lite-latest",
+            "gemini-pro-latest"
         ]
         unique_models = list(dict.fromkeys(models_to_try))
 

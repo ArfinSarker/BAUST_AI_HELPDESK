@@ -1,19 +1,24 @@
 import os
 import re
+import time
+import requests
 from dotenv import load_dotenv
-from google import genai
 
 load_dotenv()
 
 api_key = os.getenv("GEMINI_API_KEY")
 
-if not api_key:
-    raise ValueError("GEMINI_API_KEY not found in .env file")
-
-client = genai.Client(api_key=api_key)
+client = None
+try:
+    from google import genai
+    if api_key:
+        client = genai.Client(api_key=api_key)
+except Exception as e:
+    print(f"[Gemini Client Init Warning]: {e}")
+    client = None
 
 # Primary model identifier (Fast, highly capable, and stable)
-DEFAULT_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.1-flash-lite")
+DEFAULT_MODEL = os.getenv("GEMINI_MODEL", "gemini-flash-latest")
 
 # Intent classifier pattern for instant greetings
 GREETING_PATTERNS = [
@@ -24,6 +29,67 @@ GREETING_PATTERNS = [
 def is_greeting(text: str) -> bool:
     clean_text = text.strip().lower()
     return any(re.match(pattern, clean_text) for pattern in GREETING_PATTERNS)
+
+
+def call_gemini_generate(prompt: str, temperature: float = 0.2, preferred_model: str = None) -> str:
+    """
+    Robust Gemini caller that tries google.genai SDK first and seamlessly falls back
+    to Google's REST API with model fallback if SDK or specific model fails.
+    """
+    key = os.getenv("GEMINI_API_KEY")
+    if not key:
+        return ""
+
+    models_to_try = [
+        preferred_model,
+        DEFAULT_MODEL,
+        "gemini-flash-latest",
+        "gemini-flash-lite-latest",
+        "gemini-pro-latest"
+    ]
+    unique_models = list(dict.fromkeys([m for m in models_to_try if m]))
+
+    # Method 1: Try SDK client if initialized
+    if client is not None:
+        for model_name in unique_models:
+            try:
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=prompt,
+                    config={"temperature": temperature}
+                )
+                if response and response.text and response.text.strip():
+                    return response.text.strip()
+            except Exception as e:
+                print(f"[Gemini SDK Error with {model_name}]: {e}")
+                continue
+
+    # Method 2: Direct REST API (guaranteed compatibility & zero SDK dependency overhead)
+    for model_name in unique_models:
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={key}"
+        payload = {
+            "contents": [{"parts": [{"text": prompt}]}],
+            "generationConfig": {"temperature": temperature}
+        }
+        for attempt in range(2):
+            try:
+                resp = requests.post(url, json=payload, timeout=20)
+                if resp.status_code == 200:
+                    data = resp.json()
+                    candidates = data.get("candidates", [])
+                    if candidates:
+                        parts = candidates[0].get("content", {}).get("parts", [])
+                        if parts and "text" in parts[0]:
+                            return parts[0]["text"].strip()
+                elif resp.status_code in [429, 503]:
+                    time.sleep(0.5)
+                else:
+                    break
+            except Exception as e:
+                time.sleep(0.3)
+                continue
+
+    return ""
 
 
 def clean_raw_icon_artifacts(text: str) -> str:
@@ -102,28 +168,8 @@ Output ONLY the structured, categorized Markdown text.
 RAW INPUT TEXT:
 {cleaned_pretext}
 """
-    models_to_try = [
-        DEFAULT_MODEL,
-        "gemini-3.1-flash-lite",
-        "gemini-3.5-flash",
-        "gemini-3.6-flash"
-    ]
-    unique_models = list(dict.fromkeys(models_to_try))
-
-    for model_name in unique_models:
-        try:
-            response = client.models.generate_content(
-                model=model_name,
-                contents=prompt,
-                config={"temperature": 0.1}
-            )
-            if response and response.text and response.text.strip():
-                return response.text.strip()
-        except Exception as e:
-            print(f"[Gemini Structuring Error with {model_name}]: {e}")
-            continue
-
-    return cleaned_pretext
+    result = call_gemini_generate(prompt, temperature=0.1)
+    return result if result else cleaned_pretext
 
 
 def find_matching_knowledge_file(new_text: str, knowledge_folder: str) -> tuple[str, str]:
@@ -206,42 +252,24 @@ MATCH: <exact_existing_filename_from_list>
 If NEW:
 NEW: <suggested_snake_case_stem_without_extension>
 """
-    models_to_try = [
-        DEFAULT_MODEL,
-        "gemini-3.1-flash-lite",
-        "gemini-3.5-flash",
-        "gemini-3.6-flash"
-    ]
-    unique_models = list(dict.fromkeys(models_to_try))
+    resp_text = call_gemini_generate(prompt, temperature=0.0)
+    if resp_text:
+        match = re.search(r'MATCH:\s*`?([a-zA-Z0-9_\-\.]+\.txt)`?', resp_text, re.IGNORECASE)
+        if match:
+            matched_file = match.group(1).strip()
+            if matched_file in existing_files:
+                return matched_file, os.path.splitext(matched_file)[0]
 
-    for model_name in unique_models:
-        try:
-            response = client.models.generate_content(
-                model=model_name,
-                contents=prompt,
-                config={"temperature": 0.0}
-            )
-            if response and response.text:
-                resp_text = response.text.strip()
-                match = re.search(r'MATCH:\s*`?([a-zA-Z0-9_\-\.]+\.txt)`?', resp_text, re.IGNORECASE)
-                if match:
-                    matched_file = match.group(1).strip()
-                    if matched_file in existing_files:
-                        return matched_file, os.path.splitext(matched_file)[0]
+        # Fallback check if filename was mentioned without extension
+        for ef in existing_files:
+            stem_name = os.path.splitext(ef)[0]
+            if stem_name in resp_text:
+                return ef, stem_name
 
-                # Fallback check if filename was mentioned without extension
-                for ef in existing_files:
-                    stem_name = os.path.splitext(ef)[0]
-                    if stem_name in resp_text:
-                        return ef, stem_name
-
-                new_match = re.search(r'NEW:\s*`?([a-zA-Z0-9_\-]+)`?', resp_text, re.IGNORECASE)
-                if new_match:
-                    stem = new_match.group(1).strip().lower()
-                    return None, stem
-        except Exception as e:
-            print(f"[Topic Matcher Error with {model_name}]: {e}")
-            continue
+        new_match = re.search(r'NEW:\s*`?([a-zA-Z0-9_\-]+)`?', resp_text, re.IGNORECASE)
+        if new_match:
+            stem = new_match.group(1).strip().lower()
+            return None, stem
 
     return None, "document"
 
@@ -285,26 +313,9 @@ EXISTING DOCUMENT:
 NEW INFORMATION TO INTEGRATE:
 {new_text}
 """
-    models_to_try = [
-        DEFAULT_MODEL,
-        "gemini-3.1-flash-lite",
-        "gemini-3.5-flash",
-        "gemini-3.6-flash"
-    ]
-    unique_models = list(dict.fromkeys(models_to_try))
-
-    for model_name in unique_models:
-        try:
-            response = client.models.generate_content(
-                model=model_name,
-                contents=prompt,
-                config={"temperature": 0.1}
-            )
-            if response and response.text and response.text.strip():
-                return response.text.strip()
-        except Exception as e:
-            print(f"[Document Merger Error with {model_name}]: {e}")
-            continue
+    merged = call_gemini_generate(prompt, temperature=0.1)
+    if merged and merged.strip():
+        return merged.strip()
 
     # Fallback: append cleanly
     return f"{existing_text.strip()}\n\n---\n\n## Additional Updates & Policies\n{new_text.strip()}"
@@ -379,24 +390,9 @@ USER QUESTION:
 
 ASSISTANT RESPONSE (Crisp, clean, structured, directly answering the question):"""
 
-    # Active Gemini models with fast fallback order
-    models_to_try = [DEFAULT_MODEL, "gemini-3.1-flash-lite", "gemini-3.5-flash", "gemini-3.6-flash"]
-    unique_models = list(dict.fromkeys(models_to_try))
-
-    for model_name in unique_models:
-        try:
-            response = client.models.generate_content(
-                model=model_name,
-                contents=prompt,
-                config={"temperature": 0.3}
-            )
-
-            if response and response.text:
-                return response.text.strip()
-
-        except Exception as e:
-            print(f"[Gemini API Error with {model_name}]: {e}")
-            continue
+    ans = call_gemini_generate(prompt, temperature=0.3)
+    if ans and ans.strip():
+        return ans.strip()
 
     return (
         "সার্ভারে সাময়িক সমস্যা হচ্ছে। অনুগ্রহ করে পুনরায় প্রশ্নটি করুন অথবা BAUST হেল্পলাইনে সরাসরি যোগাযোগ করুন: **01769675588**, **01769675589**"

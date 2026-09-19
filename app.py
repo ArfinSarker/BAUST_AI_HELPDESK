@@ -33,7 +33,7 @@ KNOWLEDGE_FOLDER = os.path.join(BASE_DIR, "knowledge_base")
 VECTOR_FOLDER = os.path.join(BASE_DIR, "vector_store")
 
 app = Flask(__name__)
-app.secret_key = os.getenv("FLASK_SECRET_KEY", "baust-ai-helpdesk-session-secret-2026")
+app.secret_key = os.getenv("SECRET_KEY") or os.getenv("FLASK_SECRET_KEY") or "baust_ai_secret_key_2026"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["MAX_CONTENT_LENGTH"] = 25 * 1024 * 1024  # 25MB max file upload
 
@@ -260,7 +260,7 @@ def admin_login():
             flash("Welcome back, Administrator!", "success")
             return redirect(url_for("admin"))
         else:
-            error = "Invalid username or password. (Default credentials: admin / baust123)"
+            error = "Invalid username or password. Please try again."
 
     return render_template("admin_login.html", error=error)
 
@@ -304,7 +304,7 @@ def admin():
                         continue
 
                     clean_raw_name = sanitize_filename(uploaded_file.filename)
-                    save_path = os.path.join(batch_path, clean_raw_name)
+                    save_path = os.path.join(UPLOAD_FOLDER, clean_raw_name)
                     uploaded_file.save(save_path)
 
                     # Extract text using multi-format extractor (PDF, Image, TXT)
@@ -442,7 +442,8 @@ def admin():
 
     # Fetch stats for dashboard
     documents = get_knowledge_documents()
-    docs, _ = get_store()
+    store = get_store()
+    docs = store[0] if store else []
     total_chunks = len(docs) if docs else 0
 
     return render_template(
@@ -450,7 +451,7 @@ def admin():
         text=ocr_preview,
         documents=documents,
         total_chunks=total_chunks,
-        model_name=os.getenv("GEMINI_MODEL", "gemini-3.1-flash-lite")
+        model_name=os.getenv("GEMINI_MODEL", "gemini-flash-latest")
     )
 
 

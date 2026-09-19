@@ -485,6 +485,141 @@
       box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
     }
 
+    /* Loading Overlay & Processing State */
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(8, 13, 26, 0.78);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      opacity: 0;
+      transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .loading-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .loading-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      max-width: 440px;
+      width: 90%;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(56, 189, 248, 0.15);
+      animation: zoomIn 0.3s ease-out;
+    }
+
+    @keyframes zoomIn {
+      from { transform: scale(0.92); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .spinner-ring {
+      width: 64px;
+      height: 64px;
+      border: 4px solid rgba(56, 189, 248, 0.18);
+      border-top-color: #38BDF8;
+      border-right-color: #2563EB;
+      border-radius: 50%;
+      animation: spin 0.9s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);
+      margin-bottom: 8px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--text);
+      margin-top: 6px;
+    }
+
+    .loading-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    .loading-progress-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      text-align: left;
+    }
+
+    .progress-step {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .progress-step.active {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .progress-step-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--input-border);
+    }
+
+    .progress-step.active .progress-step-dot {
+      background: #38BDF8;
+      box-shadow: 0 0 8px #38BDF8;
+      animation: pulse 1.2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.4); opacity: 0.6; }
+    }
+
+    /* Inline Button Loading Spinner */
+    .btn-spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #FFFFFF;
+      animation: spin 0.8s linear infinite;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+
+    .form-locked {
+      opacity: 0.6 !important;
+      pointer-events: none !important;
+      user-select: none !important;
+    }
+
     /* Preview Card */
     .preview-card {
       background: var(--input-bg);
@@ -517,6 +652,34 @@
   </style>
 </head>
 <body>
+
+  <!-- Fullscreen Modern Loading Overlay -->
+  <div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-card">
+      <div class="spinner-ring"></div>
+      <h3 id="loadingMainTitle" class="loading-title">AI Processing & Syncing...</h3>
+      <p id="loadingSubTitle" class="loading-subtitle">Please wait while the system processes your document, extracts content, and updates the AI memory.</p>
+      
+      <div class="loading-progress-steps">
+        <div id="step1" class="progress-step active">
+          <span class="progress-step-dot"></span>
+          <span>1. Extracting Text & Removing Artifacts</span>
+        </div>
+        <div id="step2" class="progress-step">
+          <span class="progress-step-dot"></span>
+          <span>2. Semantic Structuring & Clean Markdown</span>
+        </div>
+        <div id="step3" class="progress-step">
+          <span class="progress-step-dot"></span>
+          <span>3. Intelligent Topic Matching & Auto-Merge</span>
+        </div>
+        <div id="step4" class="progress-step">
+          <span class="progress-step-dot"></span>
+          <span>4. Generating Embeddings & Syncing FAISS Vector Store</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Admin Navbar -->
   <header class="admin-navbar">
@@ -582,13 +745,13 @@
     <section class="panels-grid">
 
       <!-- Panel 1: Document Upload (Improved Day & Night UI) -->
-      <div class="panel-card">
+      <div class="panel-card" id="uploadPanelCard">
         <div class="panel-header">
           <h2>📄 Upload University Document</h2>
           <p>Supports <strong>PDF</strong>, <strong>Plain Text (.txt)</strong>, and <strong>Images (PNG/JPG)</strong>. Automatic text extraction and vector sync.</p>
         </div>
 
-        <form id="uploadForm" method="POST" enctype="multipart/form-data" onsubmit="handleUploadSubmit(event)">
+        <form id="uploadForm" method="POST" enctype="multipart/form-data" onsubmit="return handleUploadSubmit(event)">
           <input type="hidden" name="action" value="upload">
           
           <div class="form-group" style="margin-bottom: 12px;">
@@ -601,13 +764,13 @@
               placeholder="e.g. Message_From_Chief_of_Army_Staff"
             >
             <span style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">
-              Will be saved with underscores (e.g., <code>Message_From_Chief_of_Army_Staff.txt</code>).
+              Auto-merges if related to an existing topic, or saves in snake_case.
             </span>
           </div>
 
           <div class="form-group">
             <label>Select File(s)</label>
-            <div class="file-dropzone" onclick="document.getElementById('fileInput').click()">
+            <div id="dropzoneBox" class="file-dropzone" onclick="document.getElementById('fileInput').click()">
               <div class="dropzone-icon">📂</div>
               <div class="dropzone-text">Click or Drag & Drop file(s) here</div>
               <div class="dropzone-subtext">PDFs, TXT, PNG, JPG (Multiple files supported)</div>
@@ -628,36 +791,38 @@
           </div>
 
           <button type="submit" id="uploadBtn" class="btn-submit" style="margin-top: 14px; width: 100%;">
-            ⚡ Upload & Sync to AI Database
+            <span id="uploadBtnIcon">⚡</span>
+            <span id="uploadBtnText">Upload & Sync to AI Database</span>
           </button>
         </form>
       </div>
 
       <!-- Panel 2: Direct Text Notice Composer -->
-      <div class="panel-card">
+      <div class="panel-card" id="noticePanelCard">
         <div class="panel-header">
           <h2>✍️ Publish Direct Notice / Policy</h2>
-          <p>Quickly paste or type an urgent announcement, date change, or tuition fee update without needing a file.</p>
+          <p>Quickly paste or type an urgent announcement, policy, date change, or fee update without needing a file.</p>
         </div>
 
-        <form method="POST">
+        <form id="directNoticeForm" method="POST" onsubmit="return handleDirectNoticeSubmit(event)">
           <input type="hidden" name="action" value="direct_notice">
 
           <div class="form-group">
-            <label for="noticeTitle">Notice Title</label>
-            <input type="text" id="noticeTitle" name="title" class="text-input" placeholder="e.g. Admission_Requirements_2026" required>
+            <label for="noticeTitle">Notice Title (Optional)</label>
+            <input type="text" id="noticeTitle" name="title" class="text-input" placeholder="e.g. Admission_Requirements_2026">
             <span style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">
-              Saved as <code>[Title].txt</code> (spaces are converted to underscores).
+              Leave blank to auto-detect topic and merge with existing knowledge files.
             </span>
           </div>
 
           <div class="form-group" style="margin-top: 10px;">
             <label for="noticeContent">Notice Content & Instructions</label>
-            <textarea id="noticeContent" name="content" class="textarea-input" placeholder="Enter full admission details, requirements, dates, or contact info..." required></textarea>
+            <textarea id="noticeContent" name="content" class="textarea-input" placeholder="Enter full admission details, policy rules, requirements, dates, or contact info..." required></textarea>
           </div>
 
-          <button type="submit" class="btn-submit" style="margin-top: 14px; width: 100%;">
-            📝 Save & Rebuild AI Index
+          <button type="submit" id="noticeBtn" class="btn-submit" style="margin-top: 14px; width: 100%;">
+            <span id="noticeBtnIcon">📝</span>
+            <span id="noticeBtnText">Save & Rebuild AI Index</span>
           </button>
         </form>
       </div>
@@ -679,9 +844,10 @@
     <section class="table-card">
       <div class="table-header">
         <h2>📚 Managed Knowledge Base Files ({{ documents|length }})</h2>
-        <form method="POST" action="/admin/reindex">
-          <button type="submit" class="btn-submit" style="padding: 8px 16px; font-size: 12px;" title="Rebuild Vector Index">
-            🔄 Rebuild / Sync All Vectors
+        <form method="POST" action="/admin/reindex" onsubmit="return handleReindexSubmit(event)">
+          <button type="submit" id="reindexBtn" class="btn-submit" style="padding: 8px 16px; font-size: 12px;" title="Rebuild Vector Index">
+            <span id="reindexBtnIcon">🔄</span>
+            <span id="reindexBtnText">Rebuild / Sync All Vectors</span>
           </button>
         </form>
       </div>
@@ -772,24 +938,134 @@
       }
     }
 
-    // Upload Submit Loading State
+    // Step Animation Progress Tracker
+    function startProgressStepsAnimation() {
+      const steps = [
+        document.getElementById('step1'),
+        document.getElementById('step2'),
+        document.getElementById('step3'),
+        document.getElementById('step4')
+      ];
+
+      // Reset
+      steps.forEach((s, idx) => {
+        if (s) {
+          s.classList.remove('active');
+          if (idx === 0) s.classList.add('active');
+        }
+      });
+
+      setTimeout(() => {
+        if (steps[0]) steps[0].classList.remove('active');
+        if (steps[1]) steps[1].classList.add('active');
+      }, 2000);
+
+      setTimeout(() => {
+        if (steps[1]) steps[1].classList.remove('active');
+        if (steps[2]) steps[2].classList.add('active');
+      }, 4500);
+
+      setTimeout(() => {
+        if (steps[2]) steps[2].classList.remove('active');
+        if (steps[3]) steps[3].classList.add('active');
+      }, 7000);
+    }
+
+    function showLoadingOverlay(mainTitle, subTitle) {
+      const overlay = document.getElementById('loadingOverlay');
+      if (mainTitle) document.getElementById('loadingMainTitle').textContent = mainTitle;
+      if (subTitle) document.getElementById('loadingSubTitle').textContent = subTitle;
+      if (overlay) overlay.classList.add('active');
+      startProgressStepsAnimation();
+    }
+
+    // 1. Upload Submit Loading & Lock
     function handleUploadSubmit(event) {
       const fileInput = document.getElementById('fileInput');
       if (!fileInput.files.length) {
         event.preventDefault();
         alert('Please select at least one file to upload.');
-        return;
+        return false;
       }
 
       const uploadBtn = document.getElementById('uploadBtn');
-      uploadBtn.innerHTML = '⏳ Uploading & Syncing... Please wait';
+      const uploadPanel = document.getElementById('uploadPanelCard');
+      const noticePanel = document.getElementById('noticePanelCard');
+
+      // Lock buttons & inputs
+      uploadBtn.disabled = true;
+      uploadBtn.innerHTML = '<span class="btn-spinner"></span> Extracting & Syncing...';
       uploadBtn.style.opacity = '0.75';
-      uploadBtn.style.pointerEvents = 'none';
+      uploadBtn.style.cursor = 'not-allowed';
+
+      if (uploadPanel) uploadPanel.classList.add('form-locked');
+      if (noticePanel) noticePanel.classList.add('form-locked');
+
+      showLoadingOverlay(
+        "Processing Document & Updating AI...",
+        "Multimodal Vision is extracting text, removing icon artifacts, and auto-merging into your knowledge base."
+      );
+
+      return true;
     }
 
-    // Reliable Delete Confirmation
+    // 2. Direct Notice Submit Loading & Lock
+    function handleDirectNoticeSubmit(event) {
+      const content = document.getElementById('noticeContent').value.trim();
+      if (!content) {
+        event.preventDefault();
+        alert('Notice content cannot be empty.');
+        return false;
+      }
+
+      const noticeBtn = document.getElementById('noticeBtn');
+      const uploadPanel = document.getElementById('uploadPanelCard');
+      const noticePanel = document.getElementById('noticePanelCard');
+
+      noticeBtn.disabled = true;
+      noticeBtn.innerHTML = '<span class="btn-spinner"></span> Publishing & Syncing...';
+      noticeBtn.style.opacity = '0.75';
+      noticeBtn.style.cursor = 'not-allowed';
+
+      if (uploadPanel) uploadPanel.classList.add('form-locked');
+      if (noticePanel) noticePanel.classList.add('form-locked');
+
+      showLoadingOverlay(
+        "Publishing Notice & Indexing AI...",
+        "Structuring notice into clean Markdown and syncing FAISS vector database."
+      );
+
+      return true;
+    }
+
+    // 3. Rebuild Index Loading & Lock
+    function handleReindexSubmit(event) {
+      const reindexBtn = document.getElementById('reindexBtn');
+      if (reindexBtn) {
+        reindexBtn.disabled = true;
+        reindexBtn.innerHTML = '<span class="btn-spinner"></span> Rebuilding Vectors...';
+        reindexBtn.style.opacity = '0.75';
+        reindexBtn.style.cursor = 'not-allowed';
+      }
+
+      showLoadingOverlay(
+        "Rebuilding All Vector Embeddings...",
+        "Scanning all knowledge documents and generating multilingual cosine similarity indices."
+      );
+
+      return true;
+    }
+
+    // 4. Reliable Delete Confirmation & Loading
     function confirmDelete(docName) {
-      return confirm(`Are you sure you want to delete "${docName}" from the knowledge base?\nThis action will update the AI vector index automatically.`);
+      const confirmed = confirm(`Are you sure you want to delete "${docName}" from the knowledge base?\nThis action will update the AI vector index automatically.`);
+      if (confirmed) {
+        showLoadingOverlay(
+          `Deleting "${docName}"...`,
+          "Removing file and re-indexing the vector database."
+        );
+      }
+      return confirmed;
     }
 
     // Sync button UI on initial load

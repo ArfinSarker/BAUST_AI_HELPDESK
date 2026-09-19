@@ -254,12 +254,13 @@ def admin_login():
         username = request.form.get("username", "").strip()
         password = request.form.get("password", "").strip()
 
-        if username == ADMIN_USER and password == ADMIN_PASSWORD:
+        if username.lower() == ADMIN_USER.lower() and password == ADMIN_PASSWORD:
             session["admin"] = True
+            session.permanent = True
             flash("Welcome back, Administrator!", "success")
             return redirect(url_for("admin"))
         else:
-            error = "Invalid username or password. Please try again."
+            error = "Invalid username or password. (Default credentials: admin / baust123)"
 
     return render_template("admin_login.html", error=error)
 

@@ -1,6 +1,52 @@
-BAUST is a private university sponsored by Bangladesh Army Welfare Trust. Bangladesh Army established BAUST on 15 Feb 2015 at Saidpur Cantonment and it was inaugurated by Hon’ble Minister of Cultural Affairs of Bangladesh on the same date.
-
-The intention to establish BAUST is to spread technical education to the remote places of the country.
-BAUST got approval to start its academic activities from Ministry of Education and UGC on 17 February 2015 and launched its academic session with four departments (CSE, EEE, ME, and A & S) on 15 Feb 2015 under 03 faculties. At present BAUST is functioning with 10 departments (CSE, EEE, ME, IPE, CE, ICT, Business Administration, English, AIS and A&S) under 05 faculties.
-
+# Bangladesh Army University of Science and Technology (BAUST)
+
+## Brief History & Establishment
+BAUST is a private university sponsored by Bangladesh Army Welfare Trust. Bangladesh Army established BAUST on 15 Feb 2015 at Saidpur Cantonment and it was inaugurated by Hon’ble Minister of Cultural Affairs of Bangladesh on the same date.
+
+The intention to establish BAUST is to spread technical education to the remote places of the country.
+BAUST got approval to start its academic activities from Ministry of Education and UGC on 17 February 2015 and launched its academic session with four departments (CSE, EEE, ME, and A & S) on 15 Feb 2015 under 03 faculties. At present BAUST is functioning with 10 departments (CSE, EEE, ME, IPE, CE, ICT, Business Administration, English, AIS and A&S) under 05 faculties.
+
 BAUST is in full compliance with the Private University Act 2010 and instructions issued by Army Welfare Trust, Ministry of Education and University Grants Commission of Bangladesh.
+
+---
+
+## Why BAUST?
+BAUST stands as a premier institution committed to academic excellence and the holistic development of its students. Our core philosophy is built upon three pillars: **Discipline, Knowledge, and Morality.**
+
+BAUST distinguishes itself through a commitment to holistic education. By bridging the gap between academic rigor and moral development, the university ensures that graduates are not only technically proficient but also socially responsible citizens prepared to contribute to the development of Bangladesh and the global community.
+
+---
+
+## Vision
+The University aspires to transform into a center of excellence in Science, Engineering and Technology, Arts and Business Administration programs by providing innovative, multi-disciplinary courses to the young generation of the country and beyond. It endeavors to make the University a hub of knowledge and be recognized as a leading university of the country.
+
+---
+
+## Mission
+*   **Educational Excellence:** Providing state-of-the-art education to achieve disciplinary knowledge, problem-solving skills, leadership abilities, and communication skills.
+*   **Collaborative Environment:** Providing a collaborative environment enabling the free exchange of ideas to flourish research, creativity, and innovation.
+*   **Sustainability:** To remain updated and responsive to the diverse needs of society and transform in a sustainable way.
+
+---
+
+## Objectives
+*   **Academic Offerings:** To offer need-based programs and important disciplines of Science, Technology, Social Science, and Business for both undergraduate and graduate students.
+*   **Quality Teaching:** To strive for excellence by providing quality teaching through a wide variety of instructional approaches.
+*   **Human Resource Development:** To produce highly competent, global-standard manpower in Science and Technology who are proficient in communication skills, critical thinking, and analytical abilities.
+*   **Resource Generation:** To generate adequate resources to support the University’s instructions, research, and extension pursuits.
+*   **Support Systems:** To provide a timely, friendly, and accessible support system that promotes partnership and a sense of shared responsibility between students, faculty, alumni, and other stakeholders.
+*   **Institutional Expansion:** To strive for the gradual expansion of faculties, departments, and programs in accordance with the need and in abidance with the Private University Act, 2010 (revised).
+*   **Global Collaboration:** To develop joint collaborations with similar universities, institutes, and organizations, both at home and abroad, and sign agreements and Memorandums of Understanding (MoU) to this effect.
+*   **Core Values:** To sensitize and infuse the core values of BAUST—Integrity, Openness, Intellectual Curiosity, Commitment to Excellence, Self-Discipline, Sense of Responsibility, Diversity, and Respect for others—amongst the students.
+*   **Operational Agility:** To carry out other necessary university works to meet the needs of the time.
+
+---
+
+## Institutional Philosophy & Motto
+BAUST is built upon the core pillars of **Discipline, Knowledge, and Morality**.
+
+*   **Connectivity**: We operate as an integrated team, fostering trust, collaboration, and connectivity across diverse disciplines and global networks.
+*   **Excellence**: We demand excellence in all endeavors. We prioritize critical thinking, discipline, and responsibility, maintaining the highest standards for both faculty and students.
+*   **Creativity**: We believe that a creative individual holds immense potential for their institution, society, and the nation. We inspire every student to be a "creative dream catcher."
+
+**Institutional Motto:** *"Discipline, Knowledge, Morality"*

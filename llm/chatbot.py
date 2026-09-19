@@ -132,42 +132,54 @@ def find_matching_knowledge_file(new_text: str, knowledge_folder: str) -> tuple[
         path = os.path.join(knowledge_folder, f)
         try:
             with open(path, "r", encoding="utf-8") as file_obj:
-                snippet = file_obj.read()[:250].replace("\n", " ").strip()
-                file_summaries.append(f"- {f}: {snippet}")
+                content = file_obj.read()
+                headings = [line.strip() for line in content.splitlines() if line.strip().startswith("#")]
+                headings_summary = " | ".join(headings[:10]) if headings else "General topic"
+                snippet = content[:600].replace("\n", " ").strip()
+                file_summaries.append(f"- File: `{f}`\n  Sections: {headings_summary}\n  Snippet: {snippet[:250]}")
         except Exception:
             continue
 
     if not file_summaries:
         return None, "document"
 
-    files_str = "\n".join(file_summaries)
-    sample_new_snippet = new_text[:1200]
+    files_str = "\n\n".join(file_summaries)
+    sample_new_snippet = new_text[:2000]
 
     prompt = f"""
-You are the Knowledge Base Architect for Bangladesh Army University of Science and Technology (BAUST).
+You are the Chief Knowledge Base Architect for Bangladesh Army University of Science and Technology (BAUST).
 
-EXISTING KNOWLEDGE FILES:
+EXISTING KNOWLEDGE BASE FILES AND THEIR CURRENT SECTIONS:
 {files_str}
 
-NEWLY INGESTED CONTENT:
+NEWLY INGESTED CONTENT (NOTICE / POLICY / UPDATE / FORM / INFO):
 {sample_new_snippet}
 
 TASK:
-Determine if this new content belongs to one of the EXISTING files (as an update, addition, link, notice, or revision), OR if it represents a completely NEW separate topic.
+Analyze the new content and determine if it belongs to one of the EXISTING files (as an update, section, policy, notice, rule, addendum, or expansion), OR if it represents a completely NEW domain.
 
-DECISION CRITERIA:
-- If it is about admissions, forms, application links, deadlines -> match existing admission file.
-- If it is about CSE teachers, faculty updates, new teachers, leave info -> match cse_faculty_members.txt.
-- If it is about Halls, Provosts, Assistant Provosts, hostel facilities -> match hall_administration.txt or residential_facilities.txt.
-- If it is about campus wifi, internet -> match campus_wifi.txt.
-- Only create NEW if it is a genuinely distinct category (e.g. Bus transport, Blood Donation Club, Library).
+MATCHING & MERGING POLICY:
+1. **Notices, Policies, Rules, Circulars, and Guidelines:**
+   - Admission notices, circulars, fees, entrance test, dates, eligibility -> match existing admission file.
+   - Hall notices, hostel rules, curfew policies, seat allotment, provost contacts -> match existing residential halls file.
+   - Campus policies, fire safety policies, WiFi/internet rules, cafeteria notices, daycare guidelines, transport/bus policies, health & security rules -> match existing campus facilities/services file.
+   - Library notices, membership policies, book borrowing rules, library timings -> match library file (or campus facilities).
+   - Department policies, teacher lists, faculty leave updates, lab manuals/guidelines -> match department/lab files.
+   - University vision, mission, why BAUST, objectives, motto, administration -> match brief history/about BAUST file.
 
-OUTPUT FORMAT:
+2. **Aggressive Thematic Consolidation:**
+   - If an existing file's domain or sections logically cover this topic, ALWAYS match that file rather than creating a fragmented single-purpose file.
+   - You MUST output the EXACT filename from the existing files list.
+
+3. **Genuinely New Domains:**
+   - Only return `NEW` if the topic is totally unrelated to any existing files (e.g. Alumni Association, Sports Tournament, Blood Donation Club).
+
+OUTPUT FORMAT (STRICT):
 If MATCH:
-MATCH: <exact_existing_filename>
+MATCH: <exact_existing_filename_from_list>
 
 If NEW:
-NEW: <suggested_snake_case_name_without_extension>
+NEW: <suggested_snake_case_stem_without_extension>
 """
     models_to_try = [
         DEFAULT_MODEL,
@@ -186,13 +198,19 @@ NEW: <suggested_snake_case_name_without_extension>
             )
             if response and response.text:
                 resp_text = response.text.strip()
-                match = re.search(r'MATCH:\s*([a-zA-Z0-9_\-\.]+)', resp_text, re.IGNORECASE)
+                match = re.search(r'MATCH:\s*`?([a-zA-Z0-9_\-\.]+\.txt)`?', resp_text, re.IGNORECASE)
                 if match:
                     matched_file = match.group(1).strip()
                     if matched_file in existing_files:
                         return matched_file, os.path.splitext(matched_file)[0]
 
-                new_match = re.search(r'NEW:\s*([a-zA-Z0-9_\-]+)', resp_text, re.IGNORECASE)
+                # Fallback check if filename was mentioned without extension
+                for ef in existing_files:
+                    stem_name = os.path.splitext(ef)[0]
+                    if stem_name in resp_text:
+                        return ef, stem_name
+
+                new_match = re.search(r'NEW:\s*`?([a-zA-Z0-9_\-]+)`?', resp_text, re.IGNORECASE)
                 if new_match:
                     stem = new_match.group(1).strip().lower()
                     return None, stem
@@ -205,8 +223,8 @@ NEW: <suggested_snake_case_name_without_extension>
 
 def merge_into_existing_document(existing_text: str, new_text: str) -> str:
     """
-    Intelligently merges new information (links, updates, additional sections) into an existing document
-    without creating duplicates and preserving clean Markdown hierarchy.
+    Intelligently merges new information (policies, notices, links, updates, additional sections)
+    into an existing document without creating duplicates and preserving clean Markdown hierarchy.
     """
     if not existing_text or not existing_text.strip():
         return new_text
@@ -216,18 +234,21 @@ def merge_into_existing_document(existing_text: str, new_text: str) -> str:
     prompt = f"""
 You are an expert Knowledge Base Editor for Bangladesh Army University of Science and Technology (BAUST).
 
-Your task is to merge the NEW information into the EXISTING document intelligently.
+Your task is to merge the NEW information (which may be a Policy, Rule, Notice, Guideline, Contact Update, or Additional Data) into the EXISTING document intelligently.
 
 STRICT MERGING RULES:
-1. **NO REDUNDANCY / DUPLICATION**:
-   - Do NOT duplicate existing headings, paragraphs, or lists.
-   - If the new content updates existing facts (e.g., a new link, updated contact number, new deadline, or a new person), integrate or update them in the appropriate section.
-2. **PRESERVE ALL PRE-EXISTING DATA**:
-   - Do NOT remove any existing verified facts, faculty details, or notices unless explicitly replaced.
-3. **SEAMLESS STRUCTURE**:
-   - Maintain clean Markdown formatting (#, ##, ###, bullet lists, tables).
+1. **LOGICAL INTEGRATION & PLACEMENT**:
+   - If the new content is a Policy, Guideline, or Notice relevant to an existing section (e.g. Fire Safety Policy, Daycare Rules, Admission Deadline, Hall Provost info), integrate it directly under that section or create a neat subsection (e.g. `### Fire Safety Policy & Guidelines` or `## Policy & Guidelines`).
+   - If it is a general notice or announcement, add a dedicated `## Notices & Policies` or `## Rules & Regulations` section at an appropriate position.
+2. **NO DUPLICATION**:
+   - Do NOT duplicate existing headings, paragraphs, contact info, or tables.
+   - If the new content updates existing facts (e.g., a new link, phone number, updated deadline, or new person), update them in place.
+3. **PRESERVE ALL EXISTING DATA**:
+   - Keep all existing verified facts, faculty details, and history intact.
+4. **CLEAN MARKDOWN**:
+   - Maintain uniform Markdown hierarchy (#, ##, ###, bullet points, and tables).
 
-Output ONLY the complete, updated merged Markdown document.
+Output ONLY the complete, fully updated merged Markdown document.
 
 EXISTING DOCUMENT:
 {existing_text}
@@ -257,7 +278,7 @@ NEW INFORMATION TO INTEGRATE:
             continue
 
     # Fallback: append cleanly
-    return f"{existing_text.strip()}\n\n---\n\n## Additional Updates\n{new_text.strip()}"
+    return f"{existing_text.strip()}\n\n---\n\n## Additional Updates & Policies\n{new_text.strip()}"
 
 
 def generate_answer(context: str, question: str, history: list = None) -> str:

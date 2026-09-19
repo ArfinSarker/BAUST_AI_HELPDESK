@@ -75,6 +75,25 @@ BAUST is built upon the core pillars of **Discipline, Knowledge, and Morality**.
 ### Faculty of Civil Engineering (CE)
 *   B.Sc. Engg. in Civil Engineering (CE)
 
+#### Faculty of Civil Engineering (FCE) - Administrative & Staff Directory
+
+**Dean's Office**
+*   **Name:** Professor Dr. Md. Mahmudul Hasan
+*   **Designation:** Dean (In-Charge), Faculty of CE
+*   **Phone:** 01769-662720
+*   **Email:** dean_ce@baust.edu.bd
+*   **Qualifications:** B.Sc Engg. (Civil), KUET; M. Engg & PhD (Civil & Environmental Engg.), Ritsumeikan University
+
+**Current / Active Faculty Members**
+| Name | Designation | Department | Phone | Email | Qualifications | Status |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| Kh. Shihab Uddin Ahmed | Lecturer | Civil Engineering | +8801763988745 | kh.shihab@baust.edu.bd | B.Sc in Civil Engineering, BUET | Active |
+
+**Support Staff**
+*   **Name:** Md. Shakim Billah
+*   **Designation:** Messenger
+*   **Phone:** 01766022173
+
 ### Faculty of Business Studies (BS)
 *   Bachelor of Business Administration (BBA)
 *   BBA in Accounting and Information Systems (AIS)

@@ -1,0 +1,320 @@
+# Department of Civil Engineering (CE) - BAUST
+
+## Overview
+Civil engineering is the backbone of modern civilization—one of the oldest and most far-reaching disciplines in engineering. Civil engineers are the architects of infrastructure, shaping the physical world while ensuring environmental sustainability. From towering skyscrapers to sprawling dams, from cutting-edge suspension bridges to offshore drilling platforms, and from flood management to environmental protection, civil engineers make it all possible. They tackle challenges like earthquake resistance, pollution control, and sustainable development, all while managing projects and ensuring quality.
+
+## Civil Engineering at BAUST
+The Department of Civil Engineering (CE) at BAUST embarked on its mission in December 2019. The department offers a comprehensive fouryear B.Sc. degree in Civil Engineering, utilizing an **Outcome-Based Education (OBE)** system.
+
+### Specializations Offered
+*   Structural Engineering
+*   Environmental Engineering
+*   Geotechnical Engineering
+*   Transportation Engineering
+*   Water Resources Engineering
+
+## Vision
+To become a recognized center of excellence through producing Civil Engineering professionals inculcating morality, ethics, and discipline, and fitted for industry and academia to ensure sustainable development.
+
+## Mission
+*   To ensure a dynamic, student-centered learning environment with state-of-the-art facilities in Civil Engineering, including basic sciences and management.
+*   To provide opportunities that bridge theoretical knowledge with real-time projects and industrial activities, contributing to the sustainable development of society.
+*   To conduct advanced, inter- and multi-disciplinary research in collaboration with industries and other academia to address contemporary challenges.
+*   To foster students’ engagement in lifelong learning, cultivating appreciation for diversity, tolerance, ethics, and morality.
+
+## Program Educational Objectives (PEOs)
+1.  **Problem Solving:** Graduates will be competent to provide effective solutions to civil engineering problems by applying appropriate knowledge, skills, and tools.
+2.  **Professional Responsibility:** Graduates will responsibly practice civil engineering by integrating sustainability, safety, economic feasibility, and ethical values to meet societal needs.
+3.  **Leadership & Teamwork:** Graduates will demonstrate communication, leadership, teamwork, and project management skills in multidisciplinary and diverse professional environments.
+4.  **Lifelong Learning:** Graduates will engage in lifelong learning through higher studies, professional training, research, or entrepreneurship to address emerging technologies and evolving challenges for professional advancement.
+
+## Why Choose CE at BAUST?
+*   **Academic Framework:** Outcome Based Education (OBE) system with updated curricula and syllabi.
+*   **Faculty & Environment:** Highly qualified faculty members and a student-centered class environment.
+*   **Infrastructure:** State-of-the-art laboratories and 100% hall facilities (male and female).
+*   **Support & Growth:** Continuous monitoring of students, extra- and co-curricular activities, and collaboration with industries and universities.
+*   **Financial Aid:** 
+    *   Merit scholarships available.
+    *   Waivers for children of freedom fighters, siblings, and wards of military personnel.
+
+## Laboratory Facilities
+The Department of Civil Engineering provides specialized laboratory facilities to bridge theoretical knowledge with practical application:
+
+1.  **Practical Surveying Lab:** Focuses on chain, compass, and plane table surveying, leveling, contouring, theodolite, tacheometry, and curve/house setting.
+2.  **Civil Engineering Drawing Lab:** Covers manual drafting, geometric figures, projections, and building design (plan, elevation, and section) using traditional and CAD methods.
+3.  **Engineering Materials Lab (Concrete Lab):** Conducts tests on cement, aggregates, concrete, and bricks, including compressive strength, sieve analysis, and durability tests.
+4.  **Structural Mechanics Lab (SM Lab):** Analyzes structural behavior under load, including tension, compression, shear, hardness, and buckling tests.
+5.  **Open Channel Flow Lab:** Studies fluid behavior in rivers and canals, focusing on energy losses, flow visualization, and hydraulic structure design.
+6.  **Fluid Mechanics Lab:** Validates Bernoulli’s theorem and tests flow through orifices, weirs, and pipes.
+7.  **Computer Lab:** Utilizes software such as MATLAB, AutoCAD, ETABS, and SAP 2000 for engineering analysis, design, and programming.
+8.  **Mechanical Workshop Lab:** Provides hands-on training in fabrication, welding, cutting, and the use of power tools and measuring instruments.
+
+## B.Sc. Engineering in Civil Engineering (Syllabus 2022)
+*Effective from Batch 12 Onwards*
+
+### Summary of Curriculum
+The B.Sc. Engineering in Civil Engineering program is structured to provide a comprehensive foundation in core engineering principles, inter-disciplinary knowledge, and specialized elective tracks.
+
+*   **Total Program Credits:** 160.00
+*   **Core CE Credits:** 104.00
+*   **Arts & Science Credits:** 34.50
+*   **Inter-Disciplinary Credits:** 10.50
+*   **Elective Credits:** 11.00
+
+### Course Distribution
+
+#### 1. Arts & Science Department
+| Course Code | Course Name | Credits |
+| :--- | :--- | :--- |
+| HUM 1109 | Professional English | 2.00 |
+| HUM 1110 | Technical Report Writing and Presentation | 1.50 |
+| HUM 1209 | Sociology | 2.00 |
+| HUM 1219 | Bengali Language and Literature | 2.00 |
+| HUM 2109 | Engineering Economics | 2.00 |
+| HUM 2209 | Financial and Managerial Accounting | 2.00 |
+| HUM 2229 | History of the Emergence of Bangladesh | 2.00 |
+| PHY 1109 | Physics I | 3.00 |
+| PHY 1209 | Physics II | 3.00 |
+| PHY 1210 | Physics Sessional | 1.50 |
+| CHEM 1109 | Chemistry | 3.00 |
+| CHEM 1110 | Chemistry Sessional | 1.50 |
+| MATH 1109 | Math I (Calculus & Geometry) | 3.00 |
+| MATH 1209 | Math II (Differential Equations & Matrices) | 3.00 |
+| MATH 2109 | Math III (Vector, Laplace & Statistics) | 3.00 |
+| **Total** | | **34.50** |
+
+#### 2. Inter-Disciplinary Department
+| Course Code | Course Name | Credits |
+| :--- | :--- | :--- |
+| EEE 1213 | Basic Electrical Engineering | 3.00 |
+| EEE 1214 | Basic Electrical Engineering Sessional | 1.50 |
+| CSE 2123 | Introduction to Computer Programming | 3.00 |
+| CSE 2124 | Introduction to Computer Programming Sessional | 1.50 |
+| ME 1112 | Mechanical Engineering Shop Practice | 1.50 |
+| **Total** | | **10.50** |
+
+#### 3. Core Courses of CE Program
+| Course Code | Course Name | Credits |
+| :--- | :--- | :--- |
+| CE 1100 | Civil Engineering Drawing | 1.50 |
+| CE 1103 | Surveying | 3.00 |
+| CE 1200 | Computer Aided Drawing | 1.50 |
+| CE 1204 | Practical Surveying | 1.50 |
+| CE 1211 | Engineering Mechanics | 3.00 |
+| CE 2100 | Details of Construction | 1.50 |
+| CE 2105 | Engineering Materials | 3.00 |
+| CE 2106 | Engineering Materials Sessional | 1.50 |
+| CE 2111 | Mechanics of Solids I | 3.00 |
+| CE 2204 | Quantity Surveying | 1.50 |
+| CE 2207 | Applied Mathematics for Engineers | 3.00 |
+| CE 2211 | Mechanics of Solids II | 3.00 |
+| CE 2212 | Mechanics of Solids Sessional | 1.50 |
+| CE 2231 | Engineering Geology and Geomorphology | 3.00 |
+| CE 2261 | Mechanics of Fluids | 3.00 |
+| CE 2262 | Mechanics of Fluids Sessional | 1.50 |
+| CE 3107 | Numerical Methods for Engineers | 2.00 |
+| CE 3108 | Engineering Computation Sessional | 1.50 |
+| CE 3111 | Analysis and Design of Determinate Structures | 3.00 |
+| CE 3113 | Reinforced Concrete Structures I | 3.00 |
+| CE 3131 | Soil Mechanics | 3.00 |
+| CE 3132 | Geotechnical Engineering Sessional I | 1.50 |
+| CE 3141 | Environmental and Water Supply Engineering | 3.00 |
+| CE 3142 | Environmental Engineering Sessional I | 1.50 |
+| CE 3211 | Analysis of Lateral Loads and Deflection | 3.00 |
+| CE 3212 | Structural Analysis and Design Sessional I | 1.50 |
+| CE 3213 | Reinforced Concrete Structures II | 3.00 |
+| CE 3231 | Foundation Engineering | 3.00 |
+| CE 3251 | Fundamentals of Transportation Engineering | 3.00 |
+| CE 3252 | Transportation Engineering Sessional I | 1.50 |
+| CE 3261 | Open Channel Flow | 3.00 |
+| CE 3262 | Open Channel Flow Sessional | 1.50 |
+| CE 4000 | Thesis | 3.50 |
+| CE 4002 | Capstone Project | 3.00 |
+| CE 4101 | Engineering Ethics, Professional Practices | 3.00 |
+| CE 4102 | Engineering Ethics Sessional | 1.50 |
+| CE 4111 | Analysis and Design of Indeterminate Structures | 3.00 |
+| CE 4112 | Building Design Sessional | 1.50 |
+| CE 4141 | Wastewater Engineering and Sanitation | 3.00 |
+| CE 4151 | Pavement Design and Railway Engineering | 3.00 |
+| CE 4161 | Hydrology and Irrigation Engineering | 3.00 |
+| CE 4170 | Industrial Attachment | 1.00 |
+| CE 4201 | Project Planning and Construction Management | 3.00 |
+| **Total** | | **104.00** |
+
+### Elective Courses
+Students must select electives based on the following criteria:
+1.  **Thesis Related:** 1 Theory + 1 Sessional from Options II to VI.
+2.  **General Electives:** 3 additional Theory courses from Options I to VI (max 1 per group) + 1 additional Sessional from corresponding groups.
+
+| Option | Focus Area |
+| :--- | :--- |
+| **Option I** | Sustainability, Business & Career Development |
+| **Option II** | Structural Engineering |
+| **Option III** | Geotechnical Engineering |
+| **Option IV** | Environmental Engineering |
+| **Option V** | Transportation Engineering |
+| **Option VI** | Water Resources Engineering |
+
+### Important Academic Notes
+*   **Thesis/Capstone:** CE 4000 and CE 4002 are conducted throughout the 4th year (4-I and 4-II).
+*   **Industrial Attachment:** CE 4170 commences after the 3-II final examination for a duration of 2-3 weeks.
+
+## Department Head & Dean
+**Professor Dr. Md. Mahmudul Hasan**  
+*Dean of the Faculty of Civil Engineering & Professor and Head of the Dept. of Civil Engg.*  
+*   **Phone:** +8801769-662720 (Office), +8801712126942 (Personal)  
+*   **Email:** headce@baust.edu.bd, drmhasan2014@gmail.com  
+*   **Qualifications:** PhD and M.Engg. in Civil and Environmental Engg. (Ritsumeikan University, Japan), B.Sc in Civil Engineering (KUET)  
+
+## Current / Active Faculty Members
+
+| Name | Designation | Phone | Email | Qualifications |
+| :--- | :--- | :--- | :--- | :--- |
+| **Ataul Hakim Mahamud** | Assistant Professor | +8801350366612 | ahmahamud@baust.edu.bd | MSc (KTH, Sweden), BSc (SUST) |
+| **Kh. Shihab Uddin Ahmed** | Lecturer | +8801763988745 | kh.shihab@baust.edu.bd | B.Sc (BUET) |
+| **Habibur Rahman** | Lecturer | +8801767834616 | habibce@baust.edu.bd | M.Sc (Ongoing, KUET), B.Sc (KUET) |
+| **Md. Jahangir Alam** | Lecturer | +8801717657540 | ahangir_ce@baust.edu.bd | B.Sc (KUET) |
+| **Ahasanul Haque Hashib** | Lecturer | +8801409531383 | hashib_ce@baust.edu.bd | M.Sc (Ongoing, BUET), B.Sc (KUET) |
+| **Sabiha Tasnim Rifa** | Lecturer & Program Coord. | +8801754009237 | strifa@baust.edu.bd | M.Sc (Ongoing, RUET), B.Sc (RUET) |
+| **Punom Roy** | Lecturer | +8801303056351 | punomroy@baust.edu.bd | B.Sc (KUET) |
+| **Md. Sohrab Mia** | Lecturer | +8801576619671 | sohrab@baust.edu.bd | M.Sc (Ongoing, BUET), B.Sc (BUET) |
+| **Md. Aiman Wasee** | Lecturer | +8801744984093 | aiman@baust.edu.bd | B.Sc (KUET) |
+| **Anzuman Ara Priya** | Lecturer | +8801724902127 | anzumanara@baust.edu.bd | M.Sc (Ongoing, BUET), B.Sc (BUET) |
+| **Md. Kamrul Hasan Kawsar** | Lecturer | +8801916-741645 | kawsar@baust.edu.bd | M.Sc (Ongoing), B.Sc (DUET) |
+| **MD. Ausaf Alam** | Lecturer | 01673601673 | ausaf_ce@baust.edu.bd | B.Sc (BUET) |
+
+## Faculty Members on Study Leave
+*   **Md. Fazzle Rabby** (Lecturer) | +8801789798651 | fazzlece@baust.edu.bd | B.Sc (KUET)
+*   **Faisal Ahmed** (Lecturer) | +8801746390870 | faisalahmed_ce@baust.edu.bd | M.Sc (Ongoing, BUET), B.Sc (KUET)
+
+## Adjunct Faculty Members
+*   **Md. Tauhid Ur Rahman, PhD** | Professor, Dept. of CE, MIST | tauhid@ce.mist.ac.bd
+*   **Colonel Md Kabirul Islam** | Ex-Professor, MIST
+
+## Lab Technical Staff & Academic Support
+*   **Md. Ahedul Islam** (Lab Technician) | 01515235618 | ahedul@baust.edu.bd
+*   **Tushar Ahmmed** (Lab Assistant) | 01811341297 | tushar@baust.edu.bd
+*   **Md. Saikat Hossain** (Lab Assistant) | 01793063416 | saikat@baust.edu.bd
+*   **Most. Ruba Parvin** (Messenger) | 01724122021
+*   **Ole Foysal** (Cleaner) | 01975274861
+
+## Ex-Faculty & Former Staff
+| Name | Designation | Tenure |
+| :--- | :--- | :--- |
+| **Md. Faysal Kabir** | Lecturer | 04.09.2022 – 21.12.2025 |
+| **Md. Habib-Ul-Bashar** | Lecturer | 16.07.2023 – 21.08.2024 |
+| **Md. Sadman Islam** | Lecturer | 01.08.2022 – 16.07.2023 |
+| **Md. Izharul Haque Azad** | Asst. Professor | 15.12.2019 – 21.04.2024 |
+| **Md. Asaduzzaman** | Lecturer | N/A |
+| **Abu Saif Md. Nasim Uddin** | Lecturer | Dec 2019 – March 2022 |
+| **Md. Abdul Malek** | Teaching Assistant | N/A |
+| **Md. Raju Mia** | Ex-Lab Technician | N/A |
+
+## Environmental Sustainability Club (ESC) - BAUST
+
+### About ESC
+ESC is a pioneer club of the Department of Civil Engineering at BAUST. The club officially commenced its journey on **2nd September 2023** under the direct oversight and guidance of the Head of the Department, Dr. Mahmudul Hasan.
+
+*   **Club Motto:** "Towards the sustainable environment: our earth our responsibility"
+*   **Mission:** To provide a platform for individuals passionate about environmental sustainability to collaborate, share ideas, and work towards preserving and protecting the planet for future generations.
+
+### Club Activities
+*   Organizing Workshops and Seminars on current environmental issues.
+*   Field Trips and Site Visits.
+*   Environmental Awareness Campaigns.
+*   Tree Planting Campaigns.
+*   Community Clean-Up Initiatives.
+*   Sustainable Infrastructure Projects exhibition.
+*   Research and Innovation.
+*   Community Engagement in Different Environmental Issues.
+*   Guest Speaker Series.
+*   Recycling and Waste Reduction Initiatives.
+
+### Regulatory & Governing Body (Faculty)
+| Post | Name | Designation |
+| :--- | :--- | :--- |
+| **Chief Advisor** | Dr. Md. Mahmudul Hasan | Dean, Faculty of Civil Engineering; Professor & Head, Dept. of CE |
+| **Advisor** | Punom Roy | Lecturer, Dept. of Civil Engineering |
+| **Co-Advisor** | Md. Kamrul Hasan Kawsar | Lecturer, Dept. of Civil Engineering |
+
+*Note: Upon the approval of the respective Chief Advisor, the new executive committee will be effective for the Summer 2026 semester.*
+
+### Student Core Committee
+| Post | Name | Student ID | Batch |
+| :--- | :--- | :--- | :--- |
+| **President** | Md. Siam Ur Sadik Khan | 0802320405081017 | 17th |
+| **Vice-President** | Md. Nahid Hassan | 0802320205081022 | 17th |
+| **General Secretary** | Arifin Zahan Swarony | 0802320105081007 | 17th |
+| **Treasurer** | Saklain Mahmud Jissan | 0802420205081007 | 19th |
+| **Organizing Secretary** | Parvej Alam | 0802420205081008 | 19th |
+| **Member** | Abdullah Al Nayem | 0802510405081005 | 20th |
+| **Member** | Most. Atika Tahosin | 0802510105081001 | 20th |
+| **Member** | Siam Mahmud | 0802520205081009 | 21st |
+| **Media & Publication Sec.** | Sultan Mohammad Mubin | 0802520405081003 | 21st |
+| **Media & Publication Sec.** | Ovijit Kumar Datta | 0802520405081001 | 21st |
+| **Media & Publication Sec.** | Farhan Ishrak | 0802520205081019 | 21st |
+
+## Alumni Profile
+The Department of Civil Engineering at BAUST maintains a strong legacy of academic excellence. Our graduates are actively contributing to government and private sector engineering, consultancy, construction, research, and higher education both domestically and internationally.
+
+### BAUST CE Alumni: Professional Directory (Job Holders)
+| SL | Batch | Graduation Year | Name of Alumni | Current Position & Institution |
+|:---|:---|:---|:---|:---|
+| 1 | 10th | 2024 | Urnisha Roy Chowdhury | BOQ Coordinator, Maam International |
+| 2 | 10th | 2024 | Md. Abu Syied Hasan Utsho | Engineer, Environment and Infrastructure Management Solution (EIMS) Limited |
+| 3 | 10th | 2024 | Arpita Deb Roy | Assistant Engineer, The Contractors |
+| 4 | 10th | 2024 | Md. Arnob Karim | Assistant Engineer, Abdul Monem Limited |
+| 5 | 10th | 2024 | Md Abrar Jahin Tonu | Project Engineer, Idris Holding Ltd. |
+| 6 | 10th | 2024 | Rahat Ali | Structural Engineer, ACI Building Design & Construction |
+| 7 | 10th | 2024 | Jarin Tasmin Tisha | - |
+| 8 | 10th | 2024 | Saumake Ghosh | Remote Job, Success IT |
+| 9 | 10th | 2024 | Md. Sehanur Rahman | - |
+| 10 | 11th | 2024 | Md Waqar Ahmed Imteaz | Business, Unique Group |
+| 11 | 11th | 2024 | Md. Rockybul Islam | Assistant Engineer, Luxury Asset Development Ltd, Narayanganj |
+| 12 | 11th | 2024 | Md. Naimul Islam | Site Engineer, The Engineers & Builders |
+| 13 | 11th | 2024 | Md. Washim Akram | - |
+| 14 | 11th | 2024 | Md. Sayedur Rahman Mahin | Civil Engineer (BIWTA, Kanchpur Project), SS Rahman Group |
+| 15 | 11th | 2024 | Md Robiul Alam Rimon | Ecommerce Mentor, Gardenage LLC |
+| 16 | 11th | 2024 | Ahmadullah Hossain Raihan | Executive Engineer, S. A. Traders |
+
+### BAUST CE Alumni: Higher Studies Directory
+| SL | Batch | Graduation Year | Name of Alumni | Degree Pursuing & Institution |
+|:---|:---|:---|:---|:---|
+| 1 | 10th | 2024 | Md. Abu Helal | MSc in Civil Engineering, KUET |
+| 2 | 10th | 2024 | Zubair Reaz | MSc in Civil Engineering, AUST |
+| 3 | 10th | 2024 | Md. Abdul Malek | MSc in Civil Engineering, KUET |
+| 4 | 10th | 2024 | Sheikh Khoshruzzaman | MBA, University of Wales Trinity Saint David, London |
+
+## Department of Civil Engineering Alumni Association (BAUST)
+
+### Mission Statement
+To establish a dynamic and forward-looking alumni network for the Department of Civil Engineering at BAUST, Saidpur—one that fosters social, cultural, academic, and professional engagement among graduates. Our mission is to strengthen the bonds of unity and fellowship among alumni, while also supporting the continuous development of our department into a leading center of excellence in civil and infrastructure engineering. Through collaboration and contribution, we aim to play an active role in national development and in achieving the department’s vision. Our commitment is to remain connected with our alma mater and create meaningful opportunities for both current students and alumni.
+
+### Core Activities
+*   **Academic & Professional:** Organizing seminars, technical workshops, training sessions, and supporting academic research/innovation projects.
+*   **Career Development:** Hosting job fairs, recruitment events, career counseling, and mentoring programs.
+*   **Networking & Social:** Coordinating educational field trips, industrial visits, reunions, departmental picnics, and annual dinners.
+*   **Community & Engagement:** Conducting quiz contests, technical competitions, project showcases, cultural activities, and community service programs (e.g., blood donation drives).
+
+### Alumni Association Executive Committee
+| Post | Alumni Name | Contact |
+| :--- | :--- | :--- |
+| President | Md. Abu Helal | 01795748743 |
+| Coordinator & Treasurer | Zubair Reaz | 01774516589 |
+| Vice President (Liaison & PR) | Urnisha Roy Chowdhury | 01792929263 |
+| Vice President (Research & Dev) | Md. Abdul Malek | 01837691013 |
+| Vice President (Member Relation) | Rifat Ara | 01797734845 |
+| Secretary General | Md. Waqar Ahmed Imteaz | 01974604857 |
+| Secretary (Project Management) | Amit Sharma | - |
+| Secretary (Publication & Comm) | Md. Sayedur Rahman Mahin | 01623455479 |
+| Joint Secretary General | Md. Abu Syied Hasan | 01319998499 |
+| Secretary (Finance) | Arpita Deb Roy | 01777293767 |
+
+#### Executive Committee Members
+| Name | Contact |
+| :--- | :--- |
+| Sheikh Khoshruzzaman | +4407387912690 |
+| Md. Arnob Karim | 01098727325 |
+| Md. Abrar Jahin Tonu | 01954411860 |
+| Rahat Ali | 01734160376 |
+| Saumake Ghosh | 01772478449 |

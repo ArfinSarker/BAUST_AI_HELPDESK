@@ -4,18 +4,24 @@
 **Document Version:** April 2026 (Updated based on 18th Academic Council Meeting)
 
 ## Department Overview
-The Department of Industrial and Production Engineering (IPE) at BAUST provides an advanced, industry-aligned curriculum combining core mechanical/manufacturing engineering principles with modern industrial management, automation, operations research, and quality engineering.
-
----
+The Department of Industrial and Production Engineering (IPE) at BAUST, located in Saidpur Cantonment, Saidpur, Nilphamari, is a rapidly developing academic unit dedicated to quality education, research, and industrial collaboration. It provides an advanced, industry-aligned curriculum combining core mechanical/manufacturing engineering principles with modern industrial management, automation, operations research, and quality engineering. The department actively bridges the gap between academia and industry by providing specialized advisory, consultancy, research, and testing services to government and private organizations.
 
 ## General Information
 ### Introduction
-BAUST was established on 15 February 2015 by the Bangladesh Armed Forces to provide high-quality technical education. The university is located at Saidpur Cantonment, Saidpur, Nilphamari. The university offers four-year Bachelor of Science (B.Sc.) degrees in various engineering disciplines.
+BAUST was established on 15 February 2015 by the Bangladesh Armed Forces to provide high-quality technical education. The university offers four-year Bachelor of Science (B.Sc.) degrees in various engineering disciplines including CSE, EEE, ME, IPE, and CE.
 
-### Academic Objectives
-*   To provide undergraduate education in CSE, EEE, ME, IPE, and CE.
-*   To produce skilled, disciplined, and self-motivated engineers.
-*   To foster research and development in science and technology.
+### Departmental Details
+*   **Faculty:** Faculty of Mechanical Engineering (ME)
+*   **Location:** Room No: 101, BAUST Academic Building
+*   **University:** Bangladesh Army University of Science and Technology (BAUST)
+*   **Address:** Saidpur Cantonment, Saidpur-5310, Nilphamari, Bangladesh
+
+## Core Objectives
+*   **Academic Excellence:** Providing high-quality technical education to students.
+*   **Research & Development:** Engaging in innovative research to solve contemporary industrial challenges and foster development in science and technology.
+*   **Industrial Collaboration:** Bridging the gap between academia and the industrial sector.
+*   **Consultancy Services:** Providing advisory, consultancy, and testing services to both government and private organizations to support national development initiatives.
+*   **Student Development:** To produce skilled, disciplined, and self-motivated engineers.
 
 ---
 
@@ -23,10 +29,10 @@ BAUST was established on 15 February 2015 by the Bangladesh Armed Forces to prov
 ### Head of the Department
 *   **Head:** Md. Ariful Alam (Assistant Professor & Head)
 *   **Official Email:** headipe@baust.edu.bd
-*   **Official Phone:** +8801769675565
+*   **Official Phone:** +8801769675566 (WhatsApp Available)
+*   **General Email:** info.ipe@baust.edu.bd
 *   **Website:** [www.baust.edu.bd](http://www.baust.edu.bd)
-*   **General Email:** info@baust.edu.bd
-*   **Location:** Saidpur Cantonment, Saidpur, Nilphamari
+*   **Location:** Room No: 101, BAUST Academic Building, Saidpur Cantonment, Saidpur, Nilphamari
 
 ### Editorial Committee (IPE)
 *   **Md. Ariful Alam**, Assistant Professor & Head, IPE, BAUST
@@ -101,6 +107,70 @@ BAUST was established on 15 February 2015 by the Bangladesh Armed Forces to prov
 
 ---
 
+## Testing & Consultancy Services
+### Testing Services
+The department offers a wide range of technical testing services across its specialized laboratories.
+
+| Sl. No. | Laboratory Name | Test Name | Description | Rate (BDT/Sample) |
+| :--- | :--- | :--- | :--- | :--- |
+| 1 | CAD and Simulation Lab | Simulation & Design | Finite Element Analysis (FEA) | 1,500 |
+| 2 | CAD and Simulation Lab | Simulation & Design | Computational Fluid Dynamics (CFD) | 1,800 |
+| 3 | CAD and Simulation Lab | Simulation & Design | Mechanical Component Design Testing | 2,000 |
+| 4 | CAD and Simulation Lab | Simulation & Design | Product Design Validation | 2,200 |
+| 5 | Measurement & QC Lab | Measurement & Control | Calibration (gauges, thermometers) | 1,000 |
+| 6 | Measurement & QC Lab | Measurement & Control | Control System Design & Testing (PID) | 1,500 |
+| 7 | Materials Handling Lab | Maintenance Engineering | Material Handling System Design | 2,000 |
+| 8 | Materials Handling Lab | Maintenance Engineering | Maintenance Scheduling & Analysis | 1,000 |
+| 9 | Materials Handling Lab | Maintenance Engineering | Equipment Efficiency Tests | 1,500 |
+| 10 | Machine Shop & Production | Manufacturing Process | Machining Tolerances Testing | 1,800 |
+| 11 | Machine Shop & Production | Manufacturing Process | Tool Wear Analysis | 2,000 |
+| 12 | Machine Shop & Production | Manufacturing Process | Manufacturing Process Optimization | 2,200 |
+| 13 | Foundry and Welding Shop | Welding & Casting | Welding Quality Testing | 2,000 |
+| 14 | Foundry and Welding Shop | Welding & Casting | Casting Process Evaluation | 2,500 |
+| 15 | Foundry and Welding Shop | Welding & Casting | Metallurgical Testing on Welds | 2,200 |
+| 16 | Thermodynamics Lab | Renewable Energy | Solar Panel Performance Testing | 1,800 |
+| 17 | Thermodynamics Lab | Renewable Energy | Inverter Efficiency Testing | 2,000 |
+| 18 | Thermodynamics Lab | Renewable Energy | Battery Performance & Lifecycle | 2,200 |
+| 19 | Metallurgy Lab | Materials Testing | Material Properties Testing | 2,000 |
+| 20 | Metallurgy Lab | Materials Testing | Microscopic Examination | 1,800 |
+| 21 | Metallurgy Lab | Materials Testing | Corrosion Resistance Testing | 2,000 |
+| 22 | Engineering Drawing Lab | Technical Drawing | Blueprint Generation | 1,000 |
+| 23 | Engineering Drawing Lab | Technical Drawing | Dimensional Tolerances Verification | 1,500 |
+
+### Consultancy Services
+The IPE department provides professional consultancy to enhance industrial efficiency and operational standards.
+
+| Sl. No. | Service Name | Description | Rate (BDT/Service) |
+| :--- | :--- | :--- | :--- |
+| 1 | Input-Output Analysis | Factory-level flow modeling | 60,000 – 100,000 |
+| 2 | Lean Manufacturing | Waste reduction, 5S, Kaizen | 150,000 – 300,000 |
+| 3 | Technology Enhancements | Integration of new systems | 80,000 – 150,000 |
+| 4 | Plant Layout Design | AutoCAD layout & logistics | 100,000 – 200,000 |
+| 5 | Material Handling & Automation | Equipment & semi-automation | 100,000 – 180,000 |
+| 6 | Budgets & Cost Estimating | Project-level cost review | 40,000 – 80,000 |
+| 7 | Developing Work Standards | Time and motion study | 70,000 – 200,000 |
+| 8 | Engineering Development | Custom solution/prototype | 150,000 – 300,000 |
+| 9 | JIT Implementation | Inventory & supplier sync | 100,000 – 180,000 |
+| 10 | Methods Analysis | Method simplification | 60,000 – 100,000 |
+| 11 | Material Handling Solutions | Movement & storage design | 80,000 – 150,000 |
+| 12 | Production & Inventory Control | EOQ, MRP, ABC analysis | 80,000 – 160,000 |
+| 13 | Six Sigma Methods | DMAIC framework | 200,000 – 400,000 |
+| 14 | Capital Machinery Inspection | Pre-purchase evaluation | 30,000 – 70,000 |
+| 15 | Workflow Optimization | Process balancing | 80,000 – 150,000 |
+| 16 | Product Line Expansion | Capacity enhancement | 100,000 – 200,000 |
+| 17 | Project Management | Milestone tracking | 60,000 – 150,000/mo |
+| 18 | Warehouse Management | Layout & software design | 120,000 – 250,000 |
+| 19 | Continuous Improvement | PDCA, KPI setup, audit | 100,000 – 180,000 |
+| 20 | Efficiency Studies | Productivity baseline | 60,000 – 100,000 |
+| 21 | Ergonomic Improvement | Workstation design | 60,000 – 100,000 |
+| 22 | Motion Studies | Motion optimization | 50,000 – 90,000 |
+| 23 | Materials Scheduling | Scheduling rules, MRP | 60,000 – 120,000 |
+| 24 | Process Improvement | Bottleneck removal | 80,000 – 160,000 |
+| 25 | Quality Control Planning | Sampling & control charts | 80,000 – 160,000 |
+| 26 | Supply Chain Solution | Logistics & procurement | 200,000 – 500,000+ |
+
+---
+
 ## Admission Information
 ### Programs Offered
 | Faculty | Department | Program | Offered Since |
@@ -166,6 +236,76 @@ BAUST was established on 15 February 2015 by the Bangladesh Armed Forces to prov
 *   **Assignments/Presentations:** 05%
 *   **Mid-Term Assessment:** 15%
 *   **Final Examination:** 60%
+
+---
+
+## Notices & Policies
+### Publication of Examination Results (Ref: BAUST/CoE-003/2016/0645, Date: 05/02/2026)
+The results of the following examinations are officially published:
+*   **Final Examination Winter 2025 (Regular)**
+*   **Final Examination Summer 2024 (Special)**
+*   **Referred/Improvement/Backlog Examinations** (Held from 25/01/2026 to 29/01/2026)
+
+**Authorized By:**
+*   **Lt Col Syed Salahuddin Nayan, SUP, BGBM, BGOM, psc, Inf (Retd)**, Controller of Examinations
+*   **Muhammad Solaiman**, Deputy Controller of Examinations
+
+### IPE Departmental Results: Summer 2025 & Winter 2025
+The following tables summarize the academic performance for various levels and terms under Syllabus-3(2021).
+
+#### Level-1 Term-I (Syllabus-3, 2021)
+| ID | Name | GPA | Result | CGPA |
+|---|---|---|---|---|
+| 0802520105161001 | JARIN TAJNIM OYSI | 3.12 | Passed | 3.12 |
+| 0802520405161002 | S M ITTISAF SHABAB | 3.72 | Passed | 3.72 |
+| 0802520205161003 | MD. SIYAM AHMED | 2.82 | Passed | 2.82 |
+| 0802520105161004 | AMIM ARA AKHI | 3.25 | Passed | 3.25 |
+| 0802520105161005 | JANNATUN AKTER | 3.97 | Passed | 3.97 |
+| 0802520405161006 | SYED WASEE UDDIN AHMED | 3.30 | Passed | 3.30 |
+| 0802520105161007 | MOST. NAZNEEN AKHTAR RIYA | 3.20 | Passed | 3.20 |
+| 0802520205161008 | MD. FARHAN ISTIAQUE PRANTHO | 2.78 | Passed | 2.78 |
+| 0802520205161009 | MD. ABDULLAH-AL NAIM | 2.86 | Passed | 2.86 |
+| 0802520105161011 | MD. MARUF HASAN | 3.02 | Passed | 3.02 |
+| 0802520405161012 | MD. SHADMAN SHAKIB | 3.10 | Passed | 3.10 |
+| 0802520105161013 | MD. TANVIR ZAMAN | 3.68 | Passed | 3.68 |
+| 0802520205161015 | SHATANTRA RAY RUPOM | 3.29 | Passed | 3.29 |
+| 0802520205161016 | ABDULLAH AL ARAFEN | 3.71 | Passed | 3.71 |
+| 0802520105161017 | MD SAKLINE MONAJAT | 3.05 | Passed | 3.05 |
+| 0802520105161018 | MD. MUSHFIQ HOSSAIN MOBIN | 3.16 | Passed | 3.16 |
+| 0802520405161019 | MD NAEEM SHAHRIAR | 3.72 | Passed | 3.72 |
+| 0802520105161020 | POLOK CHANDRA SARKER | 3.09 | Passed | 3.09 |
+| 0802520105161021 | MD. TAWFIQUR RAHMAN DARPON | 3.49 | Passed | 3.49 |
+| 0802520105161022 | MD. SHAKIL MAHMUD SOUROV | 3.86 | Passed | 3.86 |
+| 0802520105161023 | AHANAF MASHFIK ISLAM | 3.25 | Passed | 3.25 |
+| 0802520105161024 | MD. ATIKUZZAMAN SOBUJ | 3.23 | Passed | 3.23 |
+| 0802510405161011 | MD. NAFIS MUBASHWIR | 2.20 | Passed | 2.55 |
+| 0802510405161012 | MD. ARMAN SAROWER | 2.00 | Passed | 2.37 |
+| 0802510405161016 | AVISHEK KUMAR RAY PRITOM | 2.07 | Passed | 2.35 |
+| 0802510105161017 | JARIFA JINAT | 0.00 | Failed | 3.60 |
+| 0802420205161008 | MD. SHAHAREAR RAHMAN | 0.00 | Failed | 2.11 |
+| 0802420205161016 | M.A. IBNEE TASIN OMI | 0.00 | Failed | 2.53 |
+
+#### Level-1 Term-II (Summer 2025)
+| ID | Name | GPA | Result | CGPA |
+|---|---|---|---|---|
+| 0802510405161001 | MINHAZUL ISLAM MARUF | 3.83 | Passed | 3.91 |
+| 0802510205161002 | MD. SHAMIMUL HASAN SIAM | 3.46 | Passed | 3.39 |
+| 0802510405161003 | MD. PARVEZ ZAMAN FAHIM | 2.97 | Passed | 2.92 |
+| 0802510405161004 | GOLAM PROTIQ NABY | 3.22 | Passed | 3.12 |
+| 0802510205161005 | MD. SHAHINUR ALAM | 3.12 | Passed | 3.04 |
+| 0802510605161007 | RAZIN HOSSAIN PRODHAN | 3.42 | Passed | 3.35 |
+| 0802510805161008 | MD. TAJUL ISLAM | 3.74 | Passed | 3.80 |
+| 0802510905161009 | MD. TASRIF RAHMAN | 3.02 | Passed | 2.88 |
+| 0802510205161010 | MD. NAIYEM | 3.63 | Passed | 3.37 |
+| 0802510105161013 | FARIHA BUSHRA | 3.65 | Passed | 3.57 |
+| 0802510205161014 | FARDIN AHMED | 3.20 | Passed | 3.00 |
+| 0802510205161015 | MD. ISRAR AHMED | 3.91 | Passed | 3.92 |
+| 0802420205161029 | YEASIR ATIK SADAT | 2.35 | Passed | 2.28 |
+| 0802410205161010 | MOBASHWAER SHARIAR MERIT | 2.00 | Failed | 2.26 |
+| 0802410205161023 | MD. SHAHRIAR MAHMUD | 0.00 | Failed | 2.55 |
+| 0802310405161008 | AZAD AL MUHIB | 0.00 | Failed | 2.37 |
+
+*(Note: Due to document length, additional level results are available in the official university portal. Please contact the Department of IPE for specific course-wise backlog details.)*
 
 ---
 

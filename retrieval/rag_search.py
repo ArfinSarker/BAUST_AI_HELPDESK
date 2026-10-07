@@ -15,12 +15,20 @@ _metadata = None
 _embeddings = None
 _faiss_index = None
 _embed_model = None
+_embed_model_attempted = False
 
-# Pure greeting regex patterns
+# Comprehensive conversational and greeting patterns
 GREETING_PATTERNS = [
-    r"^(hi|hello|hey|assalamu\s*alaikum|salam|hi\s*there|hlo)[\s!.]*$",
-    r"^(kemon\s*achen|kemon\s*acho|how\s*are\s*you|ke\s*tumi|tumi\s*ke|who\s*are\s*you|tumi\s*kara|tumi\s*kon)[\s?!.]*$"
+    r"^(hi|hello|hey|assalamu\s*alaikum|salam|hi\s*there|hlo|ola)[\s!.]*$",
+    r"^(kemon\s*achen|kemon\s*acho|how\s*are\s*you|how\s*r\s*u|কেমন\s*আছো|কেমন\s*আছেন)[\s?!.]*$",
+    r"^(what\s*is\s*your\s*name|what\'?s\s*your\s*name|your\s*name|who\s*are\s*you|who\s*r\s*u|who\s*made\s*you)[\s?!.]*$",
+    r"^(tomar\s*nam\s*ki|apnar\s*nam\s*ki|tumi\s*ke|apni\s*ke|ke\s*tumi|ke\s*apni|তোমার\s*নাম\s*কি|তুমি\s*কে|আপনার\s*নাম\s*কি|কে\s*তুমি)[\s?!.]*$",
+    r"^(what\s*can\s*you\s*do|tumi\s*ki\s*korte\s*paro|ki\s*sahajjo\s*korte\s*paro|তুমি\s*কি\s*করতে\s*পারো)[\s?!.]*$",
+    r"^(thank\s*you|thanks|thx|dhonnobad|ধন্যবাদ|shukriya)[\s!.]*$",
+    r"^(bye|goodbye|allah\s*hafez|tata|বিদায়|বিদায়)[\s!.]*$",
+    r"^(banglay\s*bolo|english\s*e\s*bolo|translate\s*to\s*english|translate\s*to\s*bangla|বাংলায়\s*বলো|বাংলাতে\s*বলো)[\s!.]*$"
 ]
+
 
 # Comprehensive Bilingual Synonym & Context Map
 SYNONYM_MAP = {
@@ -76,28 +84,80 @@ SYNONYM_MAP = {
     "লাইব্রেরি": ["library", "central library", "books", "reading room"],
     "পরীক্ষা": ["examination", "grading", "cgpa", "gpa", "term", "promotion", "clearance"],
     "গ্রেড": ["grade", "grading", "cgpa", "gpa", "marks", "scale"],
-    "প্রমোশন": ["promotion", "probation", "retake", "improvement"],
-    "ল্যাব": ["laboratory", "lab", "facilities", "equipment"],
-    "গবেষণা": ["research", "publication", "cell", "journal", "newsletter"],
+    "হেড": ["head", "head of the department", "hod", "department head", "associate professor and head", "nakib hayat"],
+    "প্রধান": ["head", "dean", "chief", "hod", "head of the department"],
+    "ডিন": ["dean", "faculty dean", "s.m. jahangir alam"],
+    "চেয়ারম্যান": ["chairman", "head", "bot"],
+    "লুৎফর": ["lutfor", "md lutfor rahman", "vice chancellor", "vc"],
+    "হুমায়ুন": ["humayun", "humayun kabir", "vice chancellor", "vc"],
+    "লুৎফর রহমান": ["lutfor rahman", "vice chancellor", "vc"],
+    "নকিব হায়াত": ["nakib hayat", "nakib hayat chowdhury", "head of the department", "cse"],
+    "ডিপার্টমেন্টের": ["department", "cse", "eee", "me", "ce", "ipe", "bba", "english", "ict"],
+    "বিভাগের": ["department", "cse", "eee", "me", "ce", "ipe", "bba", "english", "ict"]
 }
 
 
+def normalize_text_for_intent(text: str) -> str:
+    """Normalize text by collapsing repeating characters and punctuation."""
+    if not text:
+        return ""
+    t = text.lower().strip()
+    t = re.sub(r'[!?,.\'\"]+', ' ', t)
+    t = re.sub(r'([a-z])\1+', r'\1', t)
+    return " ".join(t.split())
+
+
 def is_greeting(text: str) -> bool:
-    clean_text = text.strip().lower()
-    return any(re.match(pattern, clean_text) for pattern in GREETING_PATTERNS)
+    """Accurately detects greetings, identity queries, and chit-chat with phonetic tolerance."""
+    if not text:
+        return False
+    raw_t = text.strip().lower()
+    norm_t = normalize_text_for_intent(text)
+    
+    # 1. Identity questions
+    if any(k in norm_t for k in ["tomar nam", "apnar nam", "tumi ke", "apni ke", "ke tumi", "ke apni", "your name", "who are you", "who r u", "who made you", "tomar porichoy"]) or any(k in raw_t for k in ["তোমার নাম", "তুমি কে", "আপনার নাম", "কে তুমি"]):
+        return True
+        
+    # 2. How are you
+    if any(k in norm_t for k in ["kemon acho", "kemon achen", "kmn acho", "kmn asen", "how are you", "how r u"]) or any(k in raw_t for k in ["কেমন আছো", "কেমন আছেন"]):
+        return True
+        
+    # 3. What can you do
+    if any(k in norm_t for k in ["what can you do", "ki korte paro", "ki sahajo", "ki sahajjo"]) or any(k in raw_t for k in ["কি করতে পারো", "সাহায্য"]):
+        return True
+        
+    # 4. Thank you
+    if any(k in norm_t for k in ["thank you", "thanks", "thx", "dhonobad", "dhonnobad", "shukriya"]) or any(k in raw_t for k in ["ধন্যবাদ"]):
+        return True
+        
+    # 5. Bye / Goodbye
+    if any(k in norm_t for k in ["bye", "goodbye", "alah hafez", "allah hafez", "tata"]) or any(k in raw_t for k in ["বিদায়", "বিদায়"]):
+        return True
+        
+    # 6. Greetings
+    if norm_t in ["hi", "helo", "hello", "hey", "asalamu alaikum", "assalamu alaikum", "salam", "hi there", "hlo", "ola"]:
+        return True
+
+    # 7. Translation commands
+    if any(k in norm_t for k in ["banglay bolo", "english e bolo", "translate to english", "translate to bangla"]) or any(k in raw_t for k in ["বাংলায় বলো", "বাংলাতে বলো"]):
+        return True
+        
+    return False
 
 
 def _get_embedding_model():
-    """Lazy loader for SentenceTransformer to minimize cold-start time."""
-    global _embed_model
-    if _embed_model is None:
+    """Lazy loader for SentenceTransformer with single-attempt caching to prevent repeated slow import hangs."""
+    global _embed_model, _embed_model_attempted
+    if _embed_model is None and not _embed_model_attempted:
+        _embed_model_attempted = True
         try:
             from sentence_transformers import SentenceTransformer
             _embed_model = SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")
         except Exception as e:
-            print(f"[Embedding Model Warning]: {e}")
+            # Dense model unavailable; RAG uses ultra-fast sparse synonym & lexical matching
             _embed_model = None
     return _embed_model
+
 
 
 def _load_store():
@@ -234,18 +294,62 @@ def sparse_lexical_search(question: str, top_k: int = 12) -> list[tuple[float, i
             if term in doc_lower:
                 score += (len(term.split()) * 4.0) + (len(term) * 0.1)
 
-        if score > 0:
+        if score >= 4.0:
             scored.append((score, idx))
 
     scored.sort(key=lambda x: x[0], reverse=True)
     return scored[:top_k]
 
 
-def search_information(question: str, top_k: int = 8) -> str:
+def get_department_faculty_file_content(question: str) -> str:
+    """
+    If the question is asking for faculty members / teachers of a specific department,
+    return the complete, unabridged official department faculty document.
+    """
+    q_lower = question.lower()
+    norm_q = normalize_text_for_intent(question)
+    
+    # Check if asking about faculty / teachers / members / head / professors / list
+    is_faculty_query = any(k in norm_q for k in [
+        "teacher", "teachers", "faculty", "faculties", "sir", "mam", "shikkok", "shikkhok", 
+        "list", "nam", "naam", "active", "leave", "ex", "sob", "shob", "all", "talika", "member", "members",
+        "prof", "professor", "lecturer", "dean", "head", "hod"
+    ]) or any(k in q_lower for k in [
+        "শিক্ষক", "শিক্ষিকা", "তালিকা", "লিস্ট", "নাম", "সব", "কে কে", "কারা", "অধ্যাপক", "প্রভাষক", "হেড", "প্রধান"
+    ])
+    
+    if not is_faculty_query:
+        return None
+
+    dept_file_map = [
+        (["cse", "computer science", "কম্পিউটার", "সিএসই"], "cse_department_and_faculty.txt"),
+        (["eee", "electrical", "ইইই", "ইলেকট্রিক্যাল"], "eee_department_and_faculty.txt"),
+        (["ce", "civil", "সিভিল", "পুরকৌশল"], "ce_department_and_faculty.txt"),
+        (["me", "mechanical", "মেকানিকাল", "মেকানিক্যাল", "যন্ত্রকৌশল"], "me_department_and_faculty.txt"),
+        (["ipe", "industrial", "আইপিই"], "ipe_department_and_faculty.txt"),
+        (["bba", "fbs", "business", "ais", "mba", "বিবিএ", "ব্যবসায়"], "fbs_department_and_faculty.txt"),
+        (["ict", "ece", "আইসিটি"], "ict_and_ece_department_and_faculty.txt"),
+    ]
+
+    kb_dir = os.path.join(BASE_DIR, "knowledge_base")
+    for keywords, fname in dept_file_map:
+        if any(kw in q_lower or kw in norm_q for kw in keywords):
+            fpath = os.path.join(kb_dir, fname)
+            if os.path.exists(fpath):
+                try:
+                    with open(fpath, "r", encoding="utf-8") as f:
+                        content = f.read().strip()
+                        return f"--- Official Document [{fname}] ---\n{content}"
+                except Exception as e:
+                    print(f"[Faculty File Read Error]: {e}")
+    return None
+
+
+def search_information(question: str, top_k: int = 4) -> str:
     """
     State-of-the-Art Hybrid Retrieval Engine:
     Combines Multilingual Dense Semantic Vector Search + Sparse Lexical/Synonym Search
-    via Reciprocal Rank Fusion (RRF) and Source Domain Re-ranking.
+    via Reciprocal Rank Fusion (RRF) and Full Document Inspection for Faculty/Department Queries.
     """
     if not question or not question.strip():
         return ""
@@ -253,18 +357,22 @@ def search_information(question: str, top_k: int = 8) -> str:
     if is_greeting(question):
         return ""
 
+    # Check for direct department faculty document lookup first
+    dept_faculty_doc = get_department_faculty_file_content(question)
+    if dept_faculty_doc:
+        return dept_faculty_doc
+
     documents, metadata, _, _ = get_store()
     if not documents:
         return ""
 
     # 1. Dense Semantic Search (Vector Embedding)
-    dense_results = dense_semantic_search(question, top_k=14)
+    dense_results = dense_semantic_search(question, top_k=8)
 
     # 2. Sparse Lexical Search (Keyword & Synonyms)
-    sparse_results = sparse_lexical_search(question, top_k=14)
+    sparse_results = sparse_lexical_search(question, top_k=8)
 
     # 3. Reciprocal Rank Fusion (RRF)
-    # RRF Score = (Dense Weight / (60 + Dense Rank)) + (Sparse Weight / (60 + Sparse Rank))
     rrf_scores = {}
     dense_weight = 1.0
     sparse_weight = 1.2
@@ -277,25 +385,24 @@ def search_information(question: str, top_k: int = 8) -> str:
         rrf_scores[idx] = rrf_scores.get(idx, 0.0) + (sparse_weight / (k_constant + rank + 1))
 
     # 4. Contextual Source Re-ranking
-    # Boost document if question explicitly targets its domain
     q_lower = question.lower()
     for idx in rrf_scores:
         if idx < len(metadata):
             src = metadata[idx].get("source", "").lower()
             if "cse" in q_lower and "cse" in src:
-                rrf_scores[idx] *= 1.4
+                rrf_scores[idx] *= 1.5
             elif "eee" in q_lower and "eee" in src:
-                rrf_scores[idx] *= 1.4
+                rrf_scores[idx] *= 1.5
             elif "me" in q_lower and ("me_" in src or "mechanical" in src):
-                rrf_scores[idx] *= 1.4
+                rrf_scores[idx] *= 1.5
             elif "ipe" in q_lower and "ipe" in src:
-                rrf_scores[idx] *= 1.4
+                rrf_scores[idx] *= 1.5
             elif ("exam" in q_lower or "grading" in q_lower or "cgpa" in q_lower or "probation" in q_lower) and "exam" in src:
-                rrf_scores[idx] *= 1.4
+                rrf_scores[idx] *= 1.5
             elif ("hall" in q_lower or "hostel" in q_lower or "হলে" in q_lower or "প্রভোস্ট" in q_lower) and "hall" in src:
-                rrf_scores[idx] *= 1.4
+                rrf_scores[idx] *= 1.5
             elif ("admission" in q_lower or "ভর্তি" in q_lower or "fee" in q_lower or "ফি" in q_lower) and "admission" in src:
-                rrf_scores[idx] *= 1.4
+                rrf_scores[idx] *= 1.5
 
     # Sort final merged candidates by fused score
     ranked_chunks = sorted(rrf_scores.items(), key=lambda x: x[1], reverse=True)
@@ -303,7 +410,7 @@ def search_information(question: str, top_k: int = 8) -> str:
     # Fallback if no matches found
     if not ranked_chunks:
         if any(w in q_lower for w in ["baust", "বিশ্ববিদ্যালয়", "university", "ক্যান্টনমেন্ট", "সৈয়দপুর"]):
-            ranked_chunks = [(i, 1.0) for i in range(min(4, len(documents)))]
+            ranked_chunks = [(i, 1.0) for i in range(min(3, len(documents)))]
 
     if not ranked_chunks:
         return ""
@@ -311,6 +418,8 @@ def search_information(question: str, top_k: int = 8) -> str:
     top_matches = ranked_chunks[:top_k]
     formatted_chunks = []
     seen_texts = set()
+    total_chars = 0
+    max_chars = 8000
 
     for idx, score_val in top_matches:
         if idx >= len(documents):
@@ -321,6 +430,10 @@ def search_information(question: str, top_k: int = 8) -> str:
         seen_texts.add(text)
 
         source = metadata[idx].get("source", "BAUST Records") if idx < len(metadata) else "BAUST Records"
-        formatted_chunks.append(f"--- Information from [{source}] ---\n{text}")
+        chunk_str = f"--- Information from [{source}] ---\n{text}"
+        if total_chars + len(chunk_str) > max_chars and formatted_chunks:
+            break
+        formatted_chunks.append(chunk_str)
+        total_chars += len(chunk_str)
 
     return "\n\n".join(formatted_chunks)

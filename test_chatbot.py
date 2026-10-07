@@ -7,22 +7,32 @@ os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 from retrieval.rag_search import search_information
-from llm.chatbot import generate_answer
+from llm.chatbot import generate_answer, rewrite_query_with_history
 
-questions = [
-    "Hi",
+history = []
+
+conversations = [
+    "tomar naam ki",
+    "kemon acho",
+    "koyta dept ache",
     "BAUST এর ভিসি কে?",
-    "CSE ডিপার্টমেন্টের হেড কে?",
-    "ভর্তি হতে কত টাকা লাগবে?",
-    "Write a quick Python function for binary search.",
-    "সূর্যগ্রহণ কেন হয়?"
+    "eita english e bolo",
+    "Who is the Head of CSE department?"
 ]
 
-print("=== STARTING CHATBOT EVALUATION ===")
-for q in questions:
-    print("\n--------------------------------------------------")
-    print(f"USER: {q}")
-    ctx = search_information(q)
-    ans = generate_answer(ctx, q)
-    print(f"AI RESPONSE:\n{ans}")
-print("\n=== EVALUATION COMPLETE ===")
+print("=== STARTING MULTI-TURN LANGUAGE & TRANSLATION EVALUATION ===", flush=True)
+
+for q in conversations:
+    print("\n" + "="*60, flush=True)
+    print(f"USER: {q}", flush=True)
+    
+    effective_q = rewrite_query_with_history(q, history)
+    ctx = search_information(effective_q)
+    ans = generate_answer(ctx, q, history=history)
+    
+    print(f"AI RESPONSE:\n{ans}", flush=True)
+    history.append({"role": "user", "content": q})
+    history.append({"role": "assistant", "content": ans})
+
+print("\n=== EVALUATION COMPLETE ===", flush=True)
+

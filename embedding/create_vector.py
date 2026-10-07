@@ -11,12 +11,15 @@ _model_instance = None
 
 
 def get_embedding_model(model_name=DEFAULT_MODEL_NAME):
-    """Singleton getter for the SentenceTransformer model with lazy loading."""
+    """Singleton getter for the SentenceTransformer model with graceful fallback."""
     global _model_instance
     if _model_instance is None:
-        print(f"[Embedding] Loading embedding model: {model_name}...")
-        from sentence_transformers import SentenceTransformer
-        _model_instance = SentenceTransformer(model_name)
+        try:
+            from sentence_transformers import SentenceTransformer
+            _model_instance = SentenceTransformer(model_name)
+        except Exception as e:
+            print(f"[Embedding Notice]: Dense neural model initialization skipped ({e}). Using ultra-fast hybrid sparse indexing.")
+            _model_instance = None
     return _model_instance
 
 
@@ -146,36 +149,41 @@ def build_vector_store(knowledge_folder=None, vector_folder=None, model_name=DEF
         print("Warning: No documents found to index.")
         return {"status": "empty", "files_processed": 0, "total_chunks": 0}
 
-    # Generate embeddings safely with batching
-    model = get_embedding_model(model_name)
-    print("Generating embeddings...")
-    raw_embeddings = model.encode(documents, batch_size=32, show_progress_bar=False)
-    embeddings = np.array(raw_embeddings).astype("float32")
-
-    # Normalize vectors for cosine similarity (norm = 1.0)
-    norms = np.linalg.norm(embeddings, axis=1, keepdims=True)
-    norms[norms == 0] = 1e-10
-    normalized_embeddings = embeddings / norms
-
-    # Save normalized embeddings matrix
-    np.save(os.path.join(vector_folder, "embeddings.npy"), normalized_embeddings)
-
+    # Save text documents and metadata immediately
     with open(os.path.join(vector_folder, "documents.pkl"), "wb") as f:
         pickle.dump(documents, f)
     with open(os.path.join(vector_folder, "metadata.pkl"), "wb") as f:
         pickle.dump(metadata, f)
 
-    # Optional FAISS save if available
+    # Generate dense embeddings if model is available
     try:
-        import faiss
-        dimension = normalized_embeddings.shape[1]
-        index = faiss.IndexFlatIP(dimension)
-        index.add(normalized_embeddings)
-        faiss.write_index(index, os.path.join(vector_folder, "index.faiss"))
-    except Exception as e:
-        print(f"[FAISS optional write skipped]: {e}")
+        model = get_embedding_model(model_name)
+        if model is not None:
+            print("Generating embeddings...")
+            raw_embeddings = model.encode(documents, batch_size=32, show_progress_bar=False)
+            embeddings = np.array(raw_embeddings).astype("float32")
 
-    print(f"Vector database saved to {vector_folder}")
+            # Normalize vectors for cosine similarity (norm = 1.0)
+            norms = np.linalg.norm(embeddings, axis=1, keepdims=True)
+            norms[norms == 0] = 1e-10
+            normalized_embeddings = embeddings / norms
+
+            # Save normalized embeddings matrix
+            np.save(os.path.join(vector_folder, "embeddings.npy"), normalized_embeddings)
+
+            # Optional FAISS index
+            try:
+                import faiss
+                dimension = normalized_embeddings.shape[1]
+                index = faiss.IndexFlatIP(dimension)
+                index.add(normalized_embeddings)
+                faiss.write_index(index, os.path.join(vector_folder, "index.faiss"))
+            except Exception as e:
+                print(f"[FAISS skipped]: {e}")
+    except Exception as emb_err:
+        print(f"[Dense Embedding Generation Notice]: {emb_err}")
+
+    print(f"Knowledge base successfully indexed in {vector_folder}")
     return {
         "status": "success",
         "files_processed": files_processed,

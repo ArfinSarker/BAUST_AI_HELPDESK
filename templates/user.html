@@ -14,6 +14,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Marked.js for fast client-side markdown streaming rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
   <!-- Immediate Theme Initializer -->
   <script>
@@ -55,10 +58,10 @@
       --bubble-ai-heading: #0F172A;
       --bubble-user-bg: linear-gradient(135deg, #0F3460 0%, #1D4ED8 100%);
       --bubble-user-text: #FFFFFF;
-      --chip-bg: #F1F5F9;
+      --chip-bg: #F8FAFC;
       --chip-border: #E2E8F0;
-      --chip-hover-bg: #E0E7FF;
-      --chip-hover-border: #6366F1;
+      --chip-hover-bg: #EFF6FF;
+      --chip-hover-border: #3B82F6;
       --radius-xl: 20px;
       --radius-lg: 16px;
       --radius-md: 12px;
@@ -333,16 +336,46 @@
       flex-direction: column;
       gap: 16px;
       background: var(--chat-bg);
-      scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
     }
 
-    /* Welcome Hero Card */
+    /* Floating Scroll to Bottom Button */
+    .scroll-bottom-btn {
+      position: absolute;
+      bottom: 82px;
+      right: 24px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 1px solid var(--border-color);
+      color: var(--primary);
+      box-shadow: var(--shadow-md);
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: bold;
+      z-index: 30;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      opacity: 0.92;
+    }
+
+    .scroll-bottom-btn:hover {
+      opacity: 1;
+      transform: translateY(-2px);
+      border-color: var(--accent);
+      background: var(--chip-hover-bg);
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Welcome Card */
     .welcome-hero {
       background: var(--chip-bg);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-lg);
-      padding: 18px 20px;
+      padding: 16px 18px;
       box-shadow: var(--shadow-sm);
       animation: fadeIn 0.25s ease-out;
     }
@@ -350,36 +383,38 @@
     .welcome-header {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 10px;
+      gap: 8px;
+      margin-bottom: 8px;
     }
 
     .welcome-icon {
-      font-size: 22px;
+      font-size: 20px;
     }
 
     .welcome-header h2 {
       font-family: 'Outfit', sans-serif;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       color: var(--text-main);
     }
 
     .welcome-hero p {
-      font-size: 13.5px;
-      line-height: 1.55;
+      font-size: 13px;
+      line-height: 1.5;
       color: var(--text-muted);
       margin-bottom: 12px;
     }
 
-    /* Quick Suggestion Chips (Horizontal Scroll on Mobile, Wrap on Desktop) */
     .quick-chips-title {
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       color: var(--primary);
       margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
     }
 
     .quick-chips-grid {
@@ -392,17 +427,16 @@
       background: var(--surface);
       border: 1px solid var(--chip-border);
       color: var(--text-main);
-      padding: 6px 12px;
-      border-radius: 16px;
-      font-size: 12px;
+      padding: 5px 11px;
+      border-radius: 14px;
+      font-size: 11.5px;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
       transition: all 0.2s ease;
       box-shadow: var(--shadow-sm);
-      white-space: nowrap;
       user-select: none;
     }
 
@@ -417,7 +451,7 @@
     .message-row {
       display: flex;
       gap: 10px;
-      max-width: 88%;
+      max-width: 90%;
       animation: fadeIn 0.2s ease-out;
     }
 
@@ -503,34 +537,78 @@
       color: var(--bubble-ai-heading);
       margin: 10px 0 4px 0;
     }
-    .bubble.ai h3 { font-size: 15px; border-bottom: 1px solid var(--bubble-ai-border); padding-bottom: 3px; }
+    .bubble.ai h3 { font-size: 14.5px; border-bottom: 1px solid var(--bubble-ai-border); padding-bottom: 3px; }
     .bubble.ai p { margin: 5px 0; }
     .bubble.ai ul, .bubble.ai ol { margin: 6px 0; padding-left: 18px; }
-    .bubble.ai li { margin-bottom: 4px; }
-    .bubble.ai strong { color: var(--primary); font-weight: 700; }
-    [data-theme="dark"] .bubble.ai strong { color: #38BDF8; }
-    .bubble.ai hr { border: none; border-top: 1px dashed var(--bubble-ai-border); margin: 10px 0; }
-    .bubble.ai a { color: var(--accent-neon); text-decoration: underline; }
-
-    /* Code block */
-    .bubble.ai pre {
-      background: #0B1120;
-      color: #F8FAFC;
-      padding: 10px 14px;
-      border-radius: 8px;
-      font-family: 'Fira Code', monospace;
-      font-size: 12.5px;
-      overflow-x: auto;
-      margin: 8px 0;
-      max-width: 100%;
+    .bubble.ai li { margin-bottom: 5px; }
+    
+    /* Field Titles & Labels */
+    .bubble.ai strong, .bubble.ai b { 
+      color: var(--primary-light); 
+      font-weight: 700; 
+    }
+    [data-theme="dark"] .bubble.ai strong, [data-theme="dark"] .bubble.ai b { 
+      color: #38BDF8; 
     }
 
+    /* Important Highlight Values / Codes / Seat Numbers / Badges (Royal Violet Theme) */
     .bubble.ai code {
-      font-family: 'Fira Code', monospace;
-      background: var(--input-bg);
-      padding: 2px 5px;
+      font-family: 'Fira Code', 'Outfit', monospace;
+      font-size: 0.90em;
+      font-weight: 600;
+      padding: 2.5px 8px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.08) 0%, rgba(147, 51, 234, 0.12) 100%);
+      color: #6D28D9;
+      border: 1px solid rgba(124, 58, 237, 0.25);
+      display: inline-block;
+      margin: 0 2px;
+      letter-spacing: 0.3px;
+      box-shadow: 0 1px 3px rgba(124, 58, 237, 0.08);
+    }
+    [data-theme="dark"] .bubble.ai code {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.18) 0%, rgba(168, 85, 247, 0.24) 100%);
+      color: #C4B5FD;
+      border: 1px solid rgba(167, 139, 250, 0.45);
+      box-shadow: 0 0 12px rgba(168, 85, 247, 0.22);
+    }
+
+    /* Important Secondary Highlights */
+    .bubble.ai em, .bubble.ai mark {
+      color: #059669;
+      background: rgba(16, 185, 129, 0.1);
+      padding: 1px 5px;
       border-radius: 4px;
-      font-size: 12.5px;
+      font-style: normal;
+      font-weight: 600;
+    }
+    [data-theme="dark"] .bubble.ai em, [data-theme="dark"] .bubble.ai mark {
+      color: #34D399;
+      background: rgba(52, 211, 153, 0.15);
+      box-shadow: 0 0 6px rgba(52, 211, 153, 0.12);
+    }
+
+    .bubble.ai hr { border: none; border-top: 1px dashed var(--bubble-ai-border); margin: 10px 0; }
+    
+    /* Contact & URL Links */
+    .bubble.ai a { 
+      color: var(--accent); 
+      text-decoration: none; 
+      border-bottom: 1px dashed var(--accent); 
+      font-weight: 600; 
+      transition: all 0.2s ease;
+    }
+    .bubble.ai a:hover {
+      color: var(--primary);
+      border-bottom-style: solid;
+    }
+    [data-theme="dark"] .bubble.ai a { 
+      color: #67E8F9; 
+      border-bottom: 1px dashed #67E8F9; 
+    }
+    [data-theme="dark"] .bubble.ai a:hover { 
+      color: #A5F3FC; 
+      border-bottom-style: solid;
     }
 
     /* Tables */
@@ -553,13 +631,14 @@
       font-weight: 700;
     }
 
-    /* Actions */
+    /* Actions Footer inside bubble */
     .bubble-actions {
       display: flex;
+      align-items: center;
       justify-content: flex-end;
       gap: 6px;
       margin-top: 8px;
-      padding-top: 5px;
+      padding-top: 6px;
       border-top: 1px solid var(--bubble-ai-border);
     }
 
@@ -568,12 +647,12 @@
       border: 1px solid transparent;
       color: var(--text-muted);
       cursor: pointer;
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 500;
       display: inline-flex;
       align-items: center;
-      gap: 4px;
-      padding: 3px 7px;
+      gap: 3px;
+      padding: 3px 6px;
       border-radius: 6px;
       transition: all 0.2s ease;
     }
@@ -581,6 +660,15 @@
     .action-icon-btn:hover {
       background: var(--input-bg);
       color: var(--primary);
+    }
+
+    .action-icon-btn.active-good {
+      color: #16A34A;
+      background: rgba(34, 197, 94, 0.12);
+    }
+    .action-icon-btn.active-bad {
+      color: #EF4444;
+      background: rgba(239, 68, 68, 0.12);
     }
 
     /* Typing Indicator */
@@ -645,7 +733,7 @@
       background: var(--input-bg);
       border: 1.5px solid var(--border-color);
       border-radius: 26px;
-      padding: 3px 5px 3px 14px;
+      padding: 3px 5px 3px 12px;
       transition: all 0.2s ease;
     }
 
@@ -667,7 +755,6 @@
       padding: 6px 2px;
     }
 
-
     .send-btn {
       width: 36px;
       height: 36px;
@@ -685,36 +772,78 @@
       box-shadow: 0 3px 8px rgba(15, 52, 96, 0.25);
     }
 
-    [data-theme="dark"] .send-btn {
-      background: linear-gradient(135deg, #2563EB 0%, #00F0FF 100%);
-      box-shadow: 0 0 10px rgba(0, 240, 255, 0.35);
+    .send-btn.stop-state {
+      background: #EF4444 !important;
+      color: white !important;
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.45) !important;
+      animation: stopPulse 1.4s infinite ease-in-out;
     }
 
-    .send-btn:disabled {
-      background: #64748B;
-      cursor: not-allowed;
-      box-shadow: none;
+    @keyframes stopPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
     }
 
+    /* Footer Tools (Clear Chat aligned to far right) */
     .footer-tools {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 4px;
-      font-size: 11px;
+      width: 100%;
+      padding: 3px 6px 0 6px;
+      font-size: 11.5px;
       color: var(--text-muted);
     }
 
     .clear-chat-btn {
-      background: none;
-      border: none;
+      background: transparent;
+      border: 1px solid var(--border-color);
       color: var(--text-muted);
+      border-radius: 14px;
+      padding: 3px 12px;
+      font-size: 11.5px;
+      font-weight: 500;
       cursor: pointer;
-      font-size: 11px;
-      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-left: auto;
+      transition: all 0.2s ease;
     }
+
     .clear-chat-btn:hover {
-      color: #EF4444;
+      background: #FEE2E2;
+      border-color: #F87171;
+      color: #DC2626;
+    }
+
+    [data-theme="dark"] .clear-chat-btn:hover {
+      background: rgba(239, 68, 68, 0.18);
+      border-color: #EF4444;
+      color: #FCA5A5;
+    }
+
+    /* Toast Notification */
+    .toast-msg {
+      position: fixed;
+      bottom: 75px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #0F172A;
+      color: #F8FAFC;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s ease;
+      z-index: 100;
+    }
+    .toast-msg.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
 
     /* =========================================
@@ -762,7 +891,6 @@
         display: none;
       }
 
-      /* Full Edge-to-Edge Container on Phones */
       .main-wrapper {
         padding: 0;
       }
@@ -776,7 +904,7 @@
         gap: 12px;
       }
       .message-row {
-        max-width: 94%;
+        max-width: 95%;
         gap: 6px;
       }
       .avatar {
@@ -789,26 +917,6 @@
         padding: 9px 12px;
         font-size: 13.5px;
       }
-      .welcome-hero {
-        padding: 12px 14px;
-      }
-      .welcome-hero p {
-        font-size: 12.5px;
-        margin-bottom: 10px;
-      }
-      .quick-chips-grid {
-        display: flex;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        padding-bottom: 4px;
-        gap: 5px;
-        -webkit-overflow-scrolling: touch;
-      }
-      .quick-chip {
-        font-size: 11px;
-        padding: 5px 10px;
-        flex-shrink: 0;
-      }
       .chat-footer {
         padding: 8px 10px max(8px, env(safe-area-inset-bottom)) 10px;
       }
@@ -818,6 +926,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <!-- Navigation Bar -->
@@ -854,16 +963,15 @@
       <!-- Messages Stream -->
       <div class="chat-messages" id="chatMessages">
 
-        <!-- Simple Clean AI Welcome Message (ChatGPT style) -->
-        <div class="message-row ai" id="welcomeMessage">
-          <div class="avatar ai">AI</div>
-          <div class="bubble ai">
-            <p>হ্যালো! 👋 আমি <strong>BAUST AI Help Desk</strong>-এর অফিসিয়াল সহকারী।</p>
-            <p>আমি <strong>বাংলাদেশ আর্মি ইউনিভার্সিটি অব সায়েন্স অ্যান্ড টেকনোলজি (BAUST), সৈয়দপুর</strong>-এর ভর্তি, অনুষদ ও বিভাগসমূহ, শিক্ষকবৃন্দ, ফি কাঠামো, পরীক্ষার নীতিমালা, আবাসিক হল এবং যেকোনো সাধারণ বিষয়ে সাহায্য করতে পারি।</p>
-            <p style="font-size: 13px; color: var(--text-muted); margin-top: 6px;">
-              💡 <em>আপনার যেকোনো প্রশ্ন নিচে লিখে শুরু করুন।</em>
-            </p>
+        <!-- Welcome Hero -->
+        <div class="welcome-hero" id="welcomeHero">
+          <div class="welcome-header">
+            <span class="welcome-icon">🎓</span>
+            <h2>স্বাগতম! BAUST AI সহায়িকায় আপনাকে স্বাগতম</h2>
           </div>
+          <p>
+            আমি <strong>বাংলাদেশ আর্মি ইউনিভার্সিটি অব সায়েন্স অ্যান্ড টেকনোলজি (BAUST), সৈয়দপুর</strong>-এর অফিসিয়াল ইন্টেলিজেন্ট হেল্পডেস্ক। ভর্তি, বিভাগ, শিক্ষকবৃন্দ, টিউশন ফি ও ওয়েভার, আবাসিক হল বা বিশ্ববিদ্যালয়ের নীতিমালা সম্পর্কে যেকোনো প্রশ্ন করুন।
+          </p>
         </div>
 
         {% if question and answer %}
@@ -886,14 +994,14 @@
       </div>
 
       <!-- Typing Indicator -->
-      <div class="typing-row" id="typingIndicator">
+      <div class="typing-row" id="typingIndicator" style="display: none;">
         <div class="typing-pill">
           <div class="dot-pulse">
             <span></span>
             <span></span>
             <span></span>
           </div>
-          BAUST AI তথ্য সংগ্রহ করছে...
+          BAUST AI উত্তর তৈরি করছে...
         </div>
       </div>
 
@@ -906,10 +1014,14 @@
             class="chat-input" 
             placeholder="ভর্তি, শিক্ষক, ফি বা যেকোনো কিছু জিজ্ঞেস করুন..." 
             autocomplete="off"
-            required
           >
+          <!-- Send Button (Visible when idle) -->
           <button type="submit" id="sendBtn" class="send-btn" title="Send message">
             ➤
+          </button>
+          <!-- Dedicated Stop Button (Visible when generating) -->
+          <button type="button" id="stopBtn" class="send-btn stop-state" onclick="stopGenerating()" title="থামুন" style="display: none;">
+            ⏹
           </button>
         </form>
         <div class="footer-tools">
@@ -918,16 +1030,31 @@
         </div>
       </footer>
 
+      <!-- Floating Scroll to Bottom Button -->
+      <button id="scrollBottomBtn" class="scroll-bottom-btn" onclick="scrollDownSmooth()" title="Scroll to bottom">
+        ↓
+      </button>
+
     </div>
   </main>
+
+  <div id="toast" class="toast-msg"></div>
 
   <script>
     const chatMessages = document.getElementById("chatMessages");
     const questionInput = document.getElementById("questionInput");
     const sendBtn = document.getElementById("sendBtn");
+    const stopBtn = document.getElementById("stopBtn");
+    const scrollBottomBtn = document.getElementById("scrollBottomBtn");
     const typingIndicator = document.getElementById("typingIndicator");
+    const toast = document.getElementById("toast");
 
     let conversationHistory = [];
+    let isSpeaking = false;
+    let isGenerating = false;
+    let currentAbortController = null;
+    let autoScroll = true;
+    let previousScrollTop = 0;
 
     // =========================================
     // THEME CONTROLLER
@@ -960,13 +1087,76 @@
       applyTheme(nextTheme);
     }
 
-    function scrollToBottom() {
-      chatMessages.scrollTop = chatMessages.scrollHeight;
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2200);
     }
 
-    function sendQuickPrompt(promptText) {
-      questionInput.value = promptText;
-      sendMessage(promptText);
+    // =========================================
+    // ULTRA-SMOOTH AUTO-SCROLL DECOUPLING
+    // =========================================
+    function isNearBottom(threshold = 70) {
+      return (chatMessages.scrollHeight - chatMessages.scrollTop - chatMessages.clientHeight) <= threshold;
+    }
+
+    function updateScrollState() {
+      const currentTop = chatMessages.scrollTop;
+      const atBottom = isNearBottom(80);
+
+      if (atBottom) {
+        autoScroll = true;
+        if (scrollBottomBtn) scrollBottomBtn.style.display = "none";
+      } else {
+        // If scrolling up or already away from bottom, disable auto-scroll
+        if (currentTop < previousScrollTop || !isNearBottom(120)) {
+          autoScroll = false;
+        }
+        if (scrollBottomBtn && !isNearBottom(140)) {
+          scrollBottomBtn.style.display = "flex";
+        }
+      }
+      previousScrollTop = currentTop;
+    }
+
+    chatMessages.addEventListener("scroll", updateScrollState, { passive: true });
+
+    chatMessages.addEventListener("wheel", (e) => {
+      if (e.deltaY < 0) {
+        // User explicitly scrolling up
+        autoScroll = false;
+        if (scrollBottomBtn) scrollBottomBtn.style.display = "flex";
+      }
+    }, { passive: true });
+
+    chatMessages.addEventListener("touchmove", () => {
+      if (!isNearBottom(80)) {
+        autoScroll = false;
+        if (scrollBottomBtn) scrollBottomBtn.style.display = "flex";
+      }
+    }, { passive: true });
+
+    function scrollToBottom(force = false) {
+      if (force) {
+        autoScroll = true;
+        if (scrollBottomBtn) scrollBottomBtn.style.display = "none";
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        return;
+      }
+      if (autoScroll) {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+    }
+
+    function scrollDownSmooth() {
+      autoScroll = true;
+      if (scrollBottomBtn) scrollBottomBtn.style.display = "none";
+      chatMessages.scrollTo({
+        top: chatMessages.scrollHeight,
+        behavior: 'smooth'
+      });
     }
 
     function appendUserMessage(text) {
@@ -977,23 +1167,7 @@
         <div class="bubble user">${escapeHtml(text)}</div>
       `;
       chatMessages.appendChild(row);
-      scrollToBottom();
-    }
-
-    function appendAIMessage(htmlContent, rawText) {
-      const row = document.createElement("div");
-      row.className = "message-row ai";
-      row.innerHTML = `
-        <div class="avatar ai">AI</div>
-        <div class="bubble ai">
-          ${htmlContent}
-          <div class="bubble-actions">
-            <button class="action-icon-btn" onclick="copyText(this)">📋 Copy</button>
-          </div>
-        </div>
-      `;
-      chatMessages.appendChild(row);
-      scrollToBottom();
+      scrollToBottom(true);
     }
 
     function escapeHtml(text) {
@@ -1004,100 +1178,220 @@
 
     function copyText(button) {
       const bubble = button.closest('.bubble');
-      const textToCopy = bubble.innerText.replace("📋 Copy", "").trim();
+      const clone = bubble.cloneNode(true);
+      const actions = clone.querySelector('.bubble-actions');
+      if (actions) actions.remove();
+      
+      const textToCopy = clone.innerText.trim();
       navigator.clipboard.writeText(textToCopy).then(() => {
-        const originalText = button.innerHTML;
-        button.innerHTML = "✅ Copied!";
-        setTimeout(() => {
-          button.innerHTML = originalText;
-        }, 2000);
+        showToast("✅ উত্তর কপি করা হয়েছে!");
       });
     }
 
-
+    // =========================================
+    // CLEAR CHAT
+    // =========================================
     function clearChat() {
-      if (confirm("Clear current conversation?")) {
+      if (confirm("বর্তমান কথোপকথন মুছে ফেলতে চান?")) {
+        if (isGenerating) stopGenerating();
         conversationHistory = [];
-        const welcome = document.getElementById("welcomeMessage");
+        const welcome = document.getElementById("welcomeHero");
         chatMessages.innerHTML = '';
         if (welcome) {
           chatMessages.appendChild(welcome);
         }
-        scrollToBottom();
+        if (window.speechSynthesis) window.speechSynthesis.cancel();
+        scrollToBottom(true);
       }
     }
 
+    // =========================================
+    // STOP GENERATION CONTROLLER
+    // =========================================
+    function stopGenerating() {
+      if (currentAbortController) {
+        currentAbortController.abort();
+        currentAbortController = null;
+      }
+      isGenerating = false;
+      resetInputUI();
+      showToast("⏹️ উত্তর জেনারেশন থামানো হয়েছে");
+    }
+
+    function setGeneratingUI() {
+      isGenerating = true;
+      sendBtn.style.display = "none";
+      stopBtn.style.display = "inline-flex";
+      typingIndicator.style.display = "flex";
+      questionInput.placeholder = "AI উত্তর তৈরি করছে... থামতে ⏹ চাপুন";
+    }
+
+    function resetInputUI() {
+      isGenerating = false;
+      stopBtn.style.display = "none";
+      sendBtn.style.display = "inline-flex";
+      typingIndicator.style.display = "none";
+      questionInput.placeholder = "ভর্তি, শিক্ষক, ফি বা যেকোনো কিছু জিজ্ঞেস করুন...";
+      questionInput.disabled = false;
+      sendBtn.disabled = false;
+      questionInput.focus();
+    }
+
+    // =========================================
+    // STREAMING CHAT ENGINE (REAL-TIME SSE)
+    // =========================================
     async function sendMessage(question) {
       if (!question || !question.trim()) return;
 
       const trimmedQuestion = question.trim();
       questionInput.value = "";
-      questionInput.disabled = true;
-      sendBtn.disabled = true;
+
+      // Reset scroll lock for new message
+      autoScroll = true;
 
       // Render user question
       appendUserMessage(trimmedQuestion);
       conversationHistory.push({ role: "user", content: trimmedQuestion });
 
-      // Show typing indicator
-      typingIndicator.style.display = "flex";
-      scrollToBottom();
+      // Create empty AI message container for live token stream
+      const row = document.createElement("div");
+      row.className = "message-row ai";
+      row.innerHTML = `
+        <div class="avatar ai">AI</div>
+        <div class="bubble ai">
+          <div class="stream-content"></div>
+          <div class="bubble-actions" style="display: none;">
+            <button class="action-icon-btn copy-btn" onclick="copyText(this)">📋 Copy</button>
+          </div>
+        </div>
+      `;
+      chatMessages.appendChild(row);
+      scrollToBottom(true);
+
+      const streamContentDiv = row.querySelector(".stream-content");
+      const bubbleActions = row.querySelector(".bubble-actions");
+
+      setGeneratingUI();
+      scrollToBottom(true);
+
+      let accumulatedText = "";
+      currentAbortController = new AbortController();
 
       try {
-        const response = await fetch("/api/chat", {
+        const response = await fetch("/api/chat/stream", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
+          headers: { "Content-Type": "application/json" },
+          signal: currentAbortController.signal,
           body: JSON.stringify({
             question: trimmedQuestion,
             history: conversationHistory
           })
         });
 
-        const data = await response.json();
         typingIndicator.style.display = "none";
 
-        if (data.status === "success") {
-          appendAIMessage(data.html_answer, data.raw_answer);
-          conversationHistory.push({ role: "assistant", content: data.raw_answer });
-        } else {
-          appendAIMessage(
-            `<p style="color: #EF4444;">⚠️ ${data.message || 'An error occurred. Please try again.'}</p>`,
-            data.message || 'Error'
-          );
+        if (!response.ok || !response.body) {
+          throw new Error("Stream response error");
         }
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder("utf-8");
+        let buffer = "";
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split("\n");
+          buffer = lines.pop(); // Keep partial line
+
+          for (const line of lines) {
+            const trimmedLine = line.trim();
+            if (trimmedLine.startsWith("data: ")) {
+              const jsonStr = trimmedLine.slice(6);
+              try {
+                const parsed = JSON.parse(jsonStr);
+                if (parsed.type === "token" && parsed.content) {
+                  accumulatedText += parsed.content;
+                  if (window.marked) {
+                    const cleanMd = accumulatedText.replace(/`(\[[^\]]+\]\([^\)]+\))`/g, '$1');
+                    streamContentDiv.innerHTML = marked.parse(cleanMd);
+                  } else {
+                    streamContentDiv.innerText = accumulatedText;
+                  }
+                  scrollToBottom(false);
+                } else if (parsed.type === "done") {
+                  if (parsed.raw_answer) {
+                    accumulatedText = parsed.raw_answer;
+                    if (window.marked) {
+                      const cleanMd = accumulatedText.replace(/`(\[[^\]]+\]\([^\)]+\))`/g, '$1');
+                      streamContentDiv.innerHTML = marked.parse(cleanMd);
+                    }
+                  }
+                } else if (parsed.type === "error") {
+                  accumulatedText = `⚠️ ${parsed.message || 'Error'}`;
+                  streamContentDiv.innerHTML = `<p style="color: #EF4444;">${accumulatedText}</p>`;
+                }
+              } catch (e) {}
+            }
+          }
+        }
+
+        // Finalize formatting
+        if (window.marked && accumulatedText) {
+          streamContentDiv.innerHTML = marked.parse(accumulatedText);
+        }
+
+        // Setup Actions
+        bubbleActions.style.display = "flex";
+        conversationHistory.push({ role: "assistant", content: accumulatedText });
+
       } catch (err) {
-        console.error("Chat error:", err);
-        typingIndicator.style.display = "none";
-        appendAIMessage(
-          `<p style="color: #EF4444;">⚠️ সার্ভারের সাথে সংযোগ স্থাপন করা সম্ভব হয়নি। অনুগ্রহ করে ইন্টারনেট সংযোগ চেক করুন।</p>`,
-          "Network Error"
-        );
+        if (err.name === "AbortError") {
+          // User clicked stop
+          if (accumulatedText) {
+            if (window.marked) streamContentDiv.innerHTML = marked.parse(accumulatedText);
+            bubbleActions.style.display = "flex";
+            conversationHistory.push({ role: "assistant", content: accumulatedText });
+          }
+        } else {
+          console.error("Chat error:", err);
+          typingIndicator.style.display = "none";
+          streamContentDiv.innerHTML = `<p style="color: #EF4444;">⚠️ সার্ভারের সাথে সংযোগ স্থাপন করা সম্ভব হয়নি। অনুগ্রহ করে আবার চেষ্টা করুন।</p>`;
+        }
       } finally {
-        questionInput.disabled = false;
-        sendBtn.disabled = false;
-        questionInput.focus();
-        scrollToBottom();
+        resetInputUI();
+        currentAbortController = null;
+        scrollToBottom(false);
       }
     }
 
     function handleFormSubmit(event) {
       event.preventDefault();
+      if (isGenerating) {
+        stopGenerating();
+        return;
+      }
       const question = questionInput.value;
       sendMessage(question);
     }
 
-    // Auto-scroll when virtual keyboard pops up on mobile
     if (questionInput) {
       questionInput.addEventListener("focus", () => {
-        setTimeout(scrollToBottom, 300);
+        setTimeout(() => scrollToBottom(true), 300);
       });
     }
 
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && isGenerating) {
+        stopGenerating();
+      }
+    });
+
     window.addEventListener("DOMContentLoaded", () => {
       initTheme();
-      scrollToBottom();
+      scrollToBottom(true);
       if (window.innerWidth > 640) {
         questionInput.focus();
       }

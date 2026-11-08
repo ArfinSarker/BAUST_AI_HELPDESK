@@ -1,17 +1,45 @@
-# Python environment & cache
+# Python virtual environment & interpreter caches
 venv/
 env/
 __pycache__/
 *.py[cod]
 *$py.class
+*.so
 
-# Environment Variables & Secrets (CRITICAL)
+# Environment Variables & API Secrets (CRITICAL)
 .env
+*.env.local
 
-# Upload batches & temporary files
+# SQLite Database & Write-Ahead Logs
+data/*.db
+data/*.db-wal
+data/*.db-shm
+data/*.db-journal
+
+# Vector Store & Embedding Binaries (Generated automatically on build)
+vector_store/*.faiss
+vector_store/*.pkl
+vector_store/*.npy
+vector_store/.incremental_cache/
+vector_store/indexer.log
+!vector_store/.gitkeep
+
+# Uploads & Temporary Storage
 uploads/*
 !uploads/.gitkeep
 
-# Operating system files
+# Application Runtime Logs
+logs/*
+!logs/.gitkeep
+*.log
+
+# Editor & IDE Configs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Operating System Files
 .DS_Store
 Thumbs.db
+desktop.ini

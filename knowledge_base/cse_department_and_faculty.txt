@@ -421,4 +421,34 @@ The following laboratories are maintained by the Department of Computer Science 
 - **Phone**: 01717595722
 - **Email**: rahmatkhansdp2001@gmail.com
 - **Education / Qualifications**: HSC
-- **Current Status**: Active
+- **Current Status**: Active
+
+---
+
+## Additional Information & Updates
+
+# Routine / Lab Schedule
+
+## Department of Computer Science and Engineering (CSE)
+
+- **Lab Name:** CSE Network Lab
+- **Schedule:** Every Monday, 2:00 PM to 4:30 PM
+- **Location:** Room 402
+
+---
+
+## Additional Information & Updates
+
+## Laboratory Facilities & Summer 2026 Updates
+* **Activities:** Deep Learning and Cloud Computing sessions.
+* **Location:** Server Room 405.
+* **Time:** 10:00 AM onwards.
+
+---
+
+## Additional Information & Updates
+
+## Summer 2026 Lab Updates
+* **Activities:** Deep Learning and Cloud Computing sessions.
+* **Location:** Server Room 405.
+* **Time:** 10:00 AM onwards.

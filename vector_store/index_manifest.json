@@ -1,0 +1,187 @@
+{
+  "model_name": "paraphrase-multilingual-MiniLM-L12-v2",
+  "total_documents": 36,
+  "total_chunks": 1054,
+  "files": {
+    "User_Learned_Facts.txt": {
+      "hash": "a52e37d47caa063c567b985cbd9e22dd",
+      "mtime": 1794071826.7576535,
+      "chunk_count": 1
+    },
+    "academic_calendar.txt": {
+      "hash": "bd67c8372bd00c79436a156e5fa58c9a",
+      "mtime": 1794133569.0525813,
+      "chunk_count": 6
+    },
+    "academic_council_members.txt": {
+      "hash": "4b367e61a86986a661dc13b19a0b0a2e",
+      "mtime": 1793554410.625499,
+      "chunk_count": 9
+    },
+    "academic_leadership_deans.txt": {
+      "hash": "5172e2875cbb6f9f86d79857b0a2e358",
+      "mtime": 1793554784.0556128,
+      "chunk_count": 5
+    },
+    "academic_programs_and_degrees.txt": {
+      "hash": "520fd241bad893c1344950e61af4408e",
+      "mtime": 1794076633.654567,
+      "chunk_count": 3
+    },
+    "administrative_contact_directory.txt": {
+      "hash": "c5f21f1b5ee8cdfb8c80d491920b12ad",
+      "mtime": 1794104714.7207167,
+      "chunk_count": 15
+    },
+    "admission_information.txt": {
+      "hash": "5486d2a5c2b35d04e87a6a96e72e1b96",
+      "mtime": 1794106174.4232557,
+      "chunk_count": 54
+    },
+    "admission_office_directory.txt": {
+      "hash": "13d81a3c8c165e4abe40c8884205c41b",
+      "mtime": 1793560938.7702045,
+      "chunk_count": 5
+    },
+    "brief_history_of_baust.txt": {
+      "hash": "4444ac89f5bd40bc21bb3016c7fca8b6",
+      "mtime": 1793560936.5684743,
+      "chunk_count": 41
+    },
+    "campus_facilities_and_services.txt": {
+      "hash": "3efbcd6f9ea18061166fefc33ff7b3c5",
+      "mtime": 1793557246.4781394,
+      "chunk_count": 44
+    },
+    "ce_department_and_faculty.txt": {
+      "hash": "8a98d985d271da4335702a6509c1ed54",
+      "mtime": 1789822648.500519,
+      "chunk_count": 41
+    },
+    "ce_department_events_2026.txt": {
+      "hash": "51dded6418db7327a882da8249d43ab7",
+      "mtime": 1794075250.8522947,
+      "chunk_count": 3
+    },
+    "cse_department_and_faculty.txt": {
+      "hash": "721d0f3800d0f59f17bf12773c78e3ac",
+      "mtime": 1793555994.2657714,
+      "chunk_count": 55
+    },
+    "cse_department_events_2026.txt": {
+      "hash": "f978a94937c019fcbc7955d2d4e1888c",
+      "mtime": 1794106341.8715098,
+      "chunk_count": 1
+    },
+    "cse_midterm_seatplan_summer_2026.txt": {
+      "hash": "face502bcc1e13c5e29e976e9404a5b0",
+      "mtime": 1794136063.3447154,
+      "chunk_count": 471
+    },
+    "discipline_committee_members.txt": {
+      "hash": "9aa8b2d504dde6a6d762e6d14a63d8a6",
+      "mtime": 1793554271.4585354,
+      "chunk_count": 3
+    },
+    "eee_department_and_faculty.txt": {
+      "hash": "4369b35091043ebc5a5e7cb33f9bc50b",
+      "mtime": 1789819948.450419,
+      "chunk_count": 9
+    },
+    "engineering_laboratories_facilities.txt": {
+      "hash": "381e973551fb23ce01e85c2f588a2434",
+      "mtime": 1789818534.65673,
+      "chunk_count": 19
+    },
+    "fbs_department_and_faculty.txt": {
+      "hash": "d592e1921a8a805c5ffdc22886cdf6df",
+      "mtime": 1789823321.6200087,
+      "chunk_count": 43
+    },
+    "finance_committee_members.txt": {
+      "hash": "58772814cb2fcc1335a3adac6faeee4f",
+      "mtime": 1793554200.6018436,
+      "chunk_count": 8
+    },
+    "financial_management_office.txt": {
+      "hash": "04bbd20074c73f4f225332d89987a2d4",
+      "mtime": 1793554499.9013689,
+      "chunk_count": 3
+    },
+    "grievance_and_redressal_committee.txt": {
+      "hash": "535fb4174cc61fc0f3792e764536dfca",
+      "mtime": 1793555079.3734536,
+      "chunk_count": 2
+    },
+    "ict_and_ece_department_and_faculty.txt": {
+      "hash": "ae4f0bcdedfeb27508035f49c0a3c48d",
+      "mtime": 1789819956.6744843,
+      "chunk_count": 6
+    },
+    "ict_wing_and_archive_directory.txt": {
+      "hash": "d29a1806a77afc42f555e93cd8a75941",
+      "mtime": 1793554728.2982934,
+      "chunk_count": 3
+    },
+    "ipe_department_and_faculty.txt": {
+      "hash": "f12427f5d4b6068aa38d1d221db603ef",
+      "mtime": 1789821905.721542,
+      "chunk_count": 41
+    },
+    "me_department_and_faculty.txt": {
+      "hash": "68d8d971d29c0ac3bb8178a5a7a10e3a",
+      "mtime": 1789819977.8382006,
+      "chunk_count": 7
+    },
+    "messages_from_leadership.txt": {
+      "hash": "5210398932429b0570f837247151e958",
+      "mtime": 1793549709.8224382,
+      "chunk_count": 11
+    },
+    "midterm_examination_schedule_summer_2026.txt": {
+      "hash": "092cb7c7233e95c7bd727be49e4aa01e",
+      "mtime": 1794137442.825286,
+      "chunk_count": 69
+    },
+    "office_of_the_adviser_of_students_welfare.txt": {
+      "hash": "dbe5297fb00904bb2bbbb73c8db1ea56",
+      "mtime": 1793554887.744015,
+      "chunk_count": 1
+    },
+    "office_of_the_controller_of_examinations.txt": {
+      "hash": "d1743e76f2851c3d938ecfa415ebee3d",
+      "mtime": 1793554670.6576922,
+      "chunk_count": 3
+    },
+    "proctor_office_and_discipline_committee.txt": {
+      "hash": "4e74ac43db29eb4a0bd1ea9bc88958a9",
+      "mtime": 1793554837.1584616,
+      "chunk_count": 3
+    },
+    "research_and_publication_cell.txt": {
+      "hash": "fb34810e2221afbd95957c28fa41aa70",
+      "mtime": 1789821139.5803075,
+      "chunk_count": 12
+    },
+    "residential_halls_and_facilities.txt": {
+      "hash": "8b6a660d1174f460b2d92b0c76120ac3",
+      "mtime": 1793555997.3400333,
+      "chunk_count": 8
+    },
+    "tuition_fees_and_scholarships.txt": {
+      "hash": "d68e3c0b021ae940f3e7937e3188b180",
+      "mtime": 1794078148.9041896,
+      "chunk_count": 17
+    },
+    "undergraduate_examination_policy.txt": {
+      "hash": "5527faa2be6091b57cd544958e64ba26",
+      "mtime": 1794111605.830297,
+      "chunk_count": 28
+    },
+    "university_syndicate_members.txt": {
+      "hash": "b682eedf9942be6e43b0527948a6ad35",
+      "mtime": 1793553887.3593042,
+      "chunk_count": 4
+    }
+  }
+}

@@ -2,43 +2,121 @@ import os
 import re
 import time
 import json
+import hashlib
 import threading
+from collections import OrderedDict
 from dotenv import load_dotenv
 import requests
+from requests.adapters import HTTPAdapter
 
 load_dotenv()
 
 api_key = os.getenv("GEMINI_API_KEY")
 
-client = None
-try:
-    from google import genai
-    if api_key:
-        client = genai.Client(api_key=api_key)
-except Exception as e:
-    print(f"[Gemini Client Init Warning]: {e}")
-    client = None
-
 # Primary model identifier (Fast, highly capable, and stable)
 DEFAULT_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
-
-# Reuse persistent HTTP session for connection pooling & low latency
-_http_session = requests.Session()
 _last_working_model = DEFAULT_MODEL
 
-# In-Memory Fast Cache for Instant (<10ms) Responses
-_RESPONSE_CACHE = {}
+# Persistent HTTP session with robust connection pooling & low latency socket reuse
+_http_session = requests.Session()
+_adapter = HTTPAdapter(pool_connections=25, pool_maxsize=50, max_retries=1)
+_http_session.mount("https://", _adapter)
+_http_session.mount("http://", _adapter)
+
+# =====================================================
+# DYNAMIC UNIVERSITY CONFIGURATION (NO HARDCODING)
+# =====================================================
+CONFIG_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "university_config.json")
+UNIVERSITY_CONFIG = {}
+try:
+    if os.path.exists(CONFIG_PATH):
+        with open(CONFIG_PATH, "r", encoding="utf-8") as _cf:
+            UNIVERSITY_CONFIG = json.load(_cf)
+except Exception as _e:
+    print(f"[Config Load Notice]: {_e}")
+
+# =====================================================
+# PRE-COMPILED REGEX PATTERNS (HIGH PERFORMANCE)
+# =====================================================
+RE_PUNCTUATION = re.compile(r'[!?,.\'"]+')
+RE_CONSECUTIVE_CHARS = re.compile(r'([a-z])\1+')
+RE_MARKDOWN_LINKS = re.compile(r'`(\[[^\]]+\]\([^\)]+\))`')
+RE_MARKDOWN_FENCES = re.compile(r'^```(?:markdown|json)?\s*', re.IGNORECASE)
+RE_CLOSING_FENCES = re.compile(r'\s*```$', re.IGNORECASE)
+RE_CLEAN_PHONE_PREFIX = re.compile(r'^[9j2JУyY\)\*\(\#\©\•\-\>\:\;]\s*(?=(\+?880|01[3-9]\d))')
+RE_CLEAN_EMAIL_PREFIX = re.compile(r'^[9j2JУyY\)\*\(\#\©\•\-\>\:\;]\s*(?=[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)')
+RE_NOISE_LINES = re.compile(r'^(View Profile|• View Profile|Snipping Tool|Screenshot copied|Automatically saved).*', re.IGNORECASE)
+RE_REASONING_HEADERS = re.compile(r'(?:### Response:|### Answer:|Final Answer:|\*\*উত্তর:\*\*|\*\*Answer:\*\*)\s*(.*)', re.DOTALL | re.IGNORECASE)
+RE_REASONING_LINES = re.compile(r'^\s*[\*\-]\s*(User Question|Input|Language|Context|Constraint|Goal|Greeting|Acknowledgment|Combined|Addresses|Reasoning):', re.IGNORECASE)
+RE_THOUGHT_STEPS = re.compile(r'^(1\.|2\.|3\.)\s+.*?(Input|Question|Constraint|Goal)', re.IGNORECASE)
+RE_JSON_ARRAY = re.compile(r'\[\s*\{.*\}\s*\]', re.DOTALL)
+
+# =====================================================
+# O(1) LRU IN-MEMORY FAST CACHE (WITH MD5 HASH KEYS)
+# =====================================================
+_RESPONSE_CACHE = OrderedDict()
 _CACHE_TTL_SECONDS = 3600  # 1 hour TTL
+_MAX_CACHE_SIZE = 1000
 _CACHE_LOCK = threading.Lock()
 
+
+def build_cache_key(question: str, context: str = "") -> str:
+    """Generate collision-proof cache key using MD5 content hash."""
+    q_norm = question.strip().lower()
+    if not context:
+        return q_norm
+    ctx_hash = hashlib.md5(context.encode("utf-8", errors="ignore")).hexdigest()[:12]
+    return f"{q_norm}_{ctx_hash}"
+
+
+def get_cached_response(key: str) -> str:
+    """Retrieve response from cache with O(1) LRU order updating."""
+    norm_key = key.strip().lower()
+    with _CACHE_LOCK:
+        if norm_key in _RESPONSE_CACHE:
+            entry = _RESPONSE_CACHE[norm_key]
+            if time.time() - entry["time"] < _CACHE_TTL_SECONDS:
+                _RESPONSE_CACHE.move_to_end(norm_key)  # O(1) mark as recently used
+                return entry["answer"]
+            else:
+                del _RESPONSE_CACHE[norm_key]
+    return None
+
+
+def set_cached_response(key: str, answer: str):
+    """Store response into memory cache with O(1) LRU eviction."""
+    if not key or not answer:
+        return
+    # Guard against leaking internal prompt instructions or raw wrappers
+    if "CRITICAL INSTRUCTION" in answer or "Summary of Relevant Information" in answer:
+        return
+    # Guard against abruptly truncated responses
+    ans_clean = answer.strip()
+    if len(ans_clean) < 80 and not any(ans_clean.endswith(p) for p in [".", "!", "?", "।", "ঃ", "]", ")", ":"]):
+        return
+    if "multiple" in key.lower() or "student" in key.lower() or "seat" in key.lower():
+        if len(ans_clean) < 120:
+            return
+
+    norm_key = key.strip().lower()
+    with _CACHE_LOCK:
+        if norm_key in _RESPONSE_CACHE:
+            _RESPONSE_CACHE.move_to_end(norm_key)
+        elif len(_RESPONSE_CACHE) >= _MAX_CACHE_SIZE:
+            _RESPONSE_CACHE.popitem(last=False)  # O(1) pop oldest LRU entry
+        _RESPONSE_CACHE[norm_key] = {
+            "answer": answer,
+            "time": time.time()
+        }
+
+
 def normalize_text_for_intent(text: str) -> str:
-    """Normalize text by collapsing repeating characters and punctuation."""
+    """Normalize text using pre-compiled regex for maximum throughput."""
     if not text:
         return ""
     t = text.lower().strip()
-    t = re.sub(r'[!?,.\'\"]+', ' ', t)
-    # Collapse repeating consecutive characters: e.g. 'naam' -> 'nam', 'kemon' -> 'kemon'
-    t = re.sub(r'([a-z])\1+', r'\1', t)
+    t = RE_PUNCTUATION.sub(' ', t)
+    t = RE_CONSECUTIVE_CHARS.sub(r'\1', t)
     return " ".join(t.split())
 
 
@@ -121,33 +199,7 @@ def get_conversational_response(text: str) -> str:
 
 
 
-def get_cached_response(key: str) -> str:
-    """Retrieve response from cache if not expired."""
-    norm_key = key.strip().lower()
-    with _CACHE_LOCK:
-        if norm_key in _RESPONSE_CACHE:
-            entry = _RESPONSE_CACHE[norm_key]
-            if time.time() - entry["time"] < _CACHE_TTL_SECONDS:
-                return entry["answer"]
-            else:
-                del _RESPONSE_CACHE[norm_key]
-    return None
 
-
-def set_cached_response(key: str, answer: str):
-    """Store response into memory cache with size control."""
-    if not key or not answer:
-        return
-    norm_key = key.strip().lower()
-    with _CACHE_LOCK:
-        # Cap cache size at 500 items to keep memory lightweight
-        if len(_RESPONSE_CACHE) > 500:
-            oldest_key = min(_RESPONSE_CACHE.keys(), key=lambda k: _RESPONSE_CACHE[k]["time"])
-            del _RESPONSE_CACHE[oldest_key]
-        _RESPONSE_CACHE[norm_key] = {
-            "answer": answer,
-            "time": time.time()
-        }
 
 
 def clean_llm_response(text: str) -> str:
@@ -157,7 +209,7 @@ def clean_llm_response(text: str) -> str:
     
     # If model output contains internal reasoning steps / scratchpad
     if "* User Question:" in text or "### Analysis" in text or "* Input:" in text or "* Constraint:" in text:
-        match = re.search(r'(?:### Response:|### Answer:|Final Answer:|\*\*উত্তর:\*\*|\*\*Answer:\*\*)\s*(.*)', text, re.DOTALL | re.IGNORECASE)
+        match = RE_REASONING_HEADERS.search(text)
         if match and match.group(1).strip():
             return match.group(1).strip()
         
@@ -165,9 +217,9 @@ def clean_llm_response(text: str) -> str:
         skip_thought = True
         for line in text.splitlines():
             if skip_thought:
-                if re.match(r'^\s*[\*\-]\s*(User Question|Input|Language|Context|Constraint|Goal|Greeting|Acknowledgment|Combined|Addresses|Reasoning):', line, re.IGNORECASE):
+                if RE_REASONING_LINES.match(line):
                     continue
-                if line.strip().startswith(('1.', '2.', '3.')) and any(k in line for k in ['Input', 'Question', 'Constraint', 'Goal']):
+                if RE_THOUGHT_STEPS.match(line.strip()):
                     continue
                 if not line.strip():
                     continue
@@ -178,7 +230,14 @@ def clean_llm_response(text: str) -> str:
             text = cleaned
 
     # Normalize accidental backticks around markdown links: `[text](url)` -> [text](url)
-    text = re.sub(r'`(\[[^\]]+\]\([^\)]+\))`', r'\1', text)
+    text = RE_MARKDOWN_LINKS.sub(r'\1', text)
+
+    # Fix common Bengali transliteration spelling errors (e.g. Break -> ব্রেক, not ব্র্যাক)
+    text = re.sub(r'সেমিস্টার\s+ব্র্যা?ক\b', 'সেমিস্টার ব্রেক', text)
+    text = re.sub(r'মিড\s*টার্ম\s+ব্র্যা?ক\b', 'মিডটার্ম ব্রেক', text)
+    text = re.sub(r'ক্লাস\s+ব্র্যা?ক\b', 'ক্লাস ব্রেক', text)
+    text = re.sub(r'\bব্র্যাক\b(?=\s*(?:হবে|শুরু|শেষ|চলবে|থাকবে|এর|এ|পর্যন্ত))', 'ব্রেক', text)
+
     return text.strip()
 
 
@@ -207,7 +266,7 @@ def is_translation_request(text: str) -> tuple[bool, str]:
 def rewrite_query_with_history(question: str, history: list = None) -> str:
     """
     If conversation history exists and question genuinely uses pronouns (e.g. 'tar phone koto', 'oitar fee koto'),
-    expand the question into a clear standalone search query without polluting new independent questions.
+    blend previous context entity for RAG search without paying the latency penalty of an extra serial LLM call.
     """
     if not history or not isinstance(history, list) or len(history) < 2:
         return question
@@ -220,6 +279,10 @@ def rewrite_query_with_history(question: str, history: list = None) -> str:
     q_lower = question.strip().lower()
     q_tokens = set(q_lower.split())
 
+    # Correction indicators where user is correcting previous turn
+    correction_signals = {"bolini", "bolchi", "bolechi", "bollam", "not", "instead", "meant", "mean", "বলিনি", "বলেছি", "বলছি", "নয়", "না"}
+    is_correction = any(s in q_tokens for s in correction_signals) or any(s in q_lower for s in ["bolini", "bolchi", "bolechi", "বলিনি", "বলেছি", "বলছি"])
+
     # Standalone topic keywords that indicate a completely new question
     standalone_topics = {
         "dept", "department", "departments", "koyta", "koyti", "fee", "fees", "cost", 
@@ -229,76 +292,86 @@ def rewrite_query_with_history(question: str, history: list = None) -> str:
         "বিভাগ", "অনুষদ", "ভর্তি", "ফি", "খরচ", "হল", "হোস্টেল", "উপাচার্য", "ভিসি"
     }
     
-    # If the user is asking an independent topic question, keep it clean
-    if len(q_tokens.intersection(standalone_topics)) > 0 and not any(p in q_tokens for p in ["tar", "tader", "ota", "oita", "তার", "তাদের", "সেটার"]):
+    # If the user is asking an independent topic question (and not correcting previous turn), keep it clean
+    if not is_correction and len(q_tokens.intersection(standalone_topics)) > 0 and not any(p in q_tokens for p in ["tar", "tader", "ota", "oita", "তার", "তাদের", "সেটার"]):
         return question
 
     dependent_pronouns = {"tar", "tader", "ota", "oita", "he", "she", "his", "her", "their", "it", "its"}
-    has_dependent_pronoun = len(q_tokens.intersection(dependent_pronouns)) > 0 or any(p in q_lower for p in ["তার", "তাদের", "ওটা", "সেটার", "উনার"])
+    followup_tokens = {
+        "time", "slot", "room", "seat", "somoy", "shomoy", "kobe", "kokhon", "tarikh",
+        "date", "when", "building", "kothay", "কবে", "কখন", "সময়", "সময়", "রুম", "সিট", "স্লট", "কোথায়"
+    }
+    is_short_followup = len(q_tokens) <= 4 and (bool(q_tokens & followup_tokens) or any(t in q_lower for t in ["সময়", "সময়", "রুম", "সিট", "স্লট", "কখন", "কবে", "কোথায়"]))
+
+    has_dependent_pronoun = is_correction or is_short_followup or len(q_tokens.intersection(dependent_pronouns)) > 0 or any(p in q_lower for p in ["তার", "তাদের", "ওটা", "সেটার", "উনার"])
 
     if not has_dependent_pronoun:
         return question
 
     last_user_msg = ""
-    last_bot_msg = ""
+    last_roll = ""
     for msg in reversed(history[-4:]):
         if isinstance(msg, dict):
+            c = str(msg.get("content", "")).strip()
+            if not last_roll:
+                rm = re.search(r'\b(08\d{6,14})\b', c)
+                if rm:
+                    last_roll = rm.group(1)
             if msg.get("role") in ["user", "student"] and not last_user_msg:
-                last_user_msg = str(msg.get("content", "")).strip()
-            elif msg.get("role") in ["assistant", "model", "bot"] and not last_bot_msg:
-                last_bot_msg = str(msg.get("content", "")).strip()[:150]
+                last_user_msg = c
+
+    if last_roll and is_short_followup:
+        return f"{last_roll} {question}"
 
     if not last_user_msg:
         return question
 
-    prompt = f"""Given the conversation context, rewrite the follow-up question into a single specific search query about BAUST university.
-Previous User Question: {last_user_msg}
-Assistant Summary: {last_bot_msg}
-Follow-up Question: {question}
-
-Output ONLY the rewritten search query (1 short phrase/sentence):"""
-
-    try:
-        rewritten = call_gemini_generate(prompt, temperature=0.0)
-        if rewritten and len(rewritten) < 120 and "query" not in rewritten.lower():
-            return rewritten.strip()
-    except Exception:
-        pass
-
+    # Fast heuristic query blending: achieves maximum RAG retrieval recall with 0ms extra latency
     return f"{last_user_msg} {question}"
 
 
-
-def call_gemini_generate(prompt: str, temperature: float = 0.2, preferred_model: str = None) -> str:
+def call_gemini_generate(prompt: str, temperature: float = 0.2, preferred_model: str = None, response_mime_type: str = None) -> str:
     """
-    Ultra-fast, robust Gemini caller with persistent connection pooling
-    and deterministic low-latency fallbacks.
+    Ultra-fast, robust Gemini caller with persistent connection pooling,
+    native JSON structured output support, and deterministic low-latency fallbacks.
     """
     global _last_working_model
     key = os.getenv("GEMINI_API_KEY")
     if not key:
         return ""
 
-    env_model = os.getenv("GEMINI_MODEL")
+    env_model = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
     candidate_models = [
+        "gemini-3.5-flash-lite",
         preferred_model,
         _last_working_model,
         env_model,
-        "gemini-3.5-flash-lite",
-        "gemini-3.1-flash-lite",
-        "gemini-3.8-flash",
-        "gemini-3.7-flash"
+        "gemini-flash-latest",
+        "gemini-3.8-flash"
     ]
     unique_models = [m for m in dict.fromkeys(candidate_models) if m]
 
+    gen_config = {"temperature": temperature}
+    if response_mime_type:
+        gen_config["responseMimeType"] = response_mime_type
+
+    payload = {
+        "contents": [{"parts": [{"text": prompt}]}],
+        "generationConfig": gen_config
+    }
+
     for model_name in unique_models:
         url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={key}"
-        payload = {
-            "contents": [{"parts": [{"text": prompt}]}],
-            "generationConfig": {"temperature": temperature}
-        }
         try:
-            resp = _http_session.post(url, json=payload, timeout=4)
+            resp = _http_session.post(url, json=payload, timeout=12)
+            # Graceful fallback: If an older or unsupported model rejects responseMimeType with 400, retry without it
+            if resp.status_code == 400 and response_mime_type:
+                fallback_payload = {
+                    "contents": [{"parts": [{"text": prompt}]}],
+                    "generationConfig": {"temperature": temperature}
+                }
+                resp = _http_session.post(url, json=fallback_payload, timeout=4)
+
             if resp.status_code == 200:
                 data = resp.json()
                 candidates = data.get("candidates", [])
@@ -307,7 +380,7 @@ def call_gemini_generate(prompt: str, temperature: float = 0.2, preferred_model:
                     if parts and "text" in parts[0]:
                         _last_working_model = model_name
                         raw_text = parts[0]["text"].strip()
-                        return clean_llm_response(raw_text)
+                        return raw_text if response_mime_type == "application/json" else clean_llm_response(raw_text)
         except Exception:
             continue
 
@@ -315,12 +388,12 @@ def call_gemini_generate(prompt: str, temperature: float = 0.2, preferred_model:
 
 
 def clean_raw_icon_artifacts(text: str) -> str:
-    """Strip OCR icon artifacts where icons were incorrectly converted to stray characters."""
+    """Strip OCR icon artifacts using pre-compiled regex patterns."""
     lines = []
     for line in text.splitlines():
-        cleaned = re.sub(r'^[9j2JУyY\)\*\(\#\©\•\-\>\:\;]\s*(?=(\+?880|01[3-9]\d))', '', line.strip())
-        cleaned = re.sub(r'^[9j2JУyY\)\*\(\#\©\•\-\>\:\;]\s*(?=[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)', '', cleaned)
-        if re.match(r'^(View Profile|• View Profile|Snipping Tool|Screenshot copied|Automatically saved).*', cleaned, re.IGNORECASE):
+        cleaned = RE_CLEAN_PHONE_PREFIX.sub('', line.strip())
+        cleaned = RE_CLEAN_EMAIL_PREFIX.sub('', cleaned)
+        if RE_NOISE_LINES.match(cleaned):
             continue
         lines.append(cleaned)
     return "\n".join(lines)
@@ -435,6 +508,12 @@ NEW: <suggested_snake_case_stem_without_extension>
         match = re.search(r'MATCH:\s*`?([a-zA-Z0-9_\-\.]+\.txt)`?', resp_text, re.IGNORECASE)
         if match:
             matched_file = match.group(1).strip()
+            # Guardrail: Never route an Examination Schedule or Routine into a Student Seatplan file
+            sample_low = sample_new_snippet.lower()
+            is_schedule_doc = any(k in sample_low for k in ["examination schedule", "exam schedule", "slot-a", "slot-b", "slot-c"])
+            if is_schedule_doc and "seatplan" in matched_file.lower():
+                return ("midterm_examination_schedule_summer_2026.txt", "midterm_examination_schedule_summer_2026") if "midterm_examination_schedule_summer_2026.txt" in existing_files else (None, "midterm_examination_schedule_summer_2026")
+
             if matched_file in existing_files:
                 return matched_file, os.path.splitext(matched_file)[0]
 
@@ -449,6 +528,212 @@ NEW: <suggested_snake_case_stem_without_extension>
             return None, stem
 
     return None, "document"
+
+
+def _rule_based_decompose_knowledge(text: str, existing_files: list[str]) -> list[dict]:
+    """
+    Fallback deterministic segmenter that splits multi-topic text by headers or numbers,
+    and maps each section to existing files or creates new category files.
+    """
+    # Mapping of keywords to standard knowledge files
+    KEYWORD_MAP = [
+        (["calendar", "academic calendar", "semester calendar", "term calendar", "academic schedule", "একাডেমিক ক্যালেন্ডার", "ক্যালেন্ডার"], "academic_calendar.txt"),
+        (["seatplan", "seat plan", "সিট প্ল্যান", "সিটপ্ল্যান"], "exam_seatplan.txt"),
+        (["routine", "class routine", "lab routine", "class schedule", "ক্লাস রুটিন", "রুটিন"], "class_and_lab_routine.txt"),
+        (["cse", "computer science", "artificial intelligence lab"], "cse_department_and_faculty.txt"),
+        (["eee", "electrical and electronic"], "eee_department_and_faculty.txt"),
+        (["me", "mechanical engineering"], "me_department_and_faculty.txt"),
+        (["ce", "civil engineering"], "ce_department_and_faculty.txt"),
+        (["ipe", "industrial and production"], "ipe_department_and_faculty.txt"),
+        (["fbs", "bba", "business studies", "accounting"], "fbs_department_and_faculty.txt"),
+        (["hall", "hostel", "mess", "residential", "provost"], "residential_halls_and_facilities.txt"),
+        (["exam", "grading", "cgpa", "midterm", "final exam"], "undergraduate_examination_policy.txt"),
+        (["admission", "tuition", "waiver", "scholarship", "eligibility"], "admission_information.txt"),
+        (["transport", "bus", "shuttle", "route", "পিকআপ", "বাস"], "university_transport_schedule.txt"),
+        (["library", "book", "borrow", "circulation", "লাইব্রেরি"], "central_library_guidelines.txt"),
+        (["medical", "clinic", "health", "doctor", "ambulance", "ফার্স্ট এইড"], "medical_center_guidelines.txt"),
+        (["history", "established", "syedpur", "cantonment", "vc"], "brief_history_of_baust.txt"),
+        (["contact", "phone", "email", "directory", "hotline"], "administrative_contact_directory.txt"),
+        (["research", "journal", "publication", "grant"], "research_and_publication_cell.txt"),
+        (["facilities", "canteen", "cafeteria", "sports", "gym"], "campus_facilities_and_services.txt")
+    ]
+
+    # Split text into sections based on headers (#, ##), numbered lists (1., 2.), or dividers (---)
+    raw_sections = re.split(r'\n(?=[#]{1,3}\s+|\d+\.\s+|[A-Z]\.\s+|---)', text.strip())
+    raw_sections = [s.strip() for s in raw_sections if len(s.strip()) > 30]
+
+    # If only 1 section or splitting didn't find multiple distinct blocks
+    if len(raw_sections) <= 1:
+        raw_sections = [text.strip()]
+
+    results = []
+
+    for sec in raw_sections:
+        sec_lower = sec.lower()
+        matched_file = None
+        topic_title = "University Update"
+
+        # Determine topic title from first line
+        first_line = sec.splitlines()[0].strip()
+        first_line_clean = re.sub(r'^[#0-9\.\-\s:]+', '', first_line).strip()
+        if 4 <= len(first_line_clean) <= 60:
+            topic_title = first_line_clean.title()
+
+        for keywords, target_file in KEYWORD_MAP:
+            matched = False
+            for k in keywords:
+                if len(k) <= 3:
+                    if re.search(r'\b' + re.escape(k) + r'\b', sec_lower):
+                        matched = True
+                        break
+                elif k in sec_lower:
+                    matched = True
+                    break
+            if matched:
+                matched_file = target_file
+                break
+
+        if not matched_file:
+            # Generate a clean new category stem from topic title
+            slug = re.sub(r'[^a-zA-Z0-9]+', '_', topic_title.lower()).strip('_')
+            matched_file = f"{slug or 'general_notice'}.txt"
+
+        action = "UPDATE_EXISTING" if matched_file in existing_files else "CREATE_NEW"
+        
+        results.append({
+            "topic": topic_title,
+            "action": action,
+            "filename": matched_file,
+            "content": sec
+        })
+
+    return results
+
+
+def decompose_and_route_knowledge(new_text: str, knowledge_folder: str) -> list[dict]:
+    """
+    Intelligently analyzes incoming text (which may contain single or multiple categories).
+    Differentiates which parts belong to an EXISTING category and updates that file,
+    and which parts require creating a NEW category file.
+    
+    Returns a list of structured action dicts:
+    [
+      {
+        "topic": "Residential Hall Guidelines",
+        "action": "UPDATE_EXISTING", # or "CREATE_NEW"
+        "filename": "residential_halls_and_facilities.txt",
+        "content": "... clean markdown section ..."
+      }, ...
+    ]
+    """
+    if not new_text or not new_text.strip():
+        return []
+
+    if not os.path.exists(knowledge_folder):
+        return [{
+            "topic": "University Notice",
+            "action": "CREATE_NEW",
+            "filename": "general_notice.txt",
+            "content": new_text.strip()
+        }]
+
+    existing_files = [f for f in sorted(os.listdir(knowledge_folder)) if f.endswith(".txt")]
+    
+    # Compile existing categories summary
+    file_summaries = []
+    for f in existing_files:
+        path = os.path.join(knowledge_folder, f)
+        try:
+            with open(path, "r", encoding="utf-8") as file_obj:
+                c_sample = file_obj.read(1200)
+                headings = [line.strip() for line in c_sample.splitlines() if line.strip().startswith("#")]
+                headings_str = " | ".join(headings[:5]) if headings else "General records"
+                file_summaries.append(f"- File: `{f}` (Topics: {headings_str})")
+        except Exception:
+            continue
+
+    files_str = "\n".join(file_summaries)
+
+    # Ask Gemini to decompose and classify into multiple or single categories
+    prompt = f"""You are the Chief Knowledge Base Architect for Bangladesh Army University of Science and Technology (BAUST).
+
+EXISTING KNOWLEDGE BASE CATEGORY FILES IN DATABASE:
+{files_str}
+
+NEWLY SUBMITTED INFORMATION:
+\"\"\"
+{new_text[:4000]}
+\"\"\"
+
+TASK:
+1. Carefully analyze the newly submitted information.
+2. Determine if it covers a SINGLE topic/category, or MULTIPLE distinct categories (e.g. mentions hall rules, exam schedule, bus routes, department updates, or fee policies).
+3. If it contains MULTIPLE topics, differentiate and split the information into distinct thematic sections.
+4. For EACH section:
+   - Check if the topic belongs to an EXISTING file from the list above. If so:
+     "action": "UPDATE_EXISTING"
+     "filename": "<exact_filename_from_list>"
+   - If the topic does NOT belong to any existing file, create a NEW category:
+     "action": "CREATE_NEW"
+     "filename": "<descriptive_snake_case_name.txt>"
+   - "topic": "<Short Descriptive Title>"
+   - "content": "<The specific information, rules, and details belonging to this category in clean Markdown>"
+
+STRICT JSON OUTPUT FORMAT (NO PRETEXT, NO MARKDOWN CODE FENCES OUTSIDE JSON):
+[
+  {{
+    "topic": "Title of Topic",
+    "action": "UPDATE_EXISTING",
+    "filename": "existing_filename.txt",
+    "content": "Formatted section text"
+  }}
+]
+"""
+    try:
+        resp = call_gemini_generate(prompt, temperature=0.1, response_mime_type="application/json")
+        if resp:
+            # Direct parse guaranteed JSON with fallback
+            try:
+                parsed = json.loads(resp)
+            except Exception:
+                json_match = RE_JSON_ARRAY.search(resp)
+                parsed = json.loads(json_match.group(0)) if json_match else []
+
+            if isinstance(parsed, list) and len(parsed) > 0:
+                    valid_items = []
+                    for item in parsed:
+                        if not isinstance(item, dict):
+                            continue
+                        topic = item.get("topic", "University Notice").strip()
+                        raw_fn = item.get("filename", "").strip()
+                        content = item.get("content", "").strip()
+
+                        if not content:
+                            continue
+
+                        # Clean filename
+                        clean_fn = os.path.basename(raw_fn).replace("`", "").strip()
+                        if not clean_fn.endswith(".txt"):
+                            clean_fn = f"{clean_fn}.txt"
+                        clean_fn = re.sub(r'[^a-zA-Z0-9_\-\.]', '_', clean_fn).lower()
+
+                        # Determine if file exists
+                        action = "UPDATE_EXISTING" if clean_fn in existing_files else "CREATE_NEW"
+
+                        valid_items.append({
+                            "topic": topic,
+                            "action": action,
+                            "filename": clean_fn,
+                            "content": content
+                        })
+
+                    if valid_items:
+                        return valid_items
+    except Exception as e:
+        print(f"[Decompose Knowledge Warning]: {e}")
+
+    # Fallback to deterministic rule-based segmenter
+    return _rule_based_decompose_knowledge(new_text, existing_files)
 
 
 def merge_into_existing_document(existing_text: str, new_text: str) -> str:
@@ -531,14 +816,26 @@ def synthesize_smart_answer(context: str, question: str, history: list = None) -
                 break
         
         if last_bot_msg:
+            # Dynamic university data with graceful fallbacks
+            vc_info = UNIVERSITY_CONFIG.get("vice_chancellor", {})
+            vc_en = vc_info.get("name_en", "Brigadier General A B M Humayun Kabir, SGP, ndc, psc, te (Retd.)")
+            vc_bn = vc_info.get("name_bn", "ব্রিগেডিয়ার জেনারেল এ বি এম হুমায়ুন কবির, এসজিপি, এনডিসি, পিএসসি, টিই (অব.)")
+            
+            cse_info = UNIVERSITY_CONFIG.get("cse_head", {})
+            cse_en = cse_info.get("name_en", "Dr. Md Nakib Hayat Chowdhury")
+            cse_bn = cse_info.get("name_bn", "ড. মো. নাকিব হায়াত চৌধুরী")
+            cse_desig = cse_info.get("designation", "Associate Professor & Head of CSE Department")
+            cse_phone = cse_info.get("phone", "01769675560")
+            cse_email = cse_info.get("email", "hdcse@baust.edu.bd")
+
             # If user asked for Bangla
             if any(p in q_lower for p in ["bangla", "বাংলা"]):
                 if "official AI Assistant" in last_bot_msg or "BAUST AI Assistant" in last_bot_msg:
                     return "আমি বাংলাদেশ আর্মি ইউনিভার্সিটি অব সায়েন্স অ্যান্ড টেকনোলজি (BAUST), সৈয়দপুরের অফিসিয়াল AI সহকারী।"
                 if "Humayun Kabir" in last_bot_msg or "Vice-Chancellor" in last_bot_msg:
-                    return "BAUST-এর বর্তমান ভাইস-চ্যান্সেলর (VC) হলেন **ব্রিগেডিয়ার জেনারেল এ বি এম হুমায়ুন কবির, এসজিপি, এনডিসি, পিএসসি, টিই (অব.)**।"
+                    return f"BAUST-এর বর্তমান ভাইস-চ্যান্সেলর (VC) হলেন **{vc_bn}**।"
                 if "Nakib Hayat" in last_bot_msg or "CSE" in last_bot_msg:
-                    return "সিএসই (CSE) বিভাগের বিভাগীয় প্রধান হলেন **ড. মো. নাকিব হায়াত চৌধুরী** (সহযোগী অধ্যাপক)।"
+                    return f"সিএসই (CSE) বিভাগের বিভাগীয় প্রধান হলেন **{cse_bn}** ({cse_desig})।"
                 if "Faculty" in last_bot_msg or "faculties" in last_bot_msg:
                     return (
                         "**BAUST-এর অনুষদসমূহ (Faculties):**\n\n"
@@ -565,9 +862,9 @@ def synthesize_smart_answer(context: str, question: str, history: list = None) -
                 if "অফিসিয়াল AI" in last_bot_msg or "সহায়ক" in last_bot_msg:
                     return "I am the official AI Assistant of Bangladesh Army University of Science and Technology (BAUST), Saidpur."
                 if "হুমায়ুন কবির" in last_bot_msg or "ভাইস-চ্যান্সেলর" in last_bot_msg or "উপাচার্য" in last_bot_msg:
-                    return "The current Vice-Chancellor (VC) of BAUST is **Brigadier General A B M Humayun Kabir, SGP, ndc, psc, te (Retd.)**."
+                    return f"The current Vice-Chancellor (VC) of BAUST is **{vc_en}**."
                 if "নাকিব হায়াত" in last_bot_msg or "সিএসই" in last_bot_msg:
-                    return "The Head of the Department of CSE is **Dr. Md Nakib Hayat Chowdhury** (Associate Professor). Phone: [01769675560](tel:01769675560), Email: [hdcse@baust.edu.bd](mailto:hdcse@baust.edu.bd)"
+                    return f"The Head of the Department of CSE is **{cse_en}** ({cse_desig}). Phone: [{cse_phone}](tel:{cse_phone}), Email: [{cse_email}](mailto:{cse_email})"
                 if "অনুষদ" in last_bot_msg or "বিভাগ" in last_bot_msg:
                     return (
                         "**Faculties at BAUST:**\n\n"
@@ -867,6 +1164,30 @@ def synthesize_smart_answer(context: str, question: str, history: list = None) -
             "🌐 **Website:** [www.baust.edu.bd](https://www.baust.edu.bd)"
         )
 
+    # 15.5 Multiple Student Matches Disambiguation Fallback
+    if "Multiple Student Matches Found" in context or "Disambiguation Required" in context:
+        student_bullets = []
+        for line in context.splitlines():
+            l_s = line.strip()
+            if re.match(r'^\d+\.\s*\*\*', l_s):
+                student_bullets.append(f"* {l_s}")
+
+        matched_name = ""
+        nm_m = re.search(r"Multiple Student Matches Found for Name ['\"]([^'\"]+)['\"]", context)
+        if nm_m:
+            matched_name = f"'{nm_m.group(1)}' "
+
+        msg = (
+            f"আমাদের ডাটাবেসে {matched_name}নামের একাধিক শিক্ষার্থী পাওয়া গেছে। "
+            f"আপনার সঠিক পরীক্ষার আসন ও সময়সূচি জানতে অনুগ্রহ করে আপনার নির্দিষ্ট **Student ID / Roll** অথবা পুরো নাম উল্লেখ করুন।\n\n"
+            f"**সম্ভাব্য শিক্ষার্থীদের তালিকা:**\n"
+        )
+        if student_bullets:
+            msg += "\n".join(student_bullets)
+        else:
+            msg += "* অনুগ্রহ করে আপনার আইডি বা রোল নম্বরটি লিখে পাঠান।"
+        return msg
+
     # 16. Smart fallback from internal RAG document context (Clean, well-structured, no raw table noise)
     if context and context.strip() and "(No specific internal BAUST document found" not in context:
         cleaned = re.sub(r'---\s*Information from \[.*?\]\s*---', '', context).strip()
@@ -875,7 +1196,7 @@ def synthesize_smart_answer(context: str, question: str, history: list = None) -
             l = line.strip()
             if not l or l.startswith('|---') or l.startswith('===') or l.startswith('---') or l.startswith(':-') or l.startswith(':--'):
                 continue
-            if any(junk in l.upper() for junk in ["ADMISSION NOTICE", "WINTER SEMESTER", "APPLICATIONS ARE INVITED", "SL. — FACULTY", "SL.", "| :---"]):
+            if any(junk in l.upper() for junk in ["ADMISSION NOTICE", "WINTER SEMESTER", "APPLICATIONS ARE INVITED", "SL. — FACULTY", "SL.", "| :---", "CRITICAL INSTRUCTION", "DO NOT PICK", "POLITELY INFORM", "MATCHING STUDENTS"]):
                 continue
             # If it's a table row
             if l.startswith('|') and l.endswith('|'):
@@ -938,6 +1259,30 @@ CRITICAL RULES (CONCISE, DIRECT, STRUCTURED, LANGUAGE ACCURATE):
 2. **PROPORTIONAL, STRUCTURED & TIDY (GUCHIYE ANSWER DAWA)**:
    - Always format with short markdown bullet points and bold field labels (e.g., `* **শিক্ষার্থীর নাম:** ...`, `* **সিট নম্বর (Seat No):** ...`).
    - For key values (e.g. Seat Numbers like `C-206-19`, Exam Rooms like `Room 206`, Roll/Student IDs like `0802620102161056`, Exam Slots like `Slot-C`), wrap them in backticks (e.g. ` `C-206-19` `, ` `Room 206` `) so they render as distinct highlighted badges with eye-catching colors!
+   - **Student Exam Seatplan, Name & Time Rule (CRITICAL)**:
+     * When answering for a student's roll/ID or seatplan/exam question:
+       The student's NAME MUST BE ON ITS OWN DEDICATED SEPARATE BULLET POINT at the very top:
+       `* **শিক্ষার্থীর নাম (Student Name):** <Student Name>`
+       NEVER merge, combine, or bundle the student's name into parentheses on the ID line (e.g., NEVER write `* **শিক্ষার্থী / আইডি:** 0802410105101027 (KAZI SAIYATAN HAQUE SADIA)`).
+       Always present the fields clearly on separate individual bullets in this exact format:
+       * **শিক্ষার্থীর নাম (Student Name):** <Student Name>
+       * **শিক্ষার্থীর আইডি / রোল (Student ID / Roll):** `<Roll>`
+       * **বিভাগ ও লেভেল/টার্ম (Department & Level/Term):** <Programme / Level & Term>
+       * **পরীক্ষার স্লট (Examination Slot):** `<Slot>`
+       * **পরীক্ষার সময় (Examination Time):** `<Time>`
+       * **পরীক্ষার কক্ষ (Exam Room):** <Building, Room>
+       * **সিট নম্বর (Seat No):** `<Seat>`
+       * **পরীক্ষা:** মিডটার্ম পরীক্ষা, সামার সেমিস্টার ২০২৬
+
+   - **Student Name Disambiguation & Anti-Random Guessing Rule (CRITICAL)**:
+     * When a user searches by a first name, partial name, or single word (e.g. 'nafisa', 'rakib', 'hasan', 'sadia') and multiple students exist in the records with that name:
+       - NEVER arbitrarily pick or guess just ONE student!
+       - Explain in polite, natural Bengali that multiple students share this name.
+       - List the matching students in clean bullet points with their Full Name, Student ID / Roll, and Level/Term.
+       - Ask the user to reply with their specific Student ID / Roll or full name to get their exact exam seat, room, and time.
+     * If ONLY ONE student matches the full name, or if the user provided their Student ID / Roll:
+       - Directly output their full individual exam seat allocation as defined above!
+
    - For single-fact questions, give a crisp 1 to 3 bullet point answer.
    - NEVER output raw unformatted tables, lengthy irrelevant admissions text, or bank routing numbers unless specifically asked.
    - For coding/general science questions (e.g., Python binary search), directly provide clean code without university admission templates.
@@ -953,6 +1298,29 @@ CRITICAL RULES (CONCISE, DIRECT, STRUCTURED, LANGUAGE ACCURATE):
      * **উচ্চশিক্ষার ছুটিতে থাকা শিক্ষকবৃন্দ (Faculty on Study Leave)**: If any teachers are on study leave, list them under a distinct, separate section clearly titled "উচ্চশিক্ষার ছুটিতে (Study Leave)".
      * **সাবেক শিক্ষকবৃন্দ (Ex-Faculty Members)**: If any former/ex-faculty are mentioned, list them ONLY under a distinct separate section titled "সাবেক শিক্ষকবৃন্দ (Ex-Faculty)" or omit them if the user asked only for current teachers.
      * **NEVER** combine or confuse active teachers with ex-faculty or teachers on study leave.
+
+5. **STRICT DEPARTMENT & FACTUAL INTEGRITY (NEVER SUBSTITUTE / HONEST MISSING DATA)**:
+   - **No Cross-Department Substitution**: If the user asks about a specific department (e.g. `CSE`, `CE`, `EEE`, `ME`, `IPE`, `BBA`, `English`, `ICT`):
+     * You must **ONLY** provide information that strictly belongs to that requested department.
+     * **NEVER substitute or mix one department's data with another!**
+     * **Strict Rule**: If the user asks for "cse picnic" or "সিএসই পিকনিক", and the official records do not contain a CSE picnic, **DO NOT** give CE (Civil Engineering) or EEE picnic details!
+   - **Missing Information Protocol**:
+     * If the official records DO NOT contain information about the user's specific query for that department (e.g., no record of a CSE picnic or specific departmental event), you MUST state directly, clearly and politely in the user's language:
+       "আমাদের অফিসিয়াল রেকর্ড বা ডাটাবেসে সিএসই (CSE) বিভাগের পিকনিক সংক্রান্ত কোনো তথ্য বা নোটিশ নেই।" (or in English: "Sorry, no information regarding a CSE department picnic was found in our official university records.")
+     * **NEVER guess, NEVER hallucinate, and DO NOT output unrelated documents (such as exam seatplans or general admission text) when the specific event/notice is missing.**
+   - **Instant Resolution on User Entity Corrections**:
+     * If the user corrects a mistaken department or entity from a previous turn (e.g. "ami ce bolini ami bolechi cse" or "not CE, I meant CSE"):
+     * Do NOT simply say an empty apology asking how you can help. **Immediately resolve the original question for the corrected department**:
+       e.g., "দুঃখিত ভুল বোঝাবুঝির জন্য। আমাদের অফিসিয়াল রেকর্ড বা ডাটাবেসে সিএসই (CSE) বিভাগের পিকনিক সংক্রান্ত কোনো তথ্য বা নোটিশ নেই।"
+6. **ACCURATE BENGALI SPELLING & ACADEMIC TERMINOLOGY**:
+   - For 'Semester Break', ALWAYS write **সেমিস্টার ব্রেক** বা **সেমিস্টার বিরতি** (NEVER spell as 'ব্র্যাক' or 'ব্রাক').
+   - For 'Midterm', write **মিডটার্ম** বা **মিড-টার্ম পরীক্ষা**।
+   - Maintain accurate standard Bengali spelling and avoid phonetic transliteration errors.
+
+7. **CONVERSATIONAL FOLLOW-UP & SHORT QUERIES**:
+   - If the user asks a brief follow-up question (e.g. 'time', 'kobe', 'room kothay', 'seat kothay', 'slot koto', 'routine', 'details'):
+     Check the RECENT CONVERSATION HISTORY to identify the subject (student, course, exam, department, or topic).
+     Answer directly and specifically with that subject's details (e.g., student's exam slot, time, room, seat) in the clean individual bullet format!
 {extra_task_instruction}"""
 
     return f"""{system_instruction}
@@ -982,7 +1350,7 @@ def generate_answer_stream(context: str, question: str, history: list = None):
         return
 
     # Check In-Memory Cache (Only if no long history is present)
-    cache_key = f"{question.strip()}_{len(context)}" if context else question.strip()
+    cache_key = build_cache_key(question, context)
     if not history or len(history) <= 1:
         cached = get_cached_response(cache_key)
         if cached:
@@ -998,14 +1366,13 @@ def generate_answer_stream(context: str, question: str, history: list = None):
     # Stream in real-time via high-speed direct REST SSE
     streamed_successfully = False
     if key:
-        env_model = os.getenv("GEMINI_MODEL")
+        env_model = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
         candidate_stream_models = [
+            "gemini-3.5-flash-lite",
             _last_working_model,
             env_model,
-            "gemini-3.5-flash-lite",
-            "gemini-3.1-flash-lite",
-            "gemini-3.8-flash",
-            "gemini-3.7-flash"
+            "gemini-flash-latest",
+            "gemini-3.8-flash"
         ]
         unique_stream_models = [m for m in dict.fromkeys(candidate_stream_models) if m]
 
@@ -1016,7 +1383,7 @@ def generate_answer_stream(context: str, question: str, history: list = None):
                 "generationConfig": {"temperature": 0.25}
             }
             try:
-                resp = _http_session.post(url, json=payload, stream=True, timeout=4)
+                resp = _http_session.post(url, json=payload, stream=True, timeout=12)
                 if resp.status_code != 200:
                     continue
 
@@ -1038,8 +1405,13 @@ def generate_answer_stream(context: str, question: str, history: list = None):
                             except Exception:
                                 pass
                 if streamed_successfully:
-                    _last_working_model = model_to_use
-                    break
+                    accum_text = "".join(full_answer_accumulator).strip()
+                    if len(accum_text) < 80 and len(context) > 120:
+                        streamed_successfully = False
+                        full_answer_accumulator.clear()
+                    else:
+                        _last_working_model = model_to_use
+                        break
             except Exception:
                 continue
 
@@ -1066,7 +1438,7 @@ def generate_answer(context: str, question: str, history: list = None) -> str:
     if is_greeting(question):
         return get_conversational_response(question)
 
-    cache_key = f"{question.strip()}_{len(context)}" if context else question.strip()
+    cache_key = build_cache_key(question, context)
     if not history or len(history) <= 1:
         cached = get_cached_response(cache_key)
         if cached:
@@ -1075,7 +1447,7 @@ def generate_answer(context: str, question: str, history: list = None) -> str:
     prompt = _build_full_prompt(context, question, history)
     ans = call_gemini_generate(prompt, temperature=0.25)
     
-    if not ans or not ans.strip():
+    if not ans or not ans.strip() or (len(ans.strip()) < 80 and len(context) > 120):
         ans = synthesize_smart_answer(context, question, history=history)
 
     final_ans = ans.strip()

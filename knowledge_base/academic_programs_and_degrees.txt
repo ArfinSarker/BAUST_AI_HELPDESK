@@ -1,0 +1,34 @@
+# Academic Programs at BAUST
+
+Bangladesh Army University of Science and Technology (BAUST) offers a comprehensive range of undergraduate and graduate programs designed to prepare students for the challenges of the modern world.
+
+## Undergraduate Programs
+**Duration:** 4-Year Degree Programs (8 Semesters)
+
+| Sl. No. | Program Name | Total Credits |
+| :--- | :--- | :--- |
+| 01 | B.Sc. Engineering in Computer Science and Engineering (CSE) | 161 Credits |
+| 02 | B.Sc. Engineering in Electrical and Electronic Engineering (EEE) | 161 Credits |
+| 03 | B.Sc. Engineering in Mechanical Engineering (ME) | 160 Credits |
+| 04 | B.Sc. Engineering in Industrial and Production Engineering (IPE) | 160 Credits |
+| 05 | B.Sc. Engineering in Civil Engineering (CE) | 160 Credits |
+| 06 | B.Sc. Engineering in Information and Communication Technology (ICT) | 160 Credits |
+| 07 | Bachelor of Business Administration (BBA) | 140 Credits |
+| 08 | BBA in Accounting & Information Systems (AIS) | 132 Credits |
+| 09 | B.A. (Hons) in English | 140 Credits |
+
+## Graduate Programs
+**Duration:** Postgraduate & Professional Degrees
+
+*   **Executive MBA (EMBA)**
+    *   **Duration:** 1.5 Years (3 Semesters)
+    *   **Required Credits:** 48 Credits
+*   **MBA Regular (For BBA Graduates)**
+    *   **Duration:** 1 Year (2 Semesters)
+    *   **Required Credits:** 36 Credits
+*   **MBA (For Other Graduates)**
+    *   **Duration:** 2 Years (4 Semesters)
+    *   **Required Credits:** 60 Credits
+*   **MA in English (ELT)**
+    *   **Duration:** 1 Year (2 Semesters)
+    *   **Required Credits:** 36 Credits

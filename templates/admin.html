@@ -21,637 +21,10 @@
     })();
   </script>
 
-  <style>
-    /* =========================================
-       THEME VARIABLES (DAY & NIGHT MODE)
-       ========================================= */
-    :root, [data-theme="light"] {
-      --bg-base: #F8FAFC;
-      --primary: #0F3460;
-      --primary-dark: #0A192F;
-      --accent: #1E6091;
-      --accent-green: #2A9D8F;
-      --danger: #DC2626;
-      --surface: #FFFFFF;
-      --border: #CBD5E1;
-      --text: #0F172A;
-      --text-muted: #64748B;
-      --card-title: #0A192F;
-      --input-bg: #F1F5F9;
-      --input-border: #94A3B8;
-      --table-stripe: #F8FAFC;
-      --dropzone-bg: #F8FAFC;
-      --dropzone-border: #94A3B8;
-      --dropzone-hover-bg: #EFF6FF;
-      --dropzone-hover-border: #2563EB;
-      --radius-lg: 16px;
-      --radius-md: 10px;
-      --shadow: 0 10px 25px -5px rgba(15, 52, 96, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
-    }
-
-    [data-theme="dark"] {
-      --bg-base: #080D1A;
-      --primary: #38BDF8;
-      --primary-dark: #070B14;
-      --accent: #38BDF8;
-      --accent-green: #10B981;
-      --danger: #EF4444;
-      --surface: #0F172A;
-      --border: rgba(56, 189, 248, 0.22);
-      --text: #F8FAFC;
-      --text-muted: #94A3B8;
-      --card-title: #38BDF8;
-      --input-bg: #141F36;
-      --input-border: rgba(56, 189, 248, 0.35);
-      --table-stripe: #131E35;
-      --dropzone-bg: rgba(15, 23, 42, 0.8);
-      --dropzone-border: rgba(56, 189, 248, 0.35);
-      --dropzone-hover-bg: rgba(56, 189, 248, 0.08);
-      --dropzone-hover-border: #38BDF8;
-      --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.7), 0 0 20px rgba(56, 189, 248, 0.07);
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html {
-      height: 100%;
-      background-color: var(--bg-base);
-      transition: background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--bg-base);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      transition: background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1), color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(circle at 50% 0%, #0F1D38 0%, #080D1A 60%, #04070E 100%);
-      opacity: 0;
-      pointer-events: none;
-      z-index: 0;
-      transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    [data-theme="dark"] body::before {
-      opacity: 1;
-    }
-
-    /* Custom Scrollbars */
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: var(--bg-base); }
-    ::-webkit-scrollbar-thumb { background: var(--input-border); border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
-
-    /* Navbar */
-    .admin-navbar {
-      position: relative;
-      z-index: 50;
-      background: var(--primary-dark);
-      color: white;
-      padding: 14px 28px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      transition: background-color 0.35s ease, border-color 0.35s ease;
-    }
-
-    [data-theme="dark"] .admin-navbar {
-      background: rgba(15, 23, 42, 0.94);
-      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
-      backdrop-filter: blur(12px);
-    }
-
-    .admin-brand { display: flex; align-items: center; gap: 12px; }
-
-    .admin-logo {
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, #1E6091, #2A9D8F);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Outfit', sans-serif;
-      font-weight: 800;
-      font-size: 17px;
-      color: white;
-    }
-
-    [data-theme="dark"] .admin-logo {
-      background: linear-gradient(135deg, #2563EB, #06B6D4);
-      box-shadow: 0 0 12px rgba(6, 182, 212, 0.4);
-    }
-
-    .admin-title h1 {
-      font-family: 'Outfit', sans-serif;
-      font-size: 17px;
-      font-weight: 700;
-      line-height: 1.2;
-    }
-
-    .admin-title p { font-size: 11px; color: #94A3B8; }
-    .admin-actions { display: flex; align-items: center; gap: 10px; }
-
-    .nav-btn {
-      text-decoration: none;
-      font-size: 12px;
-      font-weight: 600;
-      padding: 8px 14px;
-      border-radius: 8px;
-      transition: all 0.2s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      border: none;
-    }
-
-    .nav-btn.secondary {
-      background: rgba(255, 255, 255, 0.12);
-      color: white;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .nav-btn.secondary:hover {
-      background: rgba(255, 255, 255, 0.25);
-      transform: translateY(-1px);
-    }
-
-    [data-theme="dark"] .nav-btn.secondary {
-      background: #141F36;
-      border-color: rgba(56, 189, 248, 0.3);
-      color: #38BDF8;
-    }
-
-    [data-theme="dark"] .nav-btn.secondary:hover {
-      background: #1C2B4B;
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
-    }
-
-    .nav-btn.danger {
-      background: rgba(239, 68, 68, 0.18);
-      border: 1px solid rgba(239, 68, 68, 0.4);
-      color: #FECACA;
-    }
-
-    .nav-btn.danger:hover {
-      background: var(--danger);
-      color: white;
-    }
-
-    /* Dashboard Layout */
-    .dashboard-container {
-      position: relative;
-      z-index: 10;
-      max-width: 1200px;
-      width: 100%;
-      margin: 24px auto;
-      padding: 0 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    /* Flash Alerts */
-    .flash-messages { display: flex; flex-direction: column; gap: 10px; }
-
-    .flash-alert {
-      padding: 12px 18px;
-      border-radius: var(--radius-md);
-      font-size: 13px;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      animation: slideDown 0.3s ease-out;
-    }
-
-    @keyframes slideDown {
-      from { opacity: 0; transform: translateY(-8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .flash-alert.success { background: #ECFDF5; border: 1px solid #A7F3D0; color: #065F46; }
-    [data-theme="dark"] .flash-alert.success { background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.35); color: #34D399; }
-
-    .flash-alert.error { background: #FEF2F2; border: 1px solid #FECACA; color: #991B1B; }
-    [data-theme="dark"] .flash-alert.error { background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.35); color: #F87171; }
-
-    .flash-alert.info { background: #EFF6FF; border: 1px solid #BFDBFE; color: #1E40AF; }
-    [data-theme="dark"] .flash-alert.info { background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.35); color: #38BDF8; }
-
-    /* KPI Stats */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 18px;
-    }
-
-    .stat-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 20px 22px;
-      box-shadow: var(--shadow);
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      position: relative;
-      overflow: hidden;
-      transition: background-color 0.35s ease, border-color 0.35s ease;
-    }
-
-    .stat-card::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 4px;
-      height: 100%;
-      background: var(--accent);
-    }
-
-    .stat-card.green::before { background: var(--accent-green); }
-
-    [data-theme="dark"] .stat-card::before { background: #38BDF8; box-shadow: 0 0 10px #38BDF8; }
-    [data-theme="dark"] .stat-card.green::before { background: #10B981; box-shadow: 0 0 10px #10B981; }
-
-    .stat-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); }
-    .stat-value { font-family: 'Outfit', sans-serif; font-size: 28px; font-weight: 700; color: var(--text); }
-    .stat-sub { font-size: 11px; color: var(--text-muted); }
-
-    /* Action Panels */
-    .panels-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-
-    .panel-card {
-      position: relative;
-      z-index: 10;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 24px;
-      box-shadow: var(--shadow);
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      transition: background-color 0.35s ease, border-color 0.35s ease;
-    }
-
-    .panel-header h2 { font-family: 'Outfit', sans-serif; font-size: 18px; color: var(--card-title); font-weight: 700; display: flex; align-items: center; gap: 8px; }
-    .panel-header p { font-size: 12px; color: var(--text-muted); margin-top: 4px; line-height: 1.4; }
-
-    /* Enhanced Inputs & Form Styling */
-    .form-group { display: flex; flex-direction: column; gap: 6px; }
-    .form-group label { font-size: 13px; font-weight: 600; color: var(--text); }
-
-    /* Improved Document Upload Dropzone */
-    .file-dropzone {
-      position: relative;
-      border: 2px dashed var(--dropzone-border);
-      border-radius: var(--radius-md);
-      padding: 24px 16px;
-      text-align: center;
-      background-color: var(--dropzone-bg);
-      cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .file-dropzone:hover {
-      border-color: var(--dropzone-hover-border);
-      background-color: var(--dropzone-hover-bg);
-    }
-
-    [data-theme="dark"] .file-dropzone:hover {
-      box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
-    }
-
-    .dropzone-icon {
-      font-size: 32px;
-      margin-bottom: 6px;
-      transition: transform 0.2s ease;
-    }
-
-    .file-dropzone:hover .dropzone-icon {
-      transform: translateY(-3px);
-    }
-
-    .dropzone-text {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .dropzone-subtext {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-
-    .file-input-hidden {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      width: 100%;
-      height: 100%;
-      cursor: pointer;
-    }
-
-    /* File Name Display Box */
-    .file-selection-info {
-      display: none;
-      margin-top: 10px;
-      padding: 8px 12px;
-      border-radius: 6px;
-      background: var(--input-bg);
-      border: 1px solid var(--input-border);
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text);
-      word-break: break-all;
-    }
-
-    .text-input, .textarea-input {
-      width: 100%;
-      padding: 11px 14px;
-      border: 1px solid var(--input-border);
-      border-radius: var(--radius-md);
-      font-family: inherit;
-      font-size: 13px;
-      background: var(--input-bg);
-      color: var(--text);
-      outline: none;
-      transition: all 0.2s ease;
-    }
-
-    .text-input:focus, .textarea-input:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25);
-    }
-
-    .textarea-input { resize: vertical; min-height: 110px; }
-
-    /* Button Customization */
-    .btn-submit {
-      background: linear-gradient(135deg, #0F3460, #1E6091);
-      color: white;
-      border: none;
-      padding: 12px 18px;
-      border-radius: var(--radius-md);
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 10px rgba(15, 52, 96, 0.2);
-    }
-
-    .btn-submit:hover { transform: translateY(-1px); }
-    .btn-submit:active { transform: translateY(0); }
-
-    [data-theme="dark"] .btn-submit {
-      background: linear-gradient(135deg, #2563EB 0%, #06B6D4 100%);
-      box-shadow: 0 4px 14px rgba(6, 182, 212, 0.35);
-    }
-
-    /* Tables */
-    .table-card {
-      position: relative;
-      z-index: 10;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      transition: background-color 0.35s ease, border-color 0.35s ease;
-    }
-
-    .table-header {
-      padding: 18px 22px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .table-header h2 { font-family: 'Outfit', sans-serif; font-size: 17px; color: var(--card-title); }
-    .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-
-    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
-    th { background: var(--input-bg); padding: 12px 18px; color: var(--text-muted); font-weight: 600; border-bottom: 1px solid var(--border); white-space: nowrap; }
-    td { padding: 12px 18px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: middle; }
-    tr:last-child td { border-bottom: none; }
-    tr:hover td { background: rgba(56, 189, 248, 0.04); }
-    [data-theme="dark"] tr:hover td { background: #141F36; }
-
-    .file-badge { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; color: var(--primary); }
-
-    .btn-delete {
-      background: rgba(239, 68, 68, 0.1);
-      border: 1px solid rgba(239, 68, 68, 0.4);
-      color: var(--danger);
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .btn-delete:hover {
-      background: var(--danger);
-      color: white;
-      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
-    }
-
-    /* Loading Overlay & Processing State */
-    .loading-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      background: rgba(8, 13, 26, 0.78);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-      opacity: 0;
-      transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .loading-overlay.active {
-      display: flex;
-      opacity: 1;
-    }
-
-    .loading-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 32px 40px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      max-width: 440px;
-      width: 90%;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(56, 189, 248, 0.15);
-      animation: zoomIn 0.3s ease-out;
-    }
-
-    @keyframes zoomIn {
-      from { transform: scale(0.92); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-
-    .spinner-ring {
-      width: 64px;
-      height: 64px;
-      border: 4px solid rgba(56, 189, 248, 0.18);
-      border-top-color: #38BDF8;
-      border-right-color: #2563EB;
-      border-radius: 50%;
-      animation: spin 0.9s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
-      box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);
-      margin-bottom: 8px;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    .loading-title {
-      font-family: 'Outfit', sans-serif;
-      font-size: 19px;
-      font-weight: 700;
-      color: var(--text);
-      margin-top: 6px;
-    }
-
-    .loading-subtitle {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-top: 6px;
-      line-height: 1.5;
-    }
-
-    .loading-progress-steps {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      width: 100%;
-      margin-top: 18px;
-      padding-top: 16px;
-      border-top: 1px solid var(--border);
-      text-align: left;
-    }
-
-    .progress-step {
-      font-size: 12px;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.3s ease;
-    }
-
-    .progress-step.active {
-      color: var(--primary);
-      font-weight: 600;
-    }
-
-    .progress-step-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--input-border);
-    }
-
-    .progress-step.active .progress-step-dot {
-      background: #38BDF8;
-      box-shadow: 0 0 8px #38BDF8;
-      animation: pulse 1.2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.4); opacity: 0.6; }
-    }
-
-    /* Inline Button Loading Spinner */
-    .btn-spinner {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      border-radius: 50%;
-      border-top-color: #FFFFFF;
-      animation: spin 0.8s linear infinite;
-      margin-right: 6px;
-      vertical-align: middle;
-    }
-
-    .form-locked {
-      opacity: 0.6 !important;
-      pointer-events: none !important;
-      user-select: none !important;
-    }
-
-    /* Preview Card */
-    .preview-card {
-      background: var(--input-bg);
-      border-radius: var(--radius-md);
-      padding: 16px;
-      border: 1px solid var(--border);
-      font-family: monospace;
-      font-size: 12px;
-      white-space: pre-wrap;
-      max-height: 250px;
-      overflow-y: auto;
-      word-break: break-word;
-      color: var(--text);
-    }
-
-    [data-theme="dark"] .preview-card { background: #080D1A; color: #7DD3FC; }
-
-    /* Responsive Breakdown */
-    @media (max-width: 768px) {
-      .admin-navbar { padding: 10px 16px; flex-wrap: wrap; gap: 10px; }
-      .admin-title h1 { font-size: 15px; }
-      .admin-title p { display: none; }
-      .admin-actions { width: 100%; justify-content: flex-end; }
-      .dashboard-container { margin: 14px auto; padding: 0 12px; gap: 16px; }
-      .stats-grid, .panels-grid { grid-template-columns: 1fr; gap: 12px; }
-      .panel-card { padding: 16px 14px; }
-      .table-header { padding: 14px 16px; flex-direction: column; align-items: flex-start; }
-      th, td { padding: 10px 12px; font-size: 12px; }
-    }
-  </style>
+    <!-- External Unified Stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body>
+<body class="admin-page">
 
   <!-- Fullscreen Modern Loading Overlay -->
   <div id="loadingOverlay" class="loading-overlay">
@@ -660,6 +33,18 @@
       <h3 id="loadingMainTitle" class="loading-title">AI Processing & Syncing...</h3>
       <p id="loadingSubTitle" class="loading-subtitle">Please wait while the system processes your document, extracts content, and updates the AI memory.</p>
       
+      
+      <!-- Real-Time Upload & Processing Progress Bar -->
+      <div id="loadingProgressBarContainer" class="upload-progress-container" style="display: none; width: 100%; margin: 16px 0 6px;">
+        <div class="upload-progress-header">
+          <span id="loadingProgressBarText">Uploading...</span>
+          <span id="loadingProgressPercentage" style="color: #2563EB; font-weight: 700;">0%</span>
+        </div>
+        <div class="upload-progress-track">
+          <div id="loadingProgressBarFill" class="upload-progress-fill" style="width: 0%;"></div>
+        </div>
+      </div>
+
       <div class="loading-progress-steps">
         <div id="step1" class="progress-step active">
           <span class="progress-step-dot"></span>
@@ -692,10 +77,17 @@
     </div>
     <div class="admin-actions">
       <!-- Theme Switcher Button -->
-      <button id="themeToggleBtn" class="nav-btn secondary" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+      <button id="themeToggleBtn" class="nav-btn secondary" type="button" title="Toggle Dark/Light Mode">
         <span id="themeIcon">🌙</span>
         <span id="themeLabel">Night</span>
       </button>
+
+      <a href="#analytics-section" class="nav-btn secondary">
+        📊 Analytics & Gaps
+        {% if analytics_stats.unresolved_gaps_count > 0 %}
+        <span style="background: #EF4444; color: white; border-radius: 10px; font-size: 10px; padding: 1px 6px; font-weight: bold;">{{ analytics_stats.unresolved_gaps_count }}</span>
+        {% endif %}
+      </a>
 
       <a href="/" class="nav-btn secondary" target="_blank">
         💬 Student Chat ↗
@@ -715,7 +107,7 @@
           {% for category, message in messages %}
             <div class="flash-alert {{ category }}">
               <span>{{ message }}</span>
-              <button onclick="this.parentElement.remove()" style="background:none;border:none;cursor:pointer;color:inherit;font-weight:bold;">✕</button>
+              <button type="button" class="alert-dismiss-btn" style="background:none;border:none;cursor:pointer;color:inherit;font-weight:bold;">✕</button>
             </div>
           {% endfor %}
         </div>
@@ -739,6 +131,29 @@
         <span class="stat-value" style="font-size: 19px;">{{ model_name }}</span>
         <span class="stat-sub">Google GenAI Active</span>
       </div>
+      <div class="stat-card purple">
+        <span class="stat-label">Total Student Inquiries</span>
+        <span class="stat-value">{{ analytics_stats.total_queries }}</span>
+        <span class="stat-sub">Logged in Analytics Database</span>
+      </div>
+      <div class="stat-card amber">
+        <span class="stat-label">Knowledge Gaps (Unresolved)</span>
+        {% if analytics_stats.unresolved_gaps_count > 0 %}
+        <span class="stat-value gap-alert">
+          {{ analytics_stats.unresolved_gaps_count }}
+        </span>
+        {% else %}
+        <span class="stat-value">
+          {{ analytics_stats.unresolved_gaps_count }}
+        </span>
+        {% endif %}
+        <span class="stat-sub">Total detected: {{ analytics_stats.knowledge_gaps_count }}</span>
+      </div>
+      <div class="stat-card green">
+        <span class="stat-label">Student Satisfaction</span>
+        <span class="stat-value">{{ analytics_stats.satisfaction_rate }}%</span>
+        <span class="stat-sub">👍 {{ analytics_stats.likes_count }} Likes &bull; 👎 {{ analytics_stats.dislikes_count }} Dislikes</span>
+      </div>
     </section>
 
     <!-- Upload & Manual Entry Panels -->
@@ -751,7 +166,7 @@
           <p>Supports <strong>PDF</strong>, <strong>Plain Text (.txt)</strong>, and <strong>Images (PNG/JPG)</strong>. Automatic text extraction and vector sync.</p>
         </div>
 
-        <form id="uploadForm" method="POST" enctype="multipart/form-data" onsubmit="return handleUploadSubmit(event)">
+        <form id="uploadForm" action="/admin" method="POST" enctype="multipart/form-data" novalidate>
           <input type="hidden" name="action" value="upload">
           
           <div class="form-group" style="margin-bottom: 12px;">
@@ -761,33 +176,98 @@
               id="docNameInput"
               name="doc_name" 
               class="text-input" 
-              placeholder="e.g. Message_From_Chief_of_Army_Staff"
+              placeholder="e.g. Academic_Calendar_Summer_2026"
             >
             <span style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">
-              Auto-merges if related to an existing topic, or saves in snake_case.
+              Leave blank to auto-detect title and topic from document contents.
             </span>
+          </div>
+
+          <!-- Metadata Attributes (Authoritative Versioning) -->
+          <div style="margin-bottom: 12px; padding: 12px; background: var(--table-stripe); border: 1px solid var(--border); border-radius: var(--radius-md);">
+            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 8px;">
+              🏷️ Document Metadata & Versioning (Optional / Auto-Detected)
+            </div>
+            <div class="meta-grid">
+              <div class="form-group">
+                <label style="font-size: 11px;">Document Type</label>
+                <select name="doc_type" class="text-input" style="padding: 6px 10px; font-size: 12px;">
+                  <option value="">Auto-Detect from Content</option>
+                  {% for code, label in doc_types %}
+                  <option value="{{ code }}">{{ label }}</option>
+                  {% endfor %}
+                  <option value="__custom__">➕ New / Custom Type...</option>
+                </select>
+                <input type="text" name="custom_doc_type" placeholder="e.g. Canteen Guidelines" style="display:none; margin-top:5px; padding: 5px 8px; font-size: 11.5px;" class="text-input">
+              </div>
+              <div class="form-group">
+                <label style="font-size: 11px;">Academic Session</label>
+                <div style="display: flex; gap: 4px;">
+                  <input type="text" name="semester" class="text-input" placeholder="e.g. Summer" style="padding: 6px 8px; font-size: 12px;">
+                  <input type="text" name="academic_year" class="text-input" placeholder="2026" style="padding: 6px 8px; font-size: 12px; max-width: 70px;">
+                </div>
+              </div>
+              <div class="form-group">
+                <label style="font-size: 11px;">Version</label>
+                <input type="text" name="version" class="text-input" placeholder="1.0" style="padding: 6px 10px; font-size: 12px;">
+              </div>
+              <div class="form-group">
+                <label style="font-size: 11px;">Issuing Authority</label>
+                <select name="issuing_authority" class="text-input" style="padding: 6px 10px; font-size: 12px;">
+                  <option value="">Auto-Detect from Document</option>
+                  {% for auth in authorities %}
+                  <option value="{{ auth }}">{{ auth }}</option>
+                  {% endfor %}
+                  <option value="__custom__">➕ New / Custom Authority...</option>
+                </select>
+                <input type="text" name="custom_issuing_authority" placeholder="e.g. Transport Committee" style="display:none; margin-top:5px; padding: 5px 8px; font-size: 11.5px;" class="text-input">
+              </div>
+            </div>
+            <div style="margin-top: 8px; display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text-muted);">
+              <input type="checkbox" name="auto_supersede" value="true" checked id="autoSupersedeUpload">
+              <label for="autoSupersedeUpload" style="cursor: pointer;">
+                Automatically supersede & archive previous versions of this document type
+              </label>
+            </div>
           </div>
 
           <div class="form-group">
             <label>Select File(s)</label>
-            <div id="dropzoneBox" class="file-dropzone" onclick="document.getElementById('fileInput').click()">
-              <div class="dropzone-icon">📂</div>
-              <div class="dropzone-text">Click or Drag & Drop file(s) here</div>
-              <div class="dropzone-subtext">PDFs, TXT, PNG, JPG (Multiple files supported)</div>
-              
+            <div id="dropzoneBox" class="file-dropzone">
               <input 
                 type="file" 
                 name="image" 
                 id="fileInput" 
                 class="file-input-hidden" 
-                required 
                 accept=".pdf,.txt,.png,.jpg,.jpeg" 
                 multiple
-                onchange="updateFileLabel(this)"
               >
+
+              <!-- State 1: Empty Dropzone Prompt -->
+              <div id="dropzoneEmptyPrompt" class="dropzone-empty-prompt">
+                <div class="dropzone-icon" id="dropzoneIcon">📂</div>
+                <div class="dropzone-text" id="dropzoneTitle">Click or Drag & Drop file(s) here</div>
+                <div class="dropzone-subtext" id="dropzoneSubtext">PDFs, TXT, PNG, JPG (Multiple files supported)</div>
+              </div>
+
+              <!-- State 2: Active Preview Gallery (Embedded directly inside this box) -->
+              <div id="filePreviewContainer" class="file-preview-container" style="display: none;">
+                <div class="preview-header">
+                  <span class="preview-count" id="previewCount">0 Files Selected</span>
+                  <div class="preview-actions">
+                    <button type="button" class="btn-preview-action" id="addMoreFilesBtn">➕ Add More</button>
+                    <button type="button" class="btn-preview-action danger" id="clearAllFilesBtn">🗑️ Clear All</button>
+                  </div>
+                </div>
+                <div id="filePreviewGrid" class="file-preview-grid"></div>
+                <div class="preview-footer-hint">
+                  <span>💡 Click <strong>➕ Add More</strong> or drag & drop additional files directly here</span>
+                </div>
+              </div>
             </div>
-            <!-- File Name Display Box -->
-            <div id="selectedFileInfo" class="file-selection-info"></div>
+
+            <!-- Hidden fallback container -->
+            <div id="selectedFileInfo" style="display: none;"></div>
           </div>
 
           <button type="submit" id="uploadBtn" class="btn-submit" style="margin-top: 14px; width: 100%;">
@@ -804,7 +284,7 @@
           <p>Quickly paste or type an urgent announcement, policy, date change, or fee update without needing a file.</p>
         </div>
 
-        <form id="directNoticeForm" method="POST" onsubmit="return handleDirectNoticeSubmit(event)">
+        <form id="directNoticeForm" action="/admin" method="POST">
           <input type="hidden" name="action" value="direct_notice">
 
           <div class="form-group">
@@ -813,6 +293,43 @@
             <span style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">
               Leave blank to auto-detect topic and merge with existing knowledge files.
             </span>
+          </div>
+
+          <!-- Metadata Attributes (Authoritative Versioning) -->
+          <div style="margin-top: 10px; padding: 12px; background: var(--table-stripe); border: 1px solid var(--border); border-radius: var(--radius-md);">
+            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 8px;">
+              🏷️ Metadata & Authority (Optional)
+            </div>
+            <div class="meta-grid">
+              <div class="form-group">
+                <label style="font-size: 11px;">Document Type</label>
+                <select name="doc_type" class="text-input" style="padding: 6px 10px; font-size: 12px;">
+                  <option value="">Auto-Detect from Notice</option>
+                  {% for code, label in doc_types %}
+                  <option value="{{ code }}">{{ label }}</option>
+                  {% endfor %}
+                  <option value="__custom__">➕ New / Custom Type...</option>
+                </select>
+                <input type="text" name="custom_doc_type" placeholder="e.g. Canteen Guidelines" style="display:none; margin-top:5px; padding: 5px 8px; font-size: 11.5px;" class="text-input">
+              </div>
+              <div class="form-group">
+                <label style="font-size: 11px;">Issuing Authority</label>
+                <select name="issuing_authority" class="text-input" style="padding: 6px 10px; font-size: 12px;">
+                  <option value="">Auto-Detect from Notice</option>
+                  {% for auth in authorities %}
+                  <option value="{{ auth }}">{{ auth }}</option>
+                  {% endfor %}
+                  <option value="__custom__">➕ New / Custom Authority...</option>
+                </select>
+                <input type="text" name="custom_issuing_authority" placeholder="e.g. Transport Committee" style="display:none; margin-top:5px; padding: 5px 8px; font-size: 11.5px;" class="text-input">
+              </div>
+            </div>
+            <div style="margin-top: 8px; display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text-muted);">
+              <input type="checkbox" name="auto_supersede" value="true" checked id="autoSupersedeNotice">
+              <label for="autoSupersedeNotice" style="cursor: pointer;">
+                Supersede previous notices of this type
+              </label>
+            </div>
           </div>
 
           <div class="form-group" style="margin-top: 10px;">
@@ -829,6 +346,43 @@
 
     </section>
 
+    <!-- Ingestion & Category Routing Results Section -->
+    {% if routing_summary %}
+    <section class="panel-card" id="routingSummarySection" style="margin-bottom: 24px;">
+      <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <h2>⚡ Knowledge Ingestion & Categorization Results</h2>
+          <p>The system automatically analyzed, differentiated, and synchronized the following categories:</p>
+        </div>
+        <button type="button" class="alert-dismiss-btn btn-cancel" style="padding: 5px 12px; font-size: 11px;">✕ Dismiss</button>
+      </div>
+
+      <div class="flash-messages" style="margin-top: 14px;">
+        {% for item in routing_summary.categories %}
+          <div class="flash-alert {% if item.action == 'UPDATE_EXISTING' %}success{% else %}info{% endif %}">
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <span>{% if item.action == 'UPDATE_EXISTING' %}Updated existing category:{% else %}Created new category:{% endif %}</span>
+              <strong style="font-family: 'Fira Code', monospace; color: var(--card-title); font-size: 13px;">'{{ item.filename }}'</strong>
+              <span style="opacity: 0.9;">({{ item.topic }}).</span>
+            </div>
+            <button type="button" class="alert-dismiss-btn" style="background:none;border:none;cursor:pointer;color:inherit;font-weight:bold;font-size:16px;">&times;</button>
+          </div>
+          {% for old_f in item.superseded_files %}
+          <div class="flash-alert warning" style="background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.35); color: #FBBF24;">
+            <span>⚠️ Previous version '{{ old_f }}' has been automatically archived &amp; marked as SUPERSEDED.</span>
+            <button type="button" class="alert-dismiss-btn" style="background:none;border:none;cursor:pointer;color:inherit;font-weight:bold;font-size:16px;">&times;</button>
+          </div>
+          {% endfor %}
+        {% endfor %}
+
+        <div class="flash-alert info" style="font-weight: 600;">
+          <span>🚀 {{ routing_summary.summary_text }}</span>
+          <button type="button" class="alert-dismiss-btn" style="background:none;border:none;cursor:pointer;color:inherit;font-weight:bold;font-size:16px;">&times;</button>
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
     <!-- Extraction Preview (If Available) -->
     {% if text %}
     <section class="panel-card">
@@ -840,11 +394,208 @@
     </section>
     {% endif %}
 
-    <!-- Managed Knowledge Base Table -->
-    <section class="table-card">
+    <!-- Student Analytics & Knowledge Gaps Section -->
+    <section id="analytics-section" class="table-card">
       <div class="table-header">
-        <h2>📚 Managed Knowledge Base Files ({{ documents|length }})</h2>
-        <form method="POST" action="/admin/reindex" onsubmit="return handleReindexSubmit(event)">
+        <div>
+          <h2>🔍 Student Analytics & Knowledge Gap Tracker</h2>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 3px;">
+            Identifies questions where university records were missing. Add missing info to keep your AI accurate.
+          </p>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          {% if recent_logs %}
+          <form id="clearLogsForm" method="POST" action="/admin/clear-logs">
+            <button type="submit" class="btn-delete" style="padding: 7px 12px; font-size: 11px;">
+              🗑️ Clear Logs
+            </button>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Top Trending Student Questions -->
+      {% if top_questions %}
+      <div style="padding: 16px 20px; border-bottom: 1px solid var(--border); background: var(--table-stripe);">
+        <span style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 8px;">
+          🔥 Top Asked Topics by Students:
+        </span>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          {% for tq in top_questions %}
+          <span class="topic-pill {% if tq.unresolved_gap %}has-gap{% elif tq.resolved_gap %}is-resolved{% endif %}" data-question="{{ tq.question | escape }}" title="{% if tq.unresolved_gap %}Unresolved Knowledge Gap — Click to solve{% elif tq.resolved_gap %}Resolved Knowledge Gap — Solved{% else %}Popular Question{% endif %}">
+            {{ tq.question }} 
+            <span class="topic-count">{{ tq.count }}x</span>
+            {% if tq.unresolved_gap %}<span style="color: #EF4444; font-weight: bold; margin-left: 2px;">⚠️</span>
+            {% elif tq.resolved_gap %}<span style="color: #10B981; font-weight: bold; margin-left: 2px;">✅</span>{% endif %}
+          </span>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Knowledge Gaps Table -->
+      <div style="padding: 16px 20px 8px; font-weight: 600; font-size: 14px; color: var(--card-title); display: flex; align-items: center; justify-content: space-between;">
+        <span>⚠️ Identified Knowledge Gaps ({{ knowledge_gaps|length }})</span>
+        <span style="font-size: 12px; font-weight: normal; color: var(--text-muted);">
+          Questions where the AI found no records in BAUST database
+        </span>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 42%;">Student Question</th>
+              <th>Frequency</th>
+              <th>Last Asked</th>
+              <th>Status</th>
+              <th style="text-align: right;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for gap in knowledge_gaps %}
+            <tr {% if not gap.resolved %}style="background: rgba(239, 68, 68, 0.04);"{% endif %}>
+              <td>
+                <strong style="color: var(--text); font-size: 13px;">{{ gap.question }}</strong>
+                {% if gap.last_answer %}
+                <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px; max-width: 480px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                  Bot: {{ gap.last_answer }}
+                </div>
+                {% endif %}
+              </td>
+              <td>
+                <span class="frequency-badge">{{ gap.frequency }} times</span>
+              </td>
+              <td style="font-size: 12px;">{{ gap.last_asked }}</td>
+              <td>
+                {% if gap.resolved %}
+                <span style="color: #10B981; font-size: 11px; font-weight: 600; background: rgba(16, 185, 129, 0.15); padding: 3px 8px; border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.3);">
+                  ✅ Resolved
+                </span>
+                {% else %}
+                <span style="color: #EF4444; font-size: 11px; font-weight: 600; background: rgba(239, 68, 68, 0.15); padding: 3px 8px; border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.3);">
+                  ⚠️ Unresolved
+                </span>
+                {% endif %}
+              </td>
+              <td style="text-align: right;">
+                <div style="display: inline-flex; gap: 6px; align-items: center;">
+                  <button type="button" class="btn-submit btn-resolve-gap" style="padding: 6px 12px; font-size: 11px;" 
+                          data-question="{{ gap.question|escape }}" 
+                          data-gap-id="{{ gap.id }}">
+                    ⚡ Add Knowledge
+                  </button>
+                  {% if not gap.resolved %}
+                  <button type="button" class="btn-cancel btn-resolve-ajax" style="padding: 6px 10px; font-size: 11px;" 
+                          title="Mark as resolved" 
+                          data-gap-id="{{ gap.id }}">
+                    ✓ Done
+                  </button>
+                  {% endif %}
+                </div>
+              </td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="5" style="text-align: center; padding: 25px; color: var(--text-muted);">
+                🎉 No knowledge gaps detected! All student queries matched university records.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Recent Student Conversations / Activity Log -->
+      <details style="margin: 16px 20px 20px; border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden;">
+        <summary style="padding: 12px 16px; font-weight: 600; font-size: 13px; cursor: pointer; background: var(--table-stripe); color: var(--card-title); display: flex; align-items: center; justify-content: space-between;">
+          <span>📋 Recent Student Inquiries Log ({{ recent_logs|length }})</span>
+          <span style="font-size: 11px; color: var(--text-muted);">Click to expand / collapse</span>
+        </summary>
+        <!-- Table Search Toolbar for Recent Logs -->
+        <div class="table-toolbar">
+          <div class="search-input-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="logsSearchInput" class="table-search-input" placeholder="Search inquiries, questions, answers...">
+            <button type="button" id="clearLogsSearch" class="btn-clear-search" style="display: none;">&times;</button>
+          </div>
+          <div class="pagination-rows-select">
+            <label for="logsRowsPerPage">Show:</label>
+            <select id="logsRowsPerPage">
+              <option value="10">10</option>
+              <option value="15" selected>15</option>
+              <option value="25">25</option>
+              <option value="all">All</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-wrapper" style="max-height: 400px; overflow-y: auto;">
+          <table id="recentLogsTable">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Question</th>
+                <th>Context Found?</th>
+                <th>Feedback</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for log in recent_logs %}
+              <tr>
+                <td style="font-size: 11px; white-space: nowrap;">{{ log.timestamp }}</td>
+                <td>
+                  <strong style="font-size: 12px;">{{ log.question }}</strong>
+                  <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px; max-width: 500px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    {{ log.answer }}
+                  </div>
+                </td>
+                <td>
+                  {% if log.context_found %}
+                  <span style="color: #10B981; font-size: 11px;">Yes</span>
+                  {% else %}
+                  <span style="color: #EF4444; font-size: 11px; font-weight: 600;">No (Gap)</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if log.feedback == 'like' %}
+                  <span>👍</span>
+                  {% elif log.feedback == 'dislike' %}
+                  <span>👎</span>
+                  {% else %}
+                  <span style="color: var(--text-muted); font-size: 11px;">-</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% else %}
+              <tr>
+                <td colspan="4" style="text-align: center; padding: 20px; color: var(--text-muted);">
+                  No student chats recorded yet. Once students chat, interactions will appear here in real-time.
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination for Recent Logs -->
+        <div class="pagination-footer">
+          <div id="logsPaginationInfo">Showing entries</div>
+          <div id="logsPaginationNav" class="pagination-nav"></div>
+        </div>
+      </details>
+    </section>
+
+    <!-- Managed Knowledge Base Table -->
+    <section id="kb-files" class="table-card">
+      <div class="table-header">
+        <div>
+          <h2>📚 Managed Knowledge Base Files ({{ documents|length }})</h2>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 3px;">
+            Identifies active authoritative records and historical/superseded document versions.
+          </p>
+        </div>
+        <form id="reindexForm" method="POST" action="/admin/reindex">
           <button type="submit" id="reindexBtn" class="btn-submit" style="padding: 8px 16px; font-size: 12px;" title="Rebuild Vector Index">
             <span id="reindexBtnIcon">🔄</span>
             <span id="reindexBtnText">Rebuild / Sync All Vectors</span>
@@ -852,42 +603,134 @@
         </form>
       </div>
 
+      <!-- Bulk Actions Docked Bar (Appears when >= 1 checkbox checked) -->
+      <div id="bulkActionsBar" class="bulk-actions-bar" style="display: none;">
+        <div class="bulk-actions-info">
+          <span>📦</span>
+          <span><strong id="bulkSelectedCount" class="bulk-badge">0</strong> document(s) selected</span>
+        </div>
+        <div class="bulk-actions-buttons">
+          <button type="button" id="bulkArchiveBtn" class="btn-bulk-archive">
+            📦 Archive Selected
+          </button>
+          <button type="button" id="bulkDeleteBtn" class="btn-bulk-delete">
+            🗑️ Delete Selected
+          </button>
+          <button type="button" id="bulkClearBtn" class="btn-bulk-clear">
+            ✕ Cancel Selection
+          </button>
+        </div>
+      </div>
+
+      <!-- Table Search & Rows Toolbar -->
+      <div class="table-toolbar">
+        <div class="search-input-wrapper">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="docSearchInput" class="table-search-input" placeholder="Search by title, filename, authority, type, or version...">
+          <button type="button" id="clearDocSearch" class="btn-clear-search" style="display: none;">&times;</button>
+        </div>
+        <div class="pagination-rows-select">
+          <label for="docRowsPerPage">Show:</label>
+          <select id="docRowsPerPage">
+            <option value="10">10</option>
+            <option value="25" selected>25</option>
+            <option value="50">50</option>
+            <option value="all">All</option>
+          </select>
+        </div>
+      </div>
+
       <div class="table-wrapper">
-        <table>
+        <table id="kbDocsTable">
           <thead>
             <tr>
-              <th>Document Name</th>
-              <th>Size</th>
-              <th>Last Modified</th>
-              <th>Status</th>
+              <th style="width: 40px; text-align: center;">
+                <input type="checkbox" id="selectAllDocs" title="Select All Documents" style="cursor: pointer; width: 16px; height: 16px;">
+              </th>
+              <th>Document Title & File</th>
+              <th>Type & Authority</th>
+              <th>Session & Version</th>
+              <th>Lifecycle Status</th>
+              <th>Size / Date</th>
               <th style="text-align: right;">Action</th>
             </tr>
           </thead>
           <tbody>
             {% for doc in documents %}
-            <tr>
-              <td>
-                <span class="file-badge">📄 {{ doc.name }}</span>
+            <tr {% if doc.status == 'superseded' %}style="opacity: 0.65; background: rgba(239, 68, 68, 0.03);"{% elif doc.status == 'archived' %}style="opacity: 0.75;"{% endif %}>
+              <td style="text-align: center;">
+                <input type="checkbox" class="doc-checkbox" value="{{ doc.name }}" style="cursor: pointer; width: 16px; height: 16px;">
               </td>
-              <td>{{ doc.size_kb }} KB</td>
-              <td>{{ doc.modified }}</td>
               <td>
-                <span style="color: #10B981; font-size: 11px; font-weight: 600; background: rgba(16, 185, 129, 0.15); padding: 3px 8px; border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.3);">
-                  Indexed
+                <strong style="font-size: 13px; color: var(--card-title); display: block;">{{ doc.title }}</strong>
+                <span class="file-badge" style="font-size: 11px; color: var(--text-muted);">📄 {{ doc.name }}</span>
+              </td>
+              <td>
+                <span class="badge-doctype">{{ doc.doc_type|replace('_', ' ')|title }}</span>
+                <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">{{ doc.issuing_authority }}</div>
+              </td>
+              <td>
+                <span class="badge-ver">v{{ doc.version }}</span>
+                {% if doc.semester or doc.academic_year %}
+                <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">
+                  {{ doc.semester }} {{ doc.academic_year }}
+                </div>
+                {% endif %}
+              </td>
+              <td>
+                {% if doc.status == 'active' %}
+                <span class="badge-status active">
+                  🟢 Active (Authoritative)
                 </span>
+                {% elif doc.status == 'superseded' %}
+                <span class="badge-status superseded">
+                  🔴 Superseded
+                </span>
+                {% if doc.superseded_by %}
+                <div style="font-size: 10px; color: var(--text-muted); margin-top: 3px;">
+                  by {{ doc.superseded_by }}
+                </div>
+                {% endif %}
+                {% else %}
+                <span class="badge-status archived">
+                  🟡 Archived
+                </span>
+                {% endif %}
+              </td>
+              <td style="font-size: 11px; color: var(--text-muted); white-space: nowrap;">
+                {{ doc.size_kb }} KB<br/>
+                {{ doc.modified }}
               </td>
               <td style="text-align: right;">
-                <!-- Reliable Delete Form Action -->
-                <form method="POST" action="/admin/delete/{{ doc.name }}" onsubmit="return confirmDelete('{{ doc.name }}');" style="display:inline;">
-                  <button type="submit" class="btn-delete">
-                    🗑️ Delete
+                <div style="display: inline-flex; gap: 6px; align-items: center;">
+                  <button 
+                    type="button" 
+                    class="meta-edit-btn" 
+                    data-name="{{ doc.name }}"
+                    data-title="{{ doc.title | escape }}"
+                    data-doctype="{{ doc.doc_type }}"
+                    data-version="{{ doc.version }}"
+                    data-year="{{ doc.academic_year }}"
+                    data-semester="{{ doc.semester }}"
+                    data-authority="{{ doc.issuing_authority | escape }}"
+                    data-status="{{ doc.status }}"
+                    data-effective="{{ doc.effective_date }}"
+                    data-expiry="{{ doc.expiry_date }}"
+                    title="Edit Metadata & Lifecycle Status"
+                  >
+                    ✏️ Metadata
                   </button>
-                </form>
+                  <form class="delete-doc-form" method="POST" action="/admin/delete/{{ doc.name }}" data-docname="{{ doc.name }}" style="display:inline;">
+                    <button type="submit" class="btn-delete" title="Delete document">
+                      🗑️
+                    </button>
+                  </form>
+                </div>
               </td>
             </tr>
             {% else %}
             <tr>
-              <td colspan="5" style="text-align: center; padding: 30px; color: var(--text-muted);">
+              <td colspan="7" style="text-align: center; padding: 30px; color: var(--text-muted);">
                 No documents found in knowledge_base/. Upload a document above to get started.
               </td>
             </tr>
@@ -895,184 +738,142 @@
           </tbody>
         </table>
       </div>
+
+      <!-- Pagination Footer -->
+      <div class="pagination-footer">
+        <div id="docPaginationInfo">Showing entries</div>
+        <div id="docPaginationNav" class="pagination-nav"></div>
+      </div>
     </section>
 
   </main>
 
-  <script>
-    // Theme Switcher Logic
-    function updateThemeUI(theme) {
-      const themeIcon = document.getElementById("themeIcon");
-      const themeLabel = document.getElementById("themeLabel");
+  <!-- Modal for Quick Knowledge Addition -->
+  <div id="gapModal" class="modal-dialog-overlay" style="display: none; z-index: 99999;">
+    <div class="loading-card" style="max-width: 620px; width: 92%; text-align: left; padding: 26px;">
+      <div style="margin-bottom: 14px;">
+        <h3 style="font-family: 'Outfit', sans-serif; font-size: 18px; color: var(--card-title); margin: 0; display: flex; align-items: center; gap: 8px;">
+          ⚡ Add University Knowledge
+        </h3>
+      </div>
+      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.4;">
+        Provide the official information for this student query. It will be added to the knowledge base and the FAISS vector database will re-index automatically.
+      </p>
 
-      if (theme === "dark") {
-        document.documentElement.setAttribute("data-theme", "dark");
-        if (themeIcon) themeIcon.textContent = "☀️";
-        if (themeLabel) themeLabel.textContent = "Day";
-      } else {
-        document.documentElement.setAttribute("data-theme", "light");
-        if (themeIcon) themeIcon.textContent = "🌙";
-        if (themeLabel) themeLabel.textContent = "Night";
-      }
-    }
+      <form id="resolveGapForm" method="POST" action="/admin/quick-add-gap-knowledge">
+        <input type="hidden" id="modalGapId" name="gap_id" value="">
+        
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label style="font-size: 12px; font-weight: 600; color: var(--text);">Student Question / Missing Topic</label>
+          <input type="text" id="modalQuestion" class="text-input" readonly style="opacity: 0.85; font-weight: 600;">
+        </div>
 
-    function toggleTheme() {
-      const currentTheme = document.documentElement.getAttribute("data-theme");
-      const nextTheme = (currentTheme === "dark") ? "light" : "dark";
-      localStorage.setItem("baust_theme", nextTheme);
-      updateThemeUI(nextTheme);
-    }
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label for="modalTitle" style="font-size: 12px; font-weight: 600; color: var(--text);">Document Title (Optional)</label>
+          <input type="text" id="modalTitle" name="title" class="text-input" placeholder="e.g. Student_Waiver_Policy_Update">
+        </div>
 
-    // Selected File Label Feedback
-    function updateFileLabel(input) {
-      const infoBox = document.getElementById('selectedFileInfo');
-      if (input.files && input.files.length > 0) {
-        if (input.files.length === 1) {
-          infoBox.textContent = `📎 Selected File: ${input.files[0].name}`;
-        } else {
-          infoBox.textContent = `📎 Selected ${input.files.length} Files`;
-        }
-        infoBox.style.display = 'block';
-      } else {
-        infoBox.style.display = 'none';
-      }
-    }
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label for="modalContent" style="font-size: 12px; font-weight: 600; color: var(--text);">Verified Answer / Notice Content</label>
+          <textarea id="modalContent" name="content" class="textarea-input" rows="6" placeholder="Enter the official details, rules, deadlines, or contact info here..." required style="resize: vertical;"></textarea>
+        </div>
 
-    // Step Animation Progress Tracker
-    function startProgressStepsAnimation() {
-      const steps = [
-        document.getElementById('step1'),
-        document.getElementById('step2'),
-        document.getElementById('step3'),
-        document.getElementById('step4')
-      ];
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" id="cancelResolveModalBtn" class="btn-cancel">Cancel</button>
+          <button type="submit" class="btn-submit" style="padding: 9px 20px; font-size: 13px;">Save & Re-Index AI</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-      // Reset
-      steps.forEach((s, idx) => {
-        if (s) {
-          s.classList.remove('active');
-          if (idx === 0) s.classList.add('active');
-        }
-      });
+  <!-- Modal for Metadata & Lifecycle Status Edit -->
+  <div id="metaModal" class="modal-dialog-overlay" style="display: none; z-index: 99999;">
+    <div class="loading-card" style="max-width: 650px; width: 92%; text-align: left; padding: 26px;">
+      <div style="margin-bottom: 14px;">
+        <h3 style="font-family: 'Outfit', sans-serif; font-size: 18px; color: var(--card-title); margin: 0; display: flex; align-items: center; gap: 8px;">
+          🏷️ Edit Document Metadata & Lifecycle
+        </h3>
+      </div>
+      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.4;">
+        Manage the authoritative status, versioning, issuing authority, and validity dates for this document.
+      </p>
 
-      setTimeout(() => {
-        if (steps[0]) steps[0].classList.remove('active');
-        if (steps[1]) steps[1].classList.add('active');
-      }, 2000);
+      <form id="editMetaForm" method="POST" action="/admin/update-metadata">
+        <input type="hidden" id="editMetaFilename" name="filename" value="">
 
-      setTimeout(() => {
-        if (steps[1]) steps[1].classList.remove('active');
-        if (steps[2]) steps[2].classList.add('active');
-      }, 4500);
+        <div class="form-group" style="margin-bottom: 10px;">
+          <label style="font-size: 12px; font-weight: 600; color: var(--text);">Document Title</label>
+          <input type="text" id="editMetaTitle" name="title" class="text-input" required>
+        </div>
 
-      setTimeout(() => {
-        if (steps[2]) steps[2].classList.remove('active');
-        if (steps[3]) steps[3].classList.add('active');
-      }, 7000);
-    }
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+          <div class="form-group">
+            <label style="font-size: 12px; font-weight: 600; color: var(--text);">Document Type</label>
+            <select id="editMetaType" name="doc_type" class="text-input">
+              {% for code, label in doc_types %}
+              <option value="{{ code }}">{{ label }}</option>
+              {% endfor %}
+              <option value="__custom__">➕ New / Custom Type...</option>
+            </select>
+            <input type="text" id="editMetaCustomType" name="custom_doc_type" placeholder="e.g. Canteen Guidelines" style="display:none; margin-top:5px;" class="text-input">
+          </div>
+          <div class="form-group">
+            <label style="font-size: 12px; font-weight: 600; color: var(--text);">Lifecycle Status</label>
+            <select id="editMetaStatus" name="status" class="text-input">
+              <option value="active">🟢 Active (Authoritative)</option>
+              <option value="superseded">🔴 Superseded</option>
+              <option value="archived">🟡 Archived</option>
+            </select>
+          </div>
+        </div>
 
-    function showLoadingOverlay(mainTitle, subTitle) {
-      const overlay = document.getElementById('loadingOverlay');
-      if (mainTitle) document.getElementById('loadingMainTitle').textContent = mainTitle;
-      if (subTitle) document.getElementById('loadingSubTitle').textContent = subTitle;
-      if (overlay) overlay.classList.add('active');
-      startProgressStepsAnimation();
-    }
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+          <div class="form-group">
+            <label style="font-size: 12px; font-weight: 600; color: var(--text);">Version</label>
+            <input type="text" id="editMetaVersion" name="version" class="text-input" placeholder="e.g. 1.0">
+          </div>
+          <div class="form-group">
+            <label style="font-size: 12px; font-weight: 600; color: var(--text);">Academic Year</label>
+            <input type="text" id="editMetaYear" name="academic_year" class="text-input" placeholder="e.g. 2026">
+          </div>
+          <div class="form-group">
+            <label style="font-size: 12px; font-weight: 600; color: var(--text);">Semester</label>
+            <input type="text" id="editMetaSemester" name="semester" class="text-input" placeholder="e.g. Summer">
+          </div>
+        </div>
 
-    // 1. Upload Submit Loading & Lock
-    function handleUploadSubmit(event) {
-      const fileInput = document.getElementById('fileInput');
-      if (!fileInput.files.length) {
-        event.preventDefault();
-        alert('Please select at least one file to upload.');
-        return false;
-      }
+        <div class="form-group" style="margin-bottom: 10px;">
+          <label style="font-size: 12px; font-weight: 600; color: var(--text);">Issuing Department / Authority</label>
+          <select id="editMetaAuthority" name="issuing_authority" class="text-input">
+            {% for auth in authorities %}
+            <option value="{{ auth }}">{{ auth }}</option>
+            {% endfor %}
+            <option value="__custom__">➕ New / Custom Authority...</option>
+          </select>
+          <input type="text" id="editMetaCustomAuth" name="custom_issuing_authority" placeholder="e.g. Transport Committee" style="display:none; margin-top:5px;" class="text-input">
+        </div>
 
-      const uploadBtn = document.getElementById('uploadBtn');
-      const uploadPanel = document.getElementById('uploadPanelCard');
-      const noticePanel = document.getElementById('noticePanelCard');
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px;">
+          <div class="form-group">
+            <label style="font-size: 12px; font-weight: 600; color: var(--text);">Effective Date</label>
+            <input type="date" id="editMetaEffective" name="effective_date" class="text-input">
+          </div>
+          <div class="form-group">
+            <label style="font-size: 12px; font-weight: 600; color: var(--text);">Expiry Date (Optional)</label>
+            <input type="date" id="editMetaExpiry" name="expiry_date" class="text-input">
+          </div>
+        </div>
 
-      // Lock buttons & inputs
-      uploadBtn.disabled = true;
-      uploadBtn.innerHTML = '<span class="btn-spinner"></span> Extracting & Syncing...';
-      uploadBtn.style.opacity = '0.75';
-      uploadBtn.style.cursor = 'not-allowed';
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" id="cancelMetaModalBtn" class="btn-cancel">Cancel</button>
+          <button type="submit" class="btn-submit" style="padding: 9px 20px; font-size: 13px;">Save Metadata & Re-Index</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-      if (uploadPanel) uploadPanel.classList.add('form-locked');
-      if (noticePanel) noticePanel.classList.add('form-locked');
-
-      showLoadingOverlay(
-        "Processing Document & Updating AI...",
-        "Multimodal Vision is extracting text, removing icon artifacts, and auto-merging into your knowledge base."
-      );
-
-      return true;
-    }
-
-    // 2. Direct Notice Submit Loading & Lock
-    function handleDirectNoticeSubmit(event) {
-      const content = document.getElementById('noticeContent').value.trim();
-      if (!content) {
-        event.preventDefault();
-        alert('Notice content cannot be empty.');
-        return false;
-      }
-
-      const noticeBtn = document.getElementById('noticeBtn');
-      const uploadPanel = document.getElementById('uploadPanelCard');
-      const noticePanel = document.getElementById('noticePanelCard');
-
-      noticeBtn.disabled = true;
-      noticeBtn.innerHTML = '<span class="btn-spinner"></span> Publishing & Syncing...';
-      noticeBtn.style.opacity = '0.75';
-      noticeBtn.style.cursor = 'not-allowed';
-
-      if (uploadPanel) uploadPanel.classList.add('form-locked');
-      if (noticePanel) noticePanel.classList.add('form-locked');
-
-      showLoadingOverlay(
-        "Publishing Notice & Indexing AI...",
-        "Structuring notice into clean Markdown and syncing FAISS vector database."
-      );
-
-      return true;
-    }
-
-    // 3. Rebuild Index Loading & Lock
-    function handleReindexSubmit(event) {
-      const reindexBtn = document.getElementById('reindexBtn');
-      if (reindexBtn) {
-        reindexBtn.disabled = true;
-        reindexBtn.innerHTML = '<span class="btn-spinner"></span> Rebuilding Vectors...';
-        reindexBtn.style.opacity = '0.75';
-        reindexBtn.style.cursor = 'not-allowed';
-      }
-
-      showLoadingOverlay(
-        "Rebuilding All Vector Embeddings...",
-        "Scanning all knowledge documents and generating multilingual cosine similarity indices."
-      );
-
-      return true;
-    }
-
-    // 4. Reliable Delete Confirmation & Loading
-    function confirmDelete(docName) {
-      const confirmed = confirm(`Are you sure you want to delete "${docName}" from the knowledge base?\nThis action will update the AI vector index automatically.`);
-      if (confirmed) {
-        showLoadingOverlay(
-          `Deleting "${docName}"...`,
-          "Removing file and re-indexing the vector database."
-        );
-      }
-      return confirmed;
-    }
-
-    // Sync button UI on initial load
-    document.addEventListener("DOMContentLoaded", function() {
-      const activeTheme = document.documentElement.getAttribute("data-theme") || "light";
-      updateThemeUI(activeTheme);
-    });
-  </script>
+  <!-- Modular JavaScript Engine -->
+  <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin.js') }}?v=2.6"></script>
 </body>
 </html>

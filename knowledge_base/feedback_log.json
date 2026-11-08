@@ -1,0 +1,78 @@
+[
+  {
+    "timestamp": "2026-11-07 22:22:31",
+    "question": "hi",
+    "answer": "Hello! I am the official AI Assistant for BAUST, Saidpur. How can I help you with university information today?",
+    "feedback": "like"
+  },
+  {
+    "timestamp": "2026-11-07 23:42:40",
+    "log_id": 29,
+    "question": "What is BAUST location?",
+    "answer": "Saidpur Cantonment",
+    "feedback": "like"
+  },
+  {
+    "timestamp": "2026-11-07 23:47:38",
+    "log_id": 38,
+    "question": "What is BAUST location?",
+    "answer": "Saidpur Cantonment",
+    "feedback": "like"
+  },
+  {
+    "timestamp": "2026-11-08 00:30:01",
+    "log_id": 50,
+    "question": "What is BAUST location?",
+    "answer": "Saidpur Cantonment",
+    "feedback": "like"
+  },
+  {
+    "timestamp": "2026-11-08 00:49:09",
+    "log_id": 62,
+    "question": "TEST_LOCATION_QUERY",
+    "answer": "Saidpur Cantonment",
+    "feedback": "like"
+  },
+  {
+    "timestamp": "2026-11-08 15:44:52",
+    "log_id": 84,
+    "question": "TEST_LOCATION_QUERY",
+    "answer": "Saidpur Cantonment",
+    "feedback": "like"
+  },
+  {
+    "timestamp": "2026-11-08 16:00:33",
+    "log_id": 93,
+    "question": "TEST_LOCATION_QUERY",
+    "answer": "Saidpur Cantonment",
+    "feedback": "like"
+  },
+  {
+    "timestamp": "2026-11-08 16:12:44",
+    "log_id": null,
+    "question": "What is BAUST?",
+    "answer": "BAUST is a university.",
+    "feedback": "like"
+  },
+  {
+    "timestamp": "2026-11-08 16:18:30",
+    "log_id": null,
+    "question": "What is BAUST?",
+    "answer": "BAUST is a university.",
+    "feedback": "like"
+  },
+  {
+    "timestamp": "2026-11-08 16:27:27",
+    "log_id": null,
+    "question": "What is BAUST?",
+    "answer": "BAUST is a university.",
+    "feedback": "like"
+  },
+  {
+    "timestamp": "2026-11-08 16:46:09",
+    "log_id": null,
+    "question": "What is BAUST?",
+    "answer": "BAUST is a university.",
+    "feedback": "like"
+  }
+]

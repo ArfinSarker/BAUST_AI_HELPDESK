@@ -1,0 +1,24 @@
+{
+  "university_name_en": "Bangladesh Army University of Science and Technology (BAUST)",
+  "university_name_bn": "বাংলাদেশ আর্মি ইউনিভার্সিটি অব সায়েন্স অ্যান্ড টেকনোলজি (BAUST)",
+  "location": "Saidpur Cantonment, Saidpur - 5310, Nilphamari, Bangladesh",
+  "vice_chancellor": {
+    "name_en": "Brigadier General A B M Humayun Kabir, SGP, ndc, psc, te (Retd.)",
+    "name_bn": "ব্রিগেডিয়ার জেনারেল এ বি এম হুমায়ুন কবির, এসজিপি, এনডিসি, পিএসসি, টিই (অব.)",
+    "title_en": "Vice-Chancellor",
+    "title_bn": "ভাইস-চ্যান্সেলর (VC)"
+  },
+  "cse_head": {
+    "name_en": "Dr. Md Nakib Hayat Chowdhury",
+    "name_bn": "ড. মো. নাকিব হায়াত চৌধুরী",
+    "designation": "Associate Professor & Head of CSE Department",
+    "phone": "01769675560",
+    "email": "hdcse@baust.edu.bd"
+  },
+  "helpline": {
+    "primary": "01769675588",
+    "secondary": "01769675589",
+    "admission": "01769675554"
+  }
+}
+

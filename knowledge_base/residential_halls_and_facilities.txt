@@ -1,4 +1,4 @@
-The university believes that campus life is an important aspect in the development process of students. In addition, to provide services in assisting students in solving problems that affect their studies, the university aims to create an environment conductive to cultural development and promotion of interaction among staffs, students and intellectuals. The university has three residential halls for the accommodations of the students.
+The university believes that campus life is an important aspect in the development process of students. In addition, to provide services in assisting students in solving problems that affect their studies, the university aims to create an environment conductive to cultural development and promotion of interaction among staffs, students and intellectuals. The university has residential halls for the accommodations of the students.
 
 Abbas Uddin Ahmed Hall (AUAH): The hall for the male students is named after the famous Bhawaiya folk song composer and singer of Rangpur Abbas Uddin Ahmed. This hall has 520 seat capacities.
 
@@ -50,3 +50,10 @@ The students live in these on community basis, while 3/4 students share a single
 All halls are neat and clean and possess a perfect environment for study. Top quality security is ensured by our own security guards.
 
 Food quality and nutrition values are also maintained here strictly to preserve the good health of our students.
+
+## Residential Hall Maintenance Notices
+
+### Maintenance Notice - Summer 2026
+* **Target Group / Audience:** All boarders of Shahid Muktijoddha Hall.
+* **Requirement:** Complete room inspection.
+* **Deadline:** 25th July.

@@ -1,0 +1,122 @@
+# Tuition Fee Waivers, Scholarships & Program Fee Structure - BAUST
+
+## Overview
+This document outlines the standard guidelines, procedures, and policies regarding the payment of tuition fees, waivers, scholarships, and program fee structures for students enrolled in various undergraduate and graduate programs at the Bangladesh Army University of Science and Technology (BAUST), Saidpur.
+
+## Tuition Fee Waivers & Scholarships
+* Tuition Fee Waiver during Admission
+* **20% Tuition Fee Waiver for Siblings**
+* **10% Tuition Fee Waiver for Wards of Military Personnel (Serving/Retd)**
+* **100% Waiver for Children of Freedom Fighters and Underdeveloped Areas**
+* **Up to 40% Tuition Fee Waiver Based on Semester Final Results**
+* **Merit-Based Assistance:** Merit-based tuition fee waivers and scholarships are awarded based on previous academic results (SSC, HSC, and Semester GPA) as per BAUST scholarship policies.
+* **Special Quotas:** Freedom Fighter, sibling, and other special quotas are applicable in accordance with UGC and university guidelines.
+
+## Program Fee Structure
+
+| SL | Programs | Once During Admission | Per Semester (Remaining 7 Times) | Total (Including Tk. 5,000 Caution Money, Refundable) |
+| :--- | :--- | :--- | :--- | :--- |
+| **1.** | B.Sc. Engg. in CSE/EEE/ME/IPE/CE/ICT | Tk. 65,000.00 | Tk. 90,000.00 | Tk. 6,95,000.00 |
+| **2.** | BBA / BBA in AIS | Tk. 60,000.00 | Tk. 66,429.00 | Tk. 5,25,000.00 |
+| **3.** | BA (Hons) in English | Tk. 50,625.00 | Tk. 57,054.00 | Tk. 4,50,000.00 |
+
+### Fee Breakdown Components
+* **Tuition Fees:** Calculated per credit hour or on a per-semester basis depending on the enrolled program.
+* **Admission & Registration Fees:** One-time or per-semester administrative charges.
+* **Other Institutional Fees:** Includes library fees, laboratory fees, student welfare fees, and permanent/development fees where applicable.
+
+## Tuition Fee Payment Guidelines & Procedures
+
+### Payment Guidelines & Policies
+* **Payment Deadline:** Students must clear their semester tuition and other applicable fees within the stipulated timeframe announced by the Office of the Treasurer/Accounts Section prior to the mid-term and final examinations.
+* **Modes of Payment:** Payments can be made through authorized banks, online banking portals, mobile financial services (MFS), or designated payment gateways affiliated with BAUST.
+* **Late Fee Policy:** Failure to pay dues within the specified deadline may result in a late fee fine as per university regulations. Students with unresolved financial dues may be barred from obtaining admit cards or viewing semester results.
+
+### bKash Mobile App Payment Instructions
+* **Step 1:** Open your bKash App and tap on 'Education Fee'.
+* **Step 2:** Search for 'BAUST' and select it.
+* **Step 3:** Enter your Student ID and desired payment details.
+* **Step 4:** Check the amount and proceed with your bKash PIN.
+* **Step 5:** Save the transaction ID and receipt for future reference.
+
+### Bank Payment Instructions
+* **Bank Name:** Trust Bank Limited
+* **Procedure:** Tuition fees can be paid at any branch of Trust Bank Limited. Use the official deposit slip and ensure your details are correctly mentioned.
+
+### Security & Authorized Channels
+* **Secure Payment:** Always ensure you are paying to the official BAUST account. Double-check your Student ID before confirming.
+* **Authorized Channel:** Utilize only the approved bKash App process or Trust Bank Limited branches for all fee submissions.
+
+## Contact Information for Accounts Inquiries
+* **Office:** Accounts Section, BAUST, Saidpur Cantonment, Saidpur.
+* **Official Website:** www.baust.edu.bd
+
+---
+
+## Additional Information & Updates
+
+# Tuition Fee Payment Procedures - Bangladesh Army University of Science and Technology (BAUST), Saidpur
+
+## Bank Payment Information (Trust Bank Limited)
+
+Students may pay tuition fees directly through any branch of Trust Bank Limited using the following details:
+
+* **Bank Name:** Trust Bank Limited
+* **Bank Branch:** Saidpur Cantonment
+* **Branch Routing No.:** 240730822
+* **Account Name:** Bangladesh Army University and Science and Technology (BAUST), Saidpur
+* **Account No.:** 0060-0210001280
+
+---
+
+## Payment Flow via bKash Mobile App
+
+1. Open the bKash mobile app using your bKash activated mobile number and PIN. *(If you do not have a bKash personal account, download the app from the iOS App Store/Google Play Store, select the Registration option, and open an account instantly using your NID).*
+2. Select the **Make Payment** option from the app home screen.
+3. Input the BAUST-Saidpur bKash merchant number (**01769675556**) and select the arrow to proceed.
+4. Input the payment amount (including the **1.5% bKash charge**) as per your dues. Recheck to ensure the correct amount is entered. *(For example: If the payment amount is Tk. 10,000.00, the total payment amount including the charge will be Tk. 10,153.00).*
+5. In the **Reference** field, input your information in the following format: `Department/Program [Space] Batch [Space] Level [Space] Term [Space] Student ID`.
+   * **Valid Departments/Programs:** CSE / EEE / ME / IPE / CE / ICT / BBA / AIS / ENG / MBA / ELT
+   * **Example:** `CSE 15th L4 TII 220201001`
+6. Input your bKash personal PIN and select the arrow to proceed.
+7. Tap and hold to complete the payment to BAUST-Saidpur.
+8. A successful payment notification will be shown with a summary. **Preserve the Transaction ID and Student Information for future reference.**
+
+---
+
+## Payment Flow via bKash USSD Menu
+
+1. Dial `*247#` from your bKash-activated mobile handset to access the bKash menu.
+2. Input `3` for **Payment** and select send.
+3. Input the BAUST-Saidpur bKash merchant number (**01769675556**) and select send.
+4. Input the payment amount (including the **1.5% bKash charge**). *(For example: If the payment amount is Tk. 10,000.00, the total payment including charge is Tk. 10,153.00).*
+5. In the **Reference** field, input your information in the following format: `Department/Program [Space] Batch [Space] Level [Space] Term [Space] Student ID`. *(Example: CSE 4th 4 II 160201052).*
+6. In the **Counter** field, input `1` and select send.
+7. Review the payment summary, input your bKash personal PIN, and select send to confirm.
+8. A successful payment SMS will be received along with the summary. **Preserve the Transaction ID and Student Information for future reference.**
+
+---
+
+## Important Instructions
+
+* Ensure the correct amounts are inputted as per the dues communicated by the university, inclusive of bKash charges.
+* Ensure accurate Student Information is entered in the Reference field during payment.
+* Students and guardians are strongly encouraged to complete payments from their own bKash personal accounts.
+
+---
+
+## Departmental Payment Query Contacts
+
+For any payment-related queries, please contact the respective department numbers:
+
+* **CSE:** 01769675560
+* **EEE:** 01769675562
+* **ME:** 01769675564
+* **IPE:** 01769675566
+* **CE:** 01769662720
+* **ICT:** 01769675577
+* **BBA:** 01769675568
+* **BBA in AIS:** 01769675580
+* **English:** 01769662701
+* **MBA / RMBA:** 01769675580
+* **MA in English (ELT):** 01769662701

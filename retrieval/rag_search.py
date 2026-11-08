@@ -1,6 +1,11 @@
 import os
 import re
+import json
+import math
 import pickle
+import threading
+from collections import Counter
+import glob
 import numpy as np
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -9,15 +14,132 @@ DOCS_PATH = os.path.join(VECTOR_DIR, "documents.pkl")
 META_PATH = os.path.join(VECTOR_DIR, "metadata.pkl")
 EMBED_PATH = os.path.join(VECTOR_DIR, "embeddings.npy")
 FAISS_PATH = os.path.join(VECTOR_DIR, "index.faiss")
+SYNONYMS_FILE = os.path.join(BASE_DIR, "data", "synonyms.json")
 
+# =====================================================
+# THREAD-SAFE GLOBAL STATE & LOCKING
+# =====================================================
+_store_lock = threading.RLock()
 _documents = None
 _metadata = None
 _embeddings = None
 _faiss_index = None
+_bm25_model = None
+_last_store_mtime = 0.0
+
 _embed_model = None
 _embed_model_attempted = False
 
-# Comprehensive conversational and greeting patterns
+# =====================================================
+# BM25 OKAPI ALGORITHM IMPLEMENTATION
+# =====================================================
+try:
+    import importlib
+    _RankBM25Okapi = getattr(importlib.import_module("rank_bm25"), "BM25Okapi", None)
+except Exception:
+    _RankBM25Okapi = None
+
+
+class BuiltinBM25Okapi:
+    """
+    Pure Python Okapi BM25 implementation.
+    Calculates TF-IDF and document length normalization (k1=1.5, b=0.75)
+    with zero external dependencies and thread-safe evaluation.
+    """
+    def __init__(self, corpus: list[list[str]], k1: float = 1.5, b: float = 0.75, epsilon: float = 0.25):
+        self.k1 = k1
+        self.b = b
+        self.epsilon = epsilon
+        self.corpus_size = len(corpus)
+        self.avgdl = sum(len(doc) for doc in corpus) / self.corpus_size if self.corpus_size > 0 else 1.0
+        self.doc_freqs = []
+        self.idf = {}
+        self.doc_len = [len(doc) for doc in corpus]
+
+        nd = {}
+        for document in corpus:
+            frequencies = Counter(document)
+            self.doc_freqs.append(frequencies)
+            for word in frequencies:
+                nd[word] = nd.get(word, 0) + 1
+
+        idf_sum = 0.0
+        negative_idfs = []
+        for word, freq in nd.items():
+            idf = math.log((self.corpus_size - freq + 0.5) / (freq + 0.5) + 1.0)
+            self.idf[word] = idf
+            idf_sum += idf
+            if idf < 0:
+                negative_idfs.append(word)
+
+        average_idf = idf_sum / len(self.idf) if self.idf else 0.0
+        eps = self.epsilon * average_idf
+        for word in negative_idfs:
+            self.idf[word] = eps
+
+    def get_scores(self, query: list[str]) -> list[float]:
+        scores = [0.0] * self.corpus_size
+        if not self.corpus_size or not query:
+            return scores
+        for word in query:
+            if word not in self.idf:
+                continue
+            q_idf = self.idf[word]
+            for i, doc_freq in enumerate(self.doc_freqs):
+                if word in doc_freq:
+                    freq = doc_freq[word]
+                    doc_len = self.doc_len[i]
+                    numerator = freq * (self.k1 + 1.0)
+                    denominator = freq + self.k1 * (1.0 - self.b + self.b * (doc_len / self.avgdl))
+                    scores[i] += q_idf * (numerator / denominator)
+        return scores
+
+
+BM25Okapi = _RankBM25Okapi or BuiltinBM25Okapi
+
+
+def tokenize_text(text: str) -> list[str]:
+    """Tokenize English and Bengali text into clean terms."""
+    if not text:
+        return []
+    clean_t = re.sub(r'[^\w\s\u0980-\u09FF]', ' ', text.lower())
+    return [w for w in clean_t.split() if len(w) > 1]
+
+
+# =====================================================
+# DYNAMIC SYNONYM MAP (EXTERNAL JSON + LIVE RELOAD)
+# =====================================================
+_synonym_map = {}
+_synonym_mtime = 0.0
+
+DEFAULT_FALLBACK_SYNONYMS = {
+    "ভিসি": ["vc", "vice chancellor", "vice-chancellor", "executive head", "humayun kabir"],
+    "উপাচার্য": ["vc", "vice chancellor", "vice-chancellor", "humayun kabir"],
+    "ডিপার্টমেন্ট": ["department", "cse", "eee", "me", "ce", "ipe", "bba", "english", "ict"],
+    "সিএসই": ["cse", "computer science", "nakib hayat"],
+    "ভর্তি": ["admission", "apply", "eligibility", "winter", "summer"],
+    "ফি": ["fee", "tuition", "cost", "taka", "bdt", "waiver"]
+}
+
+
+def get_synonym_map() -> dict:
+    """Dynamically reads synonyms from data/synonyms.json with automatic hot reload."""
+    global _synonym_map, _synonym_mtime
+    try:
+        if os.path.exists(SYNONYMS_FILE):
+            mtime = os.path.getmtime(SYNONYMS_FILE)
+            if mtime != _synonym_mtime:
+                with open(SYNONYMS_FILE, "r", encoding="utf-8") as f:
+                    _synonym_map = json.load(f)
+                _synonym_mtime = mtime
+    except Exception as e:
+        print(f"[Synonyms Read Warning]: {e}")
+    return _synonym_map or DEFAULT_FALLBACK_SYNONYMS
+
+
+# =====================================================
+# GREETINGS & INTENT PATTERNS
+# =====================================================
 GREETING_PATTERNS = [
     r"^(hi|hello|hey|assalamu\s*alaikum|salam|hi\s*there|hlo|ola)[\s!.]*$",
     r"^(kemon\s*achen|kemon\s*acho|how\s*are\s*you|how\s*r\s*u|কেমন\s*আছো|কেমন\s*আছেন)[\s?!.]*$",
@@ -28,73 +150,6 @@ GREETING_PATTERNS = [
     r"^(bye|goodbye|allah\s*hafez|tata|বিদায়|বিদায়)[\s!.]*$",
     r"^(banglay\s*bolo|english\s*e\s*bolo|translate\s*to\s*english|translate\s*to\s*bangla|বাংলায়\s*বলো|বাংলাতে\s*বলো)[\s!.]*$"
 ]
-
-
-# Comprehensive Bilingual Synonym & Context Map
-SYNONYM_MAP = {
-    "ভিসি": ["vc", "vice chancellor", "vice-chancellor", "executive head", "chancellor", "humayun kabir"],
-    "উপাচার্য": ["vc", "vice chancellor", "vice-chancellor", "humayun kabir"],
-    "প্রেসিডেন্ট": ["president", "bot", "board of trustees", "chief of army staff"],
-    "আর্মি": ["army", "bangladesh army", "saidpur cantonment"],
-    "শিক্ষক": ["faculty", "teacher", "professor", "lecturer", "assistant professor", "associate professor"],
-    "শিক্ষিকা": ["faculty", "teacher", "professor", "lecturer"],
-    "ডিপার্টমেন্ট": ["department", "cse", "eee", "me", "ce", "ipe", "bba", "english", "ict"],
-    "বিভাগ": ["department", "cse", "eee", "me", "ce", "ipe", "bba", "english", "ict"],
-    "সিএসই": ["cse", "computer science", "engineering", "nakib hayat"],
-    "কম্পিউটার": ["cse", "computer science"],
-    "মেকানিকাল": ["me", "mechanical"],
-    "সিভিল": ["ce", "civil"],
-    "ইইই": ["eee", "electrical", "rubina aktar"],
-    "আইসিটি": ["ict", "information and communication", "ece"],
-    "আইপিই": ["ipe", "industrial and production"],
-    "বিবিএ": ["bba", "business administration", "fbs"],
-    "ইংরেজি": ["english", "humanities"],
-    "ভর্তি": ["admission", "apply", "eligibility", "intake", "batch", "winter", "summer", "application", "hsc"],
-    "এডমিশন": ["admission", "apply", "eligibility", "form"],
-    "ফি": ["fee", "tuition", "cost", "taka", "bdt", "tk", "charge", "payment", "waiver"],
-    "খরচ": ["fee", "tuition", "cost", "taka", "bdt", "tk", "charge", "payment"],
-    "টাকা": ["fee", "tuition", "cost", "taka", "bdt", "tk", "payment"],
-    "স্কলারশিপ": ["scholarship", "waiver", "discount", "financial aid", "merit", "gpa 5"],
-    "ওয়েভার": ["waiver", "scholarship", "discount"],
-    "যোগাযোগ": ["contact", "phone", "email", "helpline", "hotline", "location"],
-    "ফোন": ["phone", "mobile", "contact", "call", "01769675588", "01769675589"],
-    "ঠিকানা": ["location", "saidpur", "cantonment", "address", "nilphamari"],
-    "কোথায়": ["location", "saidpur", "cantonment", "address"],
-    "ইতিহাস": ["history", "established", "background", "foundation", "parliament", "2015"],
-    "কবে": ["established", "date", "year", "founded", "history"],
-    "নকীব": ["nakib", "nakib hayat", "head of the department"],
-    "রুহুল": ["ruhul", "dr md ruhul amin"],
-    "রুফিজা": ["rufiza", "rufiza begum"],
-    "জাহাঙ্গীর": ["jahangir", "dr md jahangir alam", "dean"],
-    "হাসান": ["al-hasan", "hasan", "lecturer"],
-    "রেজিস্ট্রার": ["registrar", "office of the registrar", "administrative"],
-    "হোস্টেল": ["hostel", "hall", "dormitory", "accommodation", "residential", "seat"],
-    "হল": ["hall", "hostel", "dormitory", "residential", "provost", "seat", "capacity"],
-    "হলে": ["hall", "hostel", "dormitory", "residential", "provost"],
-    "হলের": ["hall", "hostel", "dormitory", "residential", "provost"],
-    "প্রভোস্ট": ["provost", "assistant provost", "hall"],
-    "সহকারী": ["assistant", "assistant provost", "assistant professor"],
-    "মেয়েদের": ["girls", "female", "women", "ladies", "taramon bibi"],
-    "মহিলা": ["girls", "female", "women", "ladies"],
-    "মেয়ে": ["girls", "female", "women", "ladies"],
-    "ছেলেদের": ["boys", "male", "men", "abbas uddin", "zikrul haque"],
-    "ছেলে": ["boys", "male", "men"],
-    "প্রক্টর": ["proctor", "assistant proctor", "proctorial"],
-    "ক্যাম্পাস": ["campus", "saidpur cantonment", "facilities", "labs", "wifi", "cafeteria"],
-    "লাইব্রেরি": ["library", "central library", "books", "reading room"],
-    "পরীক্ষা": ["examination", "grading", "cgpa", "gpa", "term", "promotion", "clearance"],
-    "গ্রেড": ["grade", "grading", "cgpa", "gpa", "marks", "scale"],
-    "হেড": ["head", "head of the department", "hod", "department head", "associate professor and head", "nakib hayat"],
-    "প্রধান": ["head", "dean", "chief", "hod", "head of the department"],
-    "ডিন": ["dean", "faculty dean", "s.m. jahangir alam"],
-    "চেয়ারম্যান": ["chairman", "head", "bot"],
-    "লুৎফর": ["lutfor", "md lutfor rahman", "vice chancellor", "vc"],
-    "হুমায়ুন": ["humayun", "humayun kabir", "vice chancellor", "vc"],
-    "লুৎফর রহমান": ["lutfor rahman", "vice chancellor", "vc"],
-    "নকিব হায়াত": ["nakib hayat", "nakib hayat chowdhury", "head of the department", "cse"],
-    "ডিপার্টমেন্টের": ["department", "cse", "eee", "me", "ce", "ipe", "bba", "english", "ict"],
-    "বিভাগের": ["department", "cse", "eee", "me", "ce", "ipe", "bba", "english", "ict"]
-}
 
 
 def normalize_text_for_intent(text: str) -> str:
@@ -113,27 +168,27 @@ def is_greeting(text: str) -> bool:
         return False
     raw_t = text.strip().lower()
     norm_t = normalize_text_for_intent(text)
-    
+
     # 1. Identity questions
     if any(k in norm_t for k in ["tomar nam", "apnar nam", "tumi ke", "apni ke", "ke tumi", "ke apni", "your name", "who are you", "who r u", "who made you", "tomar porichoy"]) or any(k in raw_t for k in ["তোমার নাম", "তুমি কে", "আপনার নাম", "কে তুমি"]):
         return True
-        
+
     # 2. How are you
     if any(k in norm_t for k in ["kemon acho", "kemon achen", "kmn acho", "kmn asen", "how are you", "how r u"]) or any(k in raw_t for k in ["কেমন আছো", "কেমন আছেন"]):
         return True
-        
+
     # 3. What can you do
     if any(k in norm_t for k in ["what can you do", "ki korte paro", "ki sahajo", "ki sahajjo"]) or any(k in raw_t for k in ["কি করতে পারো", "সাহায্য"]):
         return True
-        
+
     # 4. Thank you
     if any(k in norm_t for k in ["thank you", "thanks", "thx", "dhonobad", "dhonnobad", "shukriya"]) or any(k in raw_t for k in ["ধন্যবাদ"]):
         return True
-        
+
     # 5. Bye / Goodbye
     if any(k in norm_t for k in ["bye", "goodbye", "alah hafez", "allah hafez", "tata"]) or any(k in raw_t for k in ["বিদায়", "বিদায়"]):
         return True
-        
+
     # 6. Greetings
     if norm_t in ["hi", "helo", "hello", "hey", "asalamu alaikum", "assalamu alaikum", "salam", "hi there", "hlo", "ola"]:
         return True
@@ -141,7 +196,7 @@ def is_greeting(text: str) -> bool:
     # 7. Translation commands
     if any(k in norm_t for k in ["banglay bolo", "english e bolo", "translate to english", "translate to bangla"]) or any(k in raw_t for k in ["বাংলায় বলো", "বাংলাতে বলো"]):
         return True
-        
+
     return False
 
 
@@ -152,59 +207,94 @@ def _get_embedding_model():
         _embed_model_attempted = True
         try:
             from sentence_transformers import SentenceTransformer
-            _embed_model = SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")
-        except Exception as e:
-            # Dense model unavailable; RAG uses ultra-fast sparse synonym & lexical matching
+            # Fast offline-first loading: prevents 100s+ timeout hangs when HuggingFace Hub is unreachable
+            try:
+                _embed_model = SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2", local_files_only=True)
+            except Exception:
+                _embed_model = SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")
+        except Exception:
             _embed_model = None
     return _embed_model
 
 
-
-def _load_store():
-    """Loads text chunks, metadata, numpy vector embeddings and FAISS index."""
-    global _documents, _metadata, _embeddings, _faiss_index
-    if os.path.exists(DOCS_PATH):
-        try:
-            with open(DOCS_PATH, "rb") as f:
-                _documents = pickle.load(f)
-            if os.path.exists(META_PATH):
-                with open(META_PATH, "rb") as f:
-                    _metadata = pickle.load(f)
-            else:
-                _metadata = [{"source": "official_record"} for _ in _documents]
-
-            if os.path.exists(EMBED_PATH):
-                _embeddings = np.load(EMBED_PATH)
-            else:
-                _embeddings = None
-
-            if os.path.exists(FAISS_PATH):
-                try:
-                    import faiss
-                    _faiss_index = faiss.read_index(FAISS_PATH)
-                except Exception:
-                    _faiss_index = None
-
-            print(f"[RAG Hybrid Store] Loaded {len(_documents)} document chunks with dense vector support.")
-        except Exception as e:
-            print(f"[RAG Store Error]: {e}")
-            _documents, _metadata, _embeddings, _faiss_index = [], [], None, None
-    else:
-        _documents, _metadata, _embeddings, _faiss_index = [], [], None, None
+def _get_store_mtime() -> float:
+    """Returns the newest modification timestamp of vector store artifacts."""
+    mtimes = []
+    for p in [FAISS_PATH, DOCS_PATH, META_PATH]:
+        if os.path.exists(p):
+            try:
+                mtimes.append(os.path.getmtime(p))
+            except OSError:
+                pass
+    return max(mtimes) if mtimes else 0.0
 
 
 def reload_vector_store():
-    global _documents, _embeddings, _faiss_index
-    _documents = None
-    _embeddings = None
-    _faiss_index = None
-    _load_store()
+    """
+    Thread-safe hot reloader for vector store and BM25 index.
+    Loads files into local scope first, then atomically swaps global pointers
+    to prevent NoneType race conditions during live user queries.
+    """
+    global _documents, _metadata, _embeddings, _faiss_index, _bm25_model, _last_store_mtime
+
+    with _store_lock:
+        new_docs = []
+        new_metadata = []
+        new_embeddings = None
+        new_faiss = None
+        new_bm25 = None
+        current_mtime = _get_store_mtime()
+
+        if os.path.exists(DOCS_PATH):
+            try:
+                with open(DOCS_PATH, "rb") as f:
+                    new_docs = pickle.load(f)
+                if os.path.exists(META_PATH):
+                    with open(META_PATH, "rb") as f:
+                        new_metadata = pickle.load(f)
+                else:
+                    new_metadata = [{"source": "official_record"} for _ in new_docs]
+
+                if os.path.exists(EMBED_PATH):
+                    new_embeddings = np.load(EMBED_PATH)
+
+                if os.path.exists(FAISS_PATH):
+                    try:
+                        import faiss
+                        new_faiss = faiss.read_index(FAISS_PATH)
+                    except Exception:
+                        new_faiss = None
+
+                # Initialize Okapi BM25 on the tokenized corpus
+                if new_docs:
+                    tokenized_corpus = [tokenize_text(doc) for doc in new_docs]
+                    new_bm25 = BM25Okapi(tokenized_corpus)
+
+                print(f"[RAG Hybrid Store] Hot-Loaded {len(new_docs)} chunks with FAISS + BM25Okapi support.")
+            except Exception as e:
+                print(f"[RAG Store Load Error]: {e}")
+
+        # Atomic pointer swap inside critical section
+        _documents = new_docs
+        _metadata = new_metadata
+        _embeddings = new_embeddings
+        _faiss_index = new_faiss
+        _bm25_model = new_bm25
+        _last_store_mtime = current_mtime
 
 
 def get_store():
-    global _documents, _metadata, _embeddings, _faiss_index
-    if _documents is None:
-        _load_store()
+    """
+    Thread-safe store getter with automatic mtime hot-reloading.
+    Detects if background create_vector.py finished updating index files.
+    """
+    global _documents, _metadata, _embeddings, _faiss_index, _last_store_mtime
+    current_mtime = _get_store_mtime()
+
+    # Trigger hot-reload if store is uninitialized or on-disk index was updated
+    if _documents is None or (current_mtime > 0 and current_mtime != _last_store_mtime):
+        reload_vector_store()
+
     return _documents, _metadata, _embeddings, _faiss_index
 
 
@@ -231,7 +321,7 @@ def dense_semantic_search(query: str, top_k: int = 12) -> list[tuple[float, int]
             scores, indices = faiss_index.search(normalized_query, min(top_k, len(documents)))
             results = []
             for score, idx in zip(scores[0], indices[0]):
-                if idx >= 0 and idx < len(documents):
+                if 0 <= idx < len(documents):
                     results.append((float(score), int(idx)))
             return results
         elif embeddings is not None:
@@ -246,30 +336,34 @@ def dense_semantic_search(query: str, top_k: int = 12) -> list[tuple[float, int]
 
 def sparse_lexical_search(question: str, top_k: int = 12) -> list[tuple[float, int]]:
     """
-    Computes BM25-style lexical keyword and bilingual synonym matches.
-    Returns: list of (keyword_score, chunk_index)
+    Computes genuine BM25Okapi lexical keyword and bilingual synonym matches.
+    Returns: list of (bm25_score, chunk_index)
     """
     documents, metadata, _, _ = get_store()
-    if not documents:
+    if not documents or _bm25_model is None:
         return []
 
     q_lower = question.lower().strip()
-    clean_q = re.sub(r'[^\w\s\u0980-\u09FF]', ' ', q_lower)
-    tokens = [w for w in clean_q.split() if len(w) > 1]
+    query_tokens = tokenize_text(q_lower)
+    if not query_tokens:
+        return []
 
-    expanded_terms = set(tokens)
+    syn_map = get_synonym_map()
+    expanded_terms = set(query_tokens)
 
-    # Add bilingual synonyms
-    for t in tokens:
-        for k, syn_list in SYNONYM_MAP.items():
+    # Dynamic bilingual synonym expansion
+    for t in query_tokens:
+        for k, syn_list in syn_map.items():
             if k in t or t in k:
                 for s in syn_list:
-                    expanded_terms.add(s.lower())
+                    for sw in tokenize_text(s):
+                        expanded_terms.add(sw)
 
-    for k, syn_list in SYNONYM_MAP.items():
+    for k, syn_list in syn_map.items():
         if k in q_lower:
             for s in syn_list:
-                expanded_terms.add(s.lower())
+                for sw in tokenize_text(s):
+                    expanded_terms.add(sw)
 
     stop_words = {
         "কে", "কি", "কার", "এর", "আর", "কোথায়", "কীভাবে", "কত", "আছেন", "আছে", "স্যার", "ম্যাডাম",
@@ -281,21 +375,21 @@ def sparse_lexical_search(question: str, top_k: int = 12) -> list[tuple[float, i
     if not search_terms:
         search_terms = list(expanded_terms)
 
+    # Calculate Okapi BM25 score array
+    bm25_scores = _bm25_model.get_scores(search_terms)
+
     scored = []
-    for idx, doc in enumerate(documents):
-        doc_lower = doc.lower()
-        score = 0.0
+    for idx, raw_score in enumerate(bm25_scores):
+        if raw_score <= 0.05:
+            continue
+        score = float(raw_score)
+        doc_lower = documents[idx].lower()
 
-        # Exact phrase match boost
+        # Exact query match boost
         if q_lower in doc_lower:
-            score += 25.0
+            score += 15.0
 
-        for term in search_terms:
-            if term in doc_lower:
-                score += (len(term.split()) * 4.0) + (len(term) * 0.1)
-
-        if score >= 4.0:
-            scored.append((score, idx))
+        scored.append((score, idx))
 
     scored.sort(key=lambda x: x[0], reverse=True)
     return scored[:top_k]
@@ -308,16 +402,26 @@ def get_department_faculty_file_content(question: str) -> str:
     """
     q_lower = question.lower()
     norm_q = normalize_text_for_intent(question)
-    
-    # Check if asking about faculty / teachers / members / head / professors / list
-    is_faculty_query = any(k in norm_q for k in [
-        "teacher", "teachers", "faculty", "faculties", "sir", "mam", "shikkok", "shikkhok", 
-        "list", "nam", "naam", "active", "leave", "ex", "sob", "shob", "all", "talika", "member", "members",
-        "prof", "professor", "lecturer", "dean", "head", "hod"
-    ]) or any(k in q_lower for k in [
-        "শিক্ষক", "শিক্ষিকা", "তালিকা", "লিস্ট", "নাম", "সব", "কে কে", "কারা", "অধ্যাপক", "প্রভাষক", "হেড", "প্রধান"
-    ])
-    
+
+    # Disqualify from pure faculty file lookup if user is asking for exams, routines, seatplans, fees, etc.
+    if any(k in q_lower for k in [
+        "exam", "examination", "schedule", "routine", "seatplan", "seat plan", "result",
+        "syllabus", "grade", "cgpa", "admission", "fees", "fee", "tuition", "hall", "hostel"
+    ]):
+        return None
+
+    words_set = set(norm_q.split())
+    faculty_keywords = {
+        "teacher", "teachers", "faculty", "faculties", "sir", "mam", "shikkok", "shikkhok",
+        "professor", "lecturer", "dean", "head", "hod"
+    }
+    is_faculty_query = bool(words_set & faculty_keywords) or any(k in q_lower for k in [
+        "শিক্ষক", "শিক্ষিকা", "অধ্যাপক", "প্রভাষক", "হেড", "প্রধান"
+    ]) or (
+        ("list" in words_set or "talika" in words_set or "তালিকা" in q_lower or "লিস্ট" in q_lower) and
+        any(k in norm_q for k in ["member", "staff", "person", "faculty", "teacher"])
+    )
+
     if not is_faculty_query:
         return None
 
@@ -333,22 +437,181 @@ def get_department_faculty_file_content(question: str) -> str:
 
     kb_dir = os.path.join(BASE_DIR, "knowledge_base")
     for keywords, fname in dept_file_map:
-        if any(kw in q_lower or kw in norm_q for kw in keywords):
+        matched = False
+        for kw in keywords:
+            if len(kw) <= 3:
+                if re.search(r'\b' + re.escape(kw) + r'\b', q_lower) or re.search(r'\b' + re.escape(kw) + r'\b', norm_q):
+                    matched = True
+                    break
+            else:
+                if kw in q_lower or kw in norm_q:
+                    matched = True
+                    break
+        if matched:
             fpath = os.path.join(kb_dir, fname)
             if os.path.exists(fpath):
                 try:
                     with open(fpath, "r", encoding="utf-8") as f:
                         content = f.read().strip()
-                        return f"--- Official Document [{fname}] ---\n{content}"
+                        return f"--- Document: Official Department Records (Source: {fname} | Status: CURRENT & AUTHORITATIVE) ---\n{content}"
                 except Exception as e:
                     print(f"[Faculty File Read Error]: {e}")
     return None
 
 
-def search_information(question: str, top_k: int = 4) -> str:
+def find_student_matches_by_name(query: str, max_results: int = 12) -> tuple[list[dict], str]:
+    """
+    Scans student records across knowledge base for student names.
+    Returns (matches, disambiguation_context_or_empty).
+    - If multiple students match: returns a disambiguation list and prompts for ID/Roll.
+    - If exactly one student matches: returns that student's complete exam seat and schedule record.
+    - If zero match: returns empty so standard RAG hybrid search proceeds.
+    """
+    clean_q = query.strip()
+    if not clean_q or len(clean_q) < 3:
+        return [], ""
+
+    q_lower = clean_q.lower()
+    non_name_indicators = [
+        "fee", "fees", "cost", "taka", "admission", "borti", "calendar", "kalke",
+        "routine", "schedule", "somoy", "time", "date", "kobe", "kokhon", "break",
+        "holiday", "vc", "vice chancellor", "dean", "head", "provost", "hall",
+        "hostel", "bus", "transport", "picnic", "phone", "email", "contact",
+        "what", "how", "who", "where", "koto", "kivabe", "ki", "kothay", "syllabus",
+        "department", "bivag", "credit", "waiver", "scholarship", "grade", "cgpa"
+    ]
+    if any(re.search(r'\b' + re.escape(w) + r'\b', q_lower) for w in non_name_indicators):
+        return [], ""
+
+    # Do not intercept if query already has a roll/ID number
+    if re.search(r'\b\d{6,16}\b', clean_q):
+        return [], ""
+
+    raw_tokens = re.findall(r'[a-zA-Z]{3,}', q_lower)
+    if not raw_tokens:
+        raw_tokens = [w for w in re.sub(r'[^\u0980-\u09FF\s]', ' ', clean_q).split() if len(w) >= 3]
+        if not raw_tokens:
+            return [], ""
+
+    kb_dir = os.path.join(BASE_DIR, "knowledge_base")
+    student_files = glob.glob(os.path.join(kb_dir, "*seatplan*.txt")) + glob.glob(os.path.join(kb_dir, "*student*.txt"))
+    if not student_files:
+        return [], ""
+
+    results = []
+    seen_rolls = set()
+
+    for fpath in student_files:
+        fname = os.path.basename(fpath)
+        try:
+            with open(fpath, "r", encoding="utf-8") as f:
+                lines = [line.strip() for line in f.readlines() if line.strip()]
+        except Exception:
+            continue
+
+        current_level = ""
+        current_slot = ""
+        current_prog = "Computer Science and Engineering"
+        slot_map = {
+            'A': ('Slot-A', '09:00 AM - 10:00 AM'),
+            'B': ('Slot-B', '11:00 AM - 12:00 PM'),
+            'C': ('Slot-C', '01:00 PM - 02:00 PM')
+        }
+
+        for idx, l in enumerate(lines):
+            prog_m = re.match(r'^(?:Programme|Program):\s*(.*)', l, re.I)
+            if prog_m:
+                current_prog = prog_m.group(1).strip()
+            lvl_m = re.match(r'^(Level\s*[-–]?\s*\d+\s*Term\s*[-–]?\s*[IVX0-9]+.*)', l, re.I)
+            if lvl_m:
+                current_level = lvl_m.group(1).strip()
+            slot_m = re.match(r'^(Slot\s*[-–:]?\s*[A-Z0-9].*)', l, re.I)
+            if slot_m:
+                current_slot = slot_m.group(1).strip()
+
+            if re.match(r'^\d{8,16}$', l) and idx + 1 < len(lines):
+                roll = l
+                if roll in seen_rolls:
+                    continue
+                name = lines[idx + 1]
+                name_low = name.lower()
+
+                name_words = set(re.findall(r'[a-zA-Z\u0980-\u09FF]+', name_low))
+                if all(tok in name_words for tok in raw_tokens):
+                    room = lines[idx + 2] if idx + 2 < len(lines) else ""
+                    seat = lines[idx + 3] if idx + 3 < len(lines) else ""
+
+                    seat_pfx = re.match(r'^([ABC])-\d+-\d+', seat.strip(), re.I)
+                    if seat_pfx:
+                        sk = seat_pfx.group(1).upper()
+                        s_name, s_time = slot_map.get(sk, (f"Slot-{sk}", ""))
+                    else:
+                        s_name = current_slot or "Slot-A"
+                        s_time = ""
+
+                    seen_rolls.add(roll)
+                    results.append({
+                        "roll": roll,
+                        "name": name,
+                        "programme": current_prog,
+                        "level": current_level,
+                        "slot": s_name,
+                        "time": s_time,
+                        "room": room,
+                        "seat": seat,
+                        "source": fname
+                    })
+                    if len(results) >= max_results:
+                        break
+        if len(results) >= max_results:
+            break
+
+    if not results:
+        return [], ""
+
+    if len(results) > 1:
+        doc_lines = [
+            f"--- Document: Multiple Student Matches Found for Name '{clean_q}' (Disambiguation Required) ---",
+            f"CRITICAL INSTRUCTION: There are {len(results)} distinct students matching the query '{clean_q}'.",
+            "DO NOT pick or answer for only one student arbitrarily!",
+            "Politely inform the user in Bengali that multiple students have this name, list the matching students with their full names and IDs, and ask the user to provide their Student ID / Roll number or full name to get their specific exam seat and routine.",
+            "\nMATCHING STUDENTS LIST:"
+        ]
+        for i, s in enumerate(results, 1):
+            doc_lines.append(f"{i}. **{s['name']}** — Roll / ID: `{s['roll']}` | Department: {s['programme']} | {s['level']}")
+        return results, "\n".join(doc_lines)
+
+    s = results[0]
+    single_doc = (
+        f"--- Document: Single Student Match (Source: {s['source']} | Status: CURRENT & AUTHORITATIVE) ---\n"
+        f"* Student Name: {s['name']}\n"
+        f"* Student ID / Roll: {s['roll']}\n"
+        f"* Programme: {s['programme']}\n"
+        f"* Level & Term: {s['level']}\n"
+        f"* Examination Slot: {s['slot']}\n"
+        f"* Examination Time: {s['time']}\n"
+        f"* Allocated Exam Room: {s['room']}\n"
+        f"* Allocated Seat Number: {s['seat']}\n"
+    )
+    return results, single_doc
+
+
+DEPT_PATTERNS = {
+    "cse": [r"\bcse\b", r"\bcomputer\s+science\b", r"সিএসই", r"কম্পিউটার\s+সায়েন্স", r"কম্পিউটার\s+বিজ্ঞান"],
+    "ce": [r"\bce\b", r"\bcivil\b", r"\bcivil\s+engineering\b", r"সিই", r"সিভিল", r"পুরকৌশল"],
+    "eee": [r"\beee\b", r"\belectrical\b", r"\beee\s+engineering\b", r"ইইই", r"ইলেকট্রিক্যাল", r"তড়িৎ"],
+    "me": [r"\bme\b", r"\bmechanical\b", r"এমই", r"মেকানিক্যাল", r"যন্ত্রকৌশল"],
+    "ipe": [r"\bipe\b", r"\bindustrial\b", r"আইপিই"],
+    "bba": [r"\bbba\b", r"\bfbs\b", r"\bbusiness\b", r"বিবিএ", r"ব্যবসায়"],
+    "english": [r"\benglish\b", r"ইংরেজি", r"ইংলিশ"],
+    "ict": [r"\bict\b", r"আইসিটি"]
+}
+
+
+def search_information(question: str, top_k: int = 4, history: list = None) -> str:
     """
     State-of-the-Art Hybrid Retrieval Engine:
-    Combines Multilingual Dense Semantic Vector Search + Sparse Lexical/Synonym Search
+    Combines Multilingual Dense Semantic Vector Search + BM25Okapi Lexical Ranking
     via Reciprocal Rank Fusion (RRF) and Full Document Inspection for Faculty/Department Queries.
     """
     if not question or not question.strip():
@@ -357,7 +620,12 @@ def search_information(question: str, top_k: int = 4) -> str:
     if is_greeting(question):
         return ""
 
-    # Check for direct department faculty document lookup first
+    # Check for student name query (disambiguation if multiple, direct if single)
+    name_matches, disambiguation_doc = find_student_matches_by_name(question)
+    if disambiguation_doc:
+        return disambiguation_doc
+
+    # Check for direct department faculty document lookup
     dept_faculty_doc = get_department_faculty_file_content(question)
     if dept_faculty_doc:
         return dept_faculty_doc
@@ -369,7 +637,7 @@ def search_information(question: str, top_k: int = 4) -> str:
     # 1. Dense Semantic Search (Vector Embedding)
     dense_results = dense_semantic_search(question, top_k=8)
 
-    # 2. Sparse Lexical Search (Keyword & Synonyms)
+    # 2. Sparse Lexical Search (BM25Okapi & Synonyms)
     sparse_results = sparse_lexical_search(question, top_k=8)
 
     # 3. Reciprocal Rank Fusion (RRF)
@@ -384,21 +652,93 @@ def search_information(question: str, top_k: int = 4) -> str:
     for rank, (score, idx) in enumerate(sparse_results):
         rrf_scores[idx] = rrf_scores.get(idx, 0.0) + (sparse_weight / (k_constant + rank + 1))
 
-    # 4. Contextual Source Re-ranking
+    # Universal Exact Token Booster (Rolls, Course Codes, Phones, Room IDs)
+    target_match = re.search(r'\b(08\d{6,14}|[A-Za-z]{2,5}[-\s]?\d{3,4}|01[3-9]\d{8})\b', question)
+    if not target_match and history:
+        for msg in reversed(history[-4:]):
+            if isinstance(msg, dict):
+                m = re.search(r'\b(08\d{6,14}|[A-Za-z]{2,5}[-\s]?\d{3,4}|01[3-9]\d{8})\b', str(msg.get("content", "")))
+                if m:
+                    target_match = m
+                    break
+
+    if target_match:
+        target_tok = target_match.group(1).lower().replace(" ", "").replace("-", "")
+        for idx in range(len(documents)):
+            doc_norm = documents[idx].lower().replace(" ", "").replace("-", "")
+            if target_tok in doc_norm:
+                rrf_scores[idx] = rrf_scores.get(idx, 0.0) + 10.0
+
+    # 4. Contextual Source & Authoritative Metadata Re-ranking
     q_lower = question.lower()
-    for idx in rrf_scores:
+    is_archive_query = any(k in q_lower for k in [
+        "archived", "superseded", "old", "previous", "former", "past",
+        "আগের", "পুরাতন", "গত বছর", "পূর্বের", "বাতিল", "অতীত"
+    ])
+
+    # Detect if user specifically queried for one or more departments
+    queried_depts = set()
+    for d_code, p_list in DEPT_PATTERNS.items():
+        if any(re.search(p, q_lower) for p in p_list):
+            queried_depts.add(d_code)
+
+    for idx in list(rrf_scores.keys()):
         if idx < len(metadata):
-            src = metadata[idx].get("source", "").lower()
-            if "cse" in q_lower and "cse" in src:
+            meta = metadata[idx]
+            src = meta.get("source", "").lower()
+            status = meta.get("status", "active").lower()
+            is_authoritative = meta.get("is_authoritative", 1)
+            academic_year = str(meta.get("academic_year", "")).lower()
+            semester = str(meta.get("semester", "")).lower()
+            issuer = str(meta.get("issuing_authority", "")).lower()
+            title = str(meta.get("title", "")).lower()
+            chunk_text = documents[idx].lower() if idx < len(documents) else ""
+
+            # A. Authoritative Version Filter
+            if not is_archive_query:
+                if status in ["superseded", "archived"] or not is_authoritative:
+                    rrf_scores[idx] *= 0.001
+                elif status == "active" and is_authoritative:
+                    rrf_scores[idx] *= 2.0
+
+            # B. Semester & Academic Year matching boost
+            if academic_year and academic_year in q_lower:
+                rrf_scores[idx] *= 1.4
+            if semester and semester in q_lower:
+                rrf_scores[idx] *= 1.4
+
+            # C. Departmental Isolation & Mismatch Filter (CRITICAL)
+            if queried_depts:
+                # Check if this document chunk is affiliated with the queried department
+                matches_queried = False
+                for qd in queried_depts:
+                    if (f"{qd}_" in src or f"_{qd}." in src or 
+                        f"department of {qd}" in issuer or 
+                        any(re.search(p, title) for p in DEPT_PATTERNS[qd]) or
+                        any(re.search(p, chunk_text) for p in DEPT_PATTERNS[qd])):
+                        matches_queried = True
+                        break
+
+                # Check if this document chunk belongs explicitly to a different department
+                other_depts = set(DEPT_PATTERNS.keys()) - queried_depts
+                belongs_to_other = False
+                for od in other_depts:
+                    if (f"{od}_" in src or f"_{od}." in src or 
+                        f"department of {od}" in issuer or 
+                        any(re.search(p, title) for p in DEPT_PATTERNS[od])):
+                        belongs_to_other = True
+                        break
+
+                if matches_queried:
+                    rrf_scores[idx] *= 2.5  # Strong boost for matching target department
+                elif belongs_to_other:
+                    rrf_scores[idx] *= 0.0001  # Severe penalty for wrong department
+
+            # D. Functional Topic Boosts
+            if ("exam" in q_lower or "grading" in q_lower or "cgpa" in q_lower or "probation" in q_lower) and "exam" in src:
                 rrf_scores[idx] *= 1.5
-            elif "eee" in q_lower and "eee" in src:
-                rrf_scores[idx] *= 1.5
-            elif "me" in q_lower and ("me_" in src or "mechanical" in src):
-                rrf_scores[idx] *= 1.5
-            elif "ipe" in q_lower and "ipe" in src:
-                rrf_scores[idx] *= 1.5
-            elif ("exam" in q_lower or "grading" in q_lower or "cgpa" in q_lower or "probation" in q_lower) and "exam" in src:
-                rrf_scores[idx] *= 1.5
+            elif ("calendar" in q_lower or "ক্যালেন্ডার" in q_lower or "ছুটি" in q_lower or "holiday" in q_lower) and ("calendar" in src or meta.get("doc_type") == "academic_calendar"):
+                rrf_scores[idx] *= 2.0
             elif ("hall" in q_lower or "hostel" in q_lower or "হলে" in q_lower or "প্রভোস্ট" in q_lower) and "hall" in src:
                 rrf_scores[idx] *= 1.5
             elif ("admission" in q_lower or "ভর্তি" in q_lower or "fee" in q_lower or "ফি" in q_lower) and "admission" in src:
@@ -421,16 +761,43 @@ def search_information(question: str, top_k: int = 4) -> str:
     total_chars = 0
     max_chars = 8000
 
+    has_active_chunks = any(
+        (metadata[idx].get("status") == "active" and metadata[idx].get("is_authoritative", 1))
+        for idx, _ in top_matches if idx < len(metadata)
+    )
+
     for idx, score_val in top_matches:
         if idx >= len(documents):
             continue
         text = documents[idx].strip()
         if text in seen_texts:
             continue
+
+        meta = metadata[idx] if idx < len(metadata) else {}
+        doc_status = meta.get("status", "active").lower()
+        doc_is_auth = meta.get("is_authoritative", 1)
+
+        # Skip outdated/superseded chunks when active authoritative versions exist
+        if not is_archive_query and has_active_chunks:
+            if doc_status in ["superseded", "archived"] or not doc_is_auth:
+                continue
+
         seen_texts.add(text)
 
-        source = metadata[idx].get("source", "BAUST Records") if idx < len(metadata) else "BAUST Records"
-        chunk_str = f"--- Information from [{source}] ---\n{text}"
+        source = meta.get("source", "BAUST Records")
+        title = meta.get("title", source)
+        version = meta.get("version", "1.0")
+        status = meta.get("status", "active").upper()
+        authority = meta.get("issuing_authority", "BAUST Authority")
+        year = meta.get("academic_year", "")
+        semester = meta.get("semester", "")
+        session_parts = [p for p in [semester, year] if p]
+        session_str = f" | Session: {' '.join(session_parts)}" if session_parts else ""
+
+        auth_label = "CURRENT & AUTHORITATIVE" if meta.get("is_authoritative", 1) else status
+        chunk_header = f"--- Document: {title} (Source: {source} | Status: {auth_label} | Version: {version} | Issuer: {authority}{session_str}) ---"
+        chunk_str = f"{chunk_header}\n{text}"
+
         if total_chars + len(chunk_str) > max_chars and formatted_chunks:
             break
         formatted_chunks.append(chunk_str)

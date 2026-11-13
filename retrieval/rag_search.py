@@ -985,63 +985,6 @@ FACULTY_REGISTRY = [
 ]
 
 
-def resolve_faculty_member_or_initials(question: str) -> Optional[str]:
-    """
-    Identifies queries asking about a teacher by their routine short form / initials
-    (e.g., 'GR ke', 'routine e GR maane ki', 'who is GR', 'FTZ sir ke', 'AKZ details', 'MI ke')
-    OR by their name (e.g., 'Golam Rifat ke', 'Nakib sir ke', 'Mamun Hossain ke').
-    Returns authoritative profile document with exact full name, designation, department, and courses.
-    """
-    if not question:
-        return None
-
-    clean_q = question.strip()
-    q_low = clean_q.lower()
-    tokens = [w for w in re.findall(r'[a-zA-Zঀ-৿]{2,}', q_low) if w not in ["ke", "who", "is", "sir", "madam", "maam", "teacher", "faculty", "er", "kake", "কে", "কার", "স্যার", "ম্যাডাম", "শিক্ষক", "রুটিন", "routine", "মাঝখানে", "বলতে", "মানে", "maane", "mane"]]
-
-    matched = None
-    for item in FACULTY_REGISTRY:
-        sf_low = item["short_form"].lower()
-        # Direct word boundary match for short form (e.g. gr)
-        if re.search(r'\b' + re.escape(sf_low) + r'\b', q_low):
-            matched = item
-            break
-        # Match aliases
-        for alias in item["aliases"]:
-            if len(alias) >= 3 and alias in q_low:
-                matched = item
-                break
-            elif len(alias) == 2 and re.search(r'\b' + re.escape(alias) + r'\b', q_low):
-                matched = item
-                break
-        if matched:
-            break
-
-    if not matched:
-        return None
-
-    contact_parts = []
-    if matched.get("email"):
-        contact_parts.append(f"ইমেইল: [{matched['email']}](mailto:{matched['email']})")
-    if matched.get("phone"):
-        contact_parts.append(f"ফোন: [{matched['phone']}](tel:{matched['phone']})")
-    contact_str = " | ".join(contact_parts) if contact_parts else "বিভাগীয় অফিসে যোগাযোগ করুন"
-
-    doc = (
-        f"--- Document: Faculty Routine Short Form & Teacher Profile (Authoritative Source: cse_department_and_faculty.txt & class_and_lab_routine.txt) ---\n"
-        f"* **শিক্ষক সংক্ষেপণ (Faculty Short Form):** `{matched['short_form']}`\n"
-        f"* **পূর্ণনাম (Full Name):** {matched['name_bn']} ({matched['name_en']})\n"
-        f"* **পদবি (Designation):** {matched['designation']}\n"
-        f"* **বিভাগ (Department):** {matched['department']}, বাংলাদেশ আর্মি ইউনিভার্সিটি অব সায়েন্স অ্যান্ড টেকনোলজি (BAUST), সৈয়দপুর।\n"
-    )
-    if matched.get("routine_role"):
-        doc += f"* **রুটিনে দায়িত্বপ্রাপ্ত কোর্স (Courses in Routine):** {matched['routine_role']}\n"
-    if matched.get("education"):
-        doc += f"* **শিক্ষাগত যোগ্যতা (Education):** {matched['education']}\n"
-    doc += f"* **যোগাযোগ (Contact):** {contact_str}\n"
-    return doc
-
-
 _ALL_FACULTY_CACHE = None
 _ALL_FACULTY_MTIME = 0.0
 
@@ -1150,17 +1093,15 @@ def find_faculty_or_staff_by_name(query: str) -> Optional[str]:
     if not query:
         return None
     q_low = query.lower()
-    # Filter stopwords
     stopwords = {
         "contact", "phone", "email", "mail", "number", "no", "details", "sir", "teacher", "faculty",
         "ke", "kake", "er", "who", "is", "address", "call", "profile", "jogajog", "department", "dept",
         "কে", "কার", "স্যার", "ম্যাডাম", "শিক্ষক", "যোগাযোগ", "ফোন", "নাম্বার", "ইমেইল", "নাম", "তথ্য"
     }
-    tokens = [w for w in re.findall(r"[a-zA-Zঀ-৿]{3,}", q_low) if w not in stopwords]
+    tokens = [w for w in re.findall(r"[a-zA-Z\u0980-\u09FF]{3,}", q_low) if w not in stopwords]
     if not tokens:
         return None
 
-    # Handle special compound names like "al amin" -> ["al", "amin"]
     if "al amin" in q_low or "al-amin" in q_low or "alamin" in q_low:
         tokens = ["al", "amin"]
 
@@ -1175,7 +1116,6 @@ def find_faculty_or_staff_by_name(query: str) -> Optional[str]:
     if not matched:
         return None
 
-    # Build clean contact string
     raw_phone = matched.get("phone", "").strip()
     raw_email = matched.get("email", "").strip()
 
@@ -1197,6 +1137,170 @@ def find_faculty_or_staff_by_name(query: str) -> Optional[str]:
     )
     if matched.get("qualifications"):
         doc += f"* **শিক্ষাগত যোগ্যতা (Qualifications):** {matched['qualifications']}\n"
+    doc += f"* **যোগাযোগ (Contact):** {contact_str}\n"
+    return doc
+
+
+_ABBREVIATIONS_CACHE = None
+_ABBREVIATIONS_MTIME = 0.0
+
+def get_all_abbreviations_map() -> dict:
+    """
+    Parses all teacher abbreviations/short forms from class_and_lab_routine.txt
+    and joins them with the all-department faculty database for phone & email.
+    """
+    global _ABBREVIATIONS_CACHE, _ABBREVIATIONS_MTIME
+    kb_dir = os.path.join(BASE_DIR, "knowledge_base")
+    routine_file = os.path.join(kb_dir, "class_and_lab_routine.txt")
+    if not os.path.exists(routine_file):
+        return {}
+
+    mtime = os.path.getmtime(routine_file)
+    if _ABBREVIATIONS_CACHE is not None and mtime == _ABBREVIATIONS_MTIME:
+        return _ABBREVIATIONS_CACHE
+
+    faculty_db = get_all_faculty_database()
+    abbreviations = {}
+
+    try:
+        with open(routine_file, "r", encoding="utf-8") as f:
+            lines = [line.strip() for line in f.readlines()]
+
+        # Pattern 1:
+        # Name
+        # AA
+        # Lecturer, IPE
+        for i in range(len(lines) - 2):
+            l1 = lines[i]
+            l2 = lines[i+1]
+            l3 = lines[i+2]
+            if re.match(r"^[A-Z]{2,5}(?:\([a-z]\))?$", l2) and any(d in l3.lower() for d in ["professor", "lecturer", "engineer", "assistant", "officer"]):
+                if l2 not in abbreviations:
+                    abbreviations[l2] = {"name": l1, "designation": l3}
+
+        # Pattern 2:
+        # * **S. M Golam Rifat**
+        #   * **Designation:** Lecturer, CSE
+        #   * **Short Form:** GR
+        for i in range(len(lines) - 3):
+            m_name = re.match(r"^\*\s*\*\*(.*?)\*\*", lines[i])
+            if m_name:
+                nm = m_name.group(1).strip()
+                sf_m = re.search(r"Short Form:\s*([A-Za-z0-9]+)", lines[i+2]) or re.search(r"Short Form:\s*([A-Za-z0-9]+)", lines[i+1])
+                ds_m = re.search(r"Designation:\s*(.*?)$", lines[i+1]) or re.search(r"Designation:\s*(.*?)$", lines[i+2])
+                if sf_m:
+                    sf = sf_m.group(1).upper()
+                    ds = ds_m.group(1).strip() if ds_m else ""
+                    if sf not in abbreviations:
+                        abbreviations[sf] = {"name": nm, "designation": ds}
+
+        # Join with faculty_db to enrich with phone, email, qualifications, department
+        for abbr, info in abbreviations.items():
+            clean_n = [w for w in re.findall(r"[a-zA-Z]{3,}", info["name"].lower()) if w not in ["prof", "dr", "engr", "md", "mst", "mrs", "mr"]]
+            matched_prof = None
+            if clean_n:
+                for f in faculty_db:
+                    f_low = f["name"].lower()
+                    if all(w in f_low for w in clean_n):
+                        matched_prof = f
+                        break
+            if matched_prof:
+                info["phone"] = matched_prof.get("phone", "")
+                info["email"] = matched_prof.get("email", "")
+                info["qualifications"] = matched_prof.get("qualifications", "")
+                info["department"] = matched_prof.get("department", "")
+            else:
+                info["phone"] = ""
+                info["email"] = ""
+                info["qualifications"] = ""
+                m_dept = re.search(r"(?:,\s*|\b)(CSE|EEE|ME|IPE|CE|BBA|English|A&S)\b", info["designation"], re.I)
+                info["department"] = f"Department of {m_dept.group(1).upper()}" if m_dept else "BAUST"
+
+    except Exception:
+        pass
+
+    _ABBREVIATIONS_CACHE = abbreviations
+    _ABBREVIATIONS_MTIME = mtime
+    return _ABBREVIATIONS_CACHE
+
+
+def resolve_faculty_member_or_initials(question: str) -> Optional[str]:
+    """
+    Identifies queries asking about a teacher by their routine short form / initials
+    (e.g., 'AA er contact', 'GR ke', 'routine e GR maane ki', 'who is GR', 'FTZ sir ke', 'AKZ details', 'MI ke')
+    OR by their name (e.g., 'Golam Rifat ke', 'Nakib sir ke', 'Mamun Hossain ke').
+    Returns authoritative profile document with exact full name, designation, department, phone, and email.
+    """
+    if not question:
+        return None
+
+    clean_q = question.strip()
+    q_low = clean_q.lower()
+
+    # 1. Check all routine abbreviations (AA, HM, TT, MMA, AD, INR, MHA, MA, GR, FTZ, etc.)
+    abbr_map = get_all_abbreviations_map()
+    words = re.findall(r'\b[A-Za-z]{2,5}\b', clean_q)
+    for w in words:
+        w_up = w.upper()
+        if w_up in abbr_map:
+            info = abbr_map[w_up]
+            contact_parts = []
+            if info.get("phone"):
+                contact_parts.append(f"ফোন: [{info['phone']}](tel:{info['phone']})")
+            if info.get("email"):
+                contact_parts.append(f"ইমেইল: [{info['email']}](mailto:{info['email']})")
+            contact_str = " | ".join(contact_parts) if contact_parts else "বিভাগীয় অফিসে যোগাযোগ করুন"
+
+            doc = (
+                f"--- Document: Faculty Routine Short Form & Teacher Profile (Authoritative Source: class_and_lab_routine.txt & faculty directory) ---\n"
+                f"* **শিক্ষক সংক্ষেপণ (Faculty Short Form):** `{w_up}`\n"
+                f"* **পূর্ণনাম (Full Name):** {info['name']}\n"
+                f"* **পদবি (Designation):** {info['designation']}\n"
+                f"* **বিভাগ (Department):** {info['department']}, বাংলাদেশ আর্মি ইউনিভার্সিটি অব সায়েন্স অ্যান্ড টেকনোলজি (BAUST), সৈয়দপুর।\n"
+            )
+            if info.get("qualifications"):
+                doc += f"* **শিক্ষাগত যোগ্যতা (Qualifications):** {info['qualifications']}\n"
+            doc += f"* **যোগাযোগ (Contact):** {contact_str}\n"
+            return doc
+
+    # 2. Check FACULTY_REGISTRY
+    matched = None
+    for item in FACULTY_REGISTRY:
+        sf_low = item["short_form"].lower()
+        if re.search(r'\b' + re.escape(sf_low) + r'\b', q_low):
+            matched = item
+            break
+        for alias in item["aliases"]:
+            if len(alias) >= 3 and alias in q_low:
+                matched = item
+                break
+            elif len(alias) == 2 and re.search(r'\b' + re.escape(alias) + r'\b', q_low):
+                matched = item
+                break
+        if matched:
+            break
+
+    if not matched:
+        return None
+
+    contact_parts = []
+    if matched.get("email"):
+        contact_parts.append(f"ইমেইল: [{matched['email']}](mailto:{matched['email']})")
+    if matched.get("phone"):
+        contact_parts.append(f"ফোন: [{matched['phone']}](tel:{matched['phone']})")
+    contact_str = " | ".join(contact_parts) if contact_parts else "বিভাগীয় অফিসে যোগাযোগ করুন"
+
+    doc = (
+        f"--- Document: Faculty Routine Short Form & Teacher Profile (Authoritative Source: cse_department_and_faculty.txt & class_and_lab_routine.txt) ---\n"
+        f"* **শিক্ষক সংক্ষেপণ (Faculty Short Form):** `{matched['short_form']}`\n"
+        f"* **পূর্ণনাম (Full Name):** {matched['name_bn']} ({matched['name_en']})\n"
+        f"* **পদবি (Designation):** {matched['designation']}\n"
+        f"* **বিভাগ (Department):** {matched['department']}, বাংলাদেশ আর্মি ইউনিভার্সিটি অব সায়েন্স অ্যান্ড টেকনোলজি (BAUST), সৈয়দপুর।\n"
+    )
+    if matched.get("routine_role"):
+        doc += f"* **রুটিনে দায়িত্বপ্রাপ্ত কোর্স (Courses in Routine):** {matched['routine_role']}\n"
+    if matched.get("education"):
+        doc += f"* **শিক্ষাগত যোগ্যতা (Education):** {matched['education']}\n"
     doc += f"* **যোগাযোগ (Contact):** {contact_str}\n"
     return doc
 

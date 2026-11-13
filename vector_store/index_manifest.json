@@ -1,7 +1,7 @@
 {
   "model_name": "paraphrase-multilingual-MiniLM-L12-v2",
   "total_documents": 37,
-  "total_chunks": 1086,
+  "total_chunks": 1094,
   "files": {
     "User_Learned_Facts.txt": {
       "hash": "a52e37d47caa063c567b985cbd9e22dd",
@@ -129,9 +129,9 @@
       "chunk_count": 3
     },
     "ipe_department_and_faculty.txt": {
-      "hash": "f12427f5d4b6068aa38d1d221db603ef",
-      "mtime": 1789821905.721542,
-      "chunk_count": 41
+      "hash": "073ed012354262e397a555f5a8ab3277",
+      "mtime": 1794593897.0280252,
+      "chunk_count": 49
     },
     "me_department_and_faculty.txt": {
       "hash": "68d8d971d29c0ac3bb8178a5a7a10e3a",

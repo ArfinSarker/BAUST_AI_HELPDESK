@@ -1042,6 +1042,165 @@ def resolve_faculty_member_or_initials(question: str) -> Optional[str]:
     return doc
 
 
+_ALL_FACULTY_CACHE = None
+_ALL_FACULTY_MTIME = 0.0
+
+def get_all_faculty_database() -> list[dict]:
+    """
+    Parses and caches all faculty members, designations, phones, and emails
+    from all department faculty files (*faculty*.txt, *department*.txt).
+    """
+    global _ALL_FACULTY_CACHE, _ALL_FACULTY_MTIME
+    kb_dir = os.path.join(BASE_DIR, "knowledge_base")
+    faculty_files = glob.glob(os.path.join(kb_dir, "*faculty*.txt")) + glob.glob(os.path.join(kb_dir, "*department*.txt"))
+    if not faculty_files:
+        return []
+
+    max_mtime = max((os.path.getmtime(p) for p in faculty_files if os.path.exists(p)), default=0.0)
+    if _ALL_FACULTY_CACHE is not None and max_mtime == _ALL_FACULTY_MTIME:
+        return _ALL_FACULTY_CACHE
+
+    entries = []
+    dept_label_map = {
+        "CSE": "Computer Science and Engineering (CSE)",
+        "EEE": "Electrical and Electronic Engineering (EEE)",
+        "ME": "Mechanical Engineering (ME)",
+        "IPE": "Industrial and Production Engineering (IPE)",
+        "CE": "Civil Engineering (CE)",
+        "FBS": "Faculty of Business Studies (BBA/MBA)",
+        "ENGLISH": "Department of English",
+        "ICT": "Information and Communication Technology (ICT/ICE)",
+        "ARTS": "Department of Arts and Sciences"
+    }
+
+    for fpath in faculty_files:
+        fname = os.path.basename(fpath)
+        raw_dept = fname.split("_")[0].upper()
+        full_dept = dept_label_map.get(raw_dept, f"Department of {raw_dept}")
+        try:
+            with open(fpath, "r", encoding="utf-8") as f:
+                lines = f.readlines()
+        except Exception:
+            continue
+
+        in_table = False
+        for l in lines:
+            l = l.strip()
+            if l.startswith("|") and "---" not in l:
+                cells = [c.strip().strip("*") for c in l.split("|")[1:-1]]
+                if any(h in cells[0].lower() for h in ["name", "faculty", "teacher"]):
+                    in_table = True
+                    continue
+                if in_table and len(cells) >= 3 and cells[0]:
+                    name = cells[0]
+                    desig = cells[1] if len(cells) > 1 else ""
+                    phone = cells[2] if len(cells) > 2 else ""
+                    email = cells[3] if len(cells) > 3 else ""
+                    qual = cells[4] if len(cells) > 4 else ""
+                    entries.append({
+                        "name": name,
+                        "designation": desig,
+                        "phone": phone,
+                        "email": email,
+                        "qualifications": qual,
+                        "department": full_dept,
+                        "source": fname
+                    })
+            elif not l.startswith("|"):
+                in_table = False
+
+        # Parse ### Header format (like CSE department faculty)
+        current_prof = None
+        for l in lines:
+            l = l.strip()
+            hm = re.match(r"^###\s+(?:Prof\w*\.?|Dr\w*\.?|Engr\w*\.?|Mr\w*\.?|Ms\w*\.?|Mst\w*\.?|Mrs\w*\.?)?\s*(.*)", l, re.I)
+            if hm and not any(k in l.lower() for k in ["introduction", "overview", "specialization", "laboratory", "facilities", "programs", "members"]):
+                raw_name = hm.group(1).strip()
+                if len(raw_name) > 3 and not raw_name.startswith("Level"):
+                    current_prof = {
+                        "name": l.replace("###", "").strip(),
+                        "designation": "",
+                        "phone": "",
+                        "email": "",
+                        "qualifications": "",
+                        "department": full_dept,
+                        "source": fname
+                    }
+                    entries.append(current_prof)
+            elif current_prof and l.startswith("- **"):
+                if "designation" in l.lower():
+                    current_prof["designation"] = re.sub(r"-\s*\*\*Designation\*\*:\s*", "", l, flags=re.I).strip()
+                elif "phone" in l.lower():
+                    current_prof["phone"] = re.sub(r"-\s*\*\*Phone\*\*:\s*", "", l, flags=re.I).strip()
+                elif "email" in l.lower():
+                    current_prof["email"] = re.sub(r"-\s*\*\*Email\*\*:\s*", "", l, flags=re.I).strip()
+                elif "education" in l.lower() or "qualification" in l.lower():
+                    current_prof["qualifications"] = re.sub(r"-\s*\*\*(?:Education\s*/\s*Qualifications|Qualifications)\*\*:\s*", "", l, flags=re.I).strip()
+
+    _ALL_FACULTY_CACHE = entries
+    _ALL_FACULTY_MTIME = max_mtime
+    return _ALL_FACULTY_CACHE
+
+
+def find_faculty_or_staff_by_name(query: str) -> Optional[str]:
+    """
+    Scans all department faculty tables and profile files for a teacher's name.
+    Matches queries like 'Md. Al Amin', 'Al Amin contact', 'alamin phone number', 'Ariful Alam'.
+    """
+    if not query:
+        return None
+    q_low = query.lower()
+    # Filter stopwords
+    stopwords = {
+        "contact", "phone", "email", "mail", "number", "no", "details", "sir", "teacher", "faculty",
+        "ke", "kake", "er", "who", "is", "address", "call", "profile", "jogajog", "department", "dept",
+        "কে", "কার", "স্যার", "ম্যাডাম", "শিক্ষক", "যোগাযোগ", "ফোন", "নাম্বার", "ইমেইল", "নাম", "তথ্য"
+    }
+    tokens = [w for w in re.findall(r"[a-zA-Zঀ-৿]{3,}", q_low) if w not in stopwords]
+    if not tokens:
+        return None
+
+    # Handle special compound names like "al amin" -> ["al", "amin"]
+    if "al amin" in q_low or "al-amin" in q_low or "alamin" in q_low:
+        tokens = ["al", "amin"]
+
+    faculty_list = get_all_faculty_database()
+    matched = None
+    for e in faculty_list:
+        name_low = e["name"].lower()
+        if all(tok in name_low for tok in tokens):
+            matched = e
+            break
+
+    if not matched:
+        return None
+
+    # Build clean contact string
+    raw_phone = matched.get("phone", "").strip()
+    raw_email = matched.get("email", "").strip()
+
+    contact_parts = []
+    if raw_phone and raw_phone != "-":
+        clean_num = re.sub(r"[^\d\+]", "", raw_phone)
+        contact_parts.append(f"ফোন: [{raw_phone}](tel:{clean_num})")
+    if raw_email and raw_email != "-":
+        first_email = raw_email.split(",")[0].strip()
+        contact_parts.append(f"ইমেইল: [{first_email}](mailto:{first_email})")
+
+    contact_str = " | ".join(contact_parts) if contact_parts else "বিভাগীয় অফিসে যোগাযোগ করুন"
+
+    doc = (
+        f"--- Document: Faculty Member Profile & Contact Details (Authoritative Source: {matched['source']}) ---\n"
+        f"* **শিক্ষক/কর্মকর্তার নাম (Full Name):** {matched['name']}\n"
+        f"* **পদবি (Designation):** {matched['designation']}\n"
+        f"* **বিভাগ (Department):** {matched['department']}, বাংলাদেশ আর্মি ইউনিভার্সিটি অব সায়েন্স অ্যান্ড টেকনোলজি (BAUST), সৈয়দপুর।\n"
+    )
+    if matched.get("qualifications"):
+        doc += f"* **শিক্ষাগত যোগ্যতা (Qualifications):** {matched['qualifications']}\n"
+    doc += f"* **যোগাযোগ (Contact):** {contact_str}\n"
+    return doc
+
+
 def search_information(question: str, top_k: int = 4, history: list = None) -> str:
     """
     State-of-the-Art Hybrid Retrieval Engine:
@@ -1058,6 +1217,11 @@ def search_information(question: str, top_k: int = 4, history: list = None) -> s
     faculty_doc = resolve_faculty_member_or_initials(question)
     if faculty_doc:
         return faculty_doc
+
+    # 1.5 Universal Faculty & Staff Search across all departments (e.g. Md. Al Amin, Ariful Alam, etc.)
+    general_faculty_doc = find_faculty_or_staff_by_name(question)
+    if general_faculty_doc:
+        return general_faculty_doc
 
     # 2. Authoritative Resolver for Student Profile, Class Routine and Exam Seatplan
     student_or_routine_doc = resolve_student_or_routine_query(question, history=history)

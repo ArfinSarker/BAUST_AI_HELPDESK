@@ -1,7 +1,7 @@
 {
   "model_name": "paraphrase-multilingual-MiniLM-L12-v2",
   "total_documents": 37,
-  "total_chunks": 1062,
+  "total_chunks": 1086,
   "files": {
     "User_Learned_Facts.txt": {
       "hash": "a52e37d47caa063c567b985cbd9e22dd",
@@ -64,13 +64,13 @@
       "chunk_count": 3
     },
     "class_and_lab_routine.txt": {
-      "hash": "56f6e3aeb4297a277515b055fef57c04",
-      "mtime": 1794570613.133981,
-      "chunk_count": 8
+      "hash": "55c5ac7b5acbaf28e821c26026e1e954",
+      "mtime": 1794591577.1219907,
+      "chunk_count": 32
     },
     "cse_department_and_faculty.txt": {
-      "hash": "721d0f3800d0f59f17bf12773c78e3ac",
-      "mtime": 1793555994.2657714,
+      "hash": "fb7f1cc4978690969ccc4df74c2de99c",
+      "mtime": 1794583503.4129882,
       "chunk_count": 55
     },
     "cse_department_events_2026.txt": {

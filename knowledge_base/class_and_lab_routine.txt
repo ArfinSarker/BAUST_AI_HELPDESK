@@ -82,3 +82,1355 @@
 ## Adjunct Faculty Members
 
 * *None currently listed*
+
+---
+
+## Additional Information & Updates
+
+--- Page 1 ---
+Bangladesh Army University of Science and Technology (BAUST)
+Department of Mechanical Engineering (ME)
+Course Co-ordinator
+Head, Dept. of ME
+
+
+Course
+Code
+Course Title
+Type of
+Course
+Contact
+Hours
+Credit
+Hours
+ME 1101
+Fundamentals of Mechanical
+Engineering
+Theory
+3.00
+3.00
+EEE 1159
+Basic Electrical Engineering
+Theory
+3.00
+3.00
+MATH 1101
+Mathematics-I
+Theory
+3.00
+3.00
+PHY 1105
+Physics-I
+Theory
+3.00
+3.00
+HUM 1115
+English
+Theory
+3.00
+3.00
+Sub Total =
+15.00
+15.00
+ME 1108
+Foundry, Welding and Machine
+Shop Practice
+Sessional
+3.00
+1.50
+EEE 1160
+Basic Electrical Engineering
+Sessional
+Sessional
+1.50
+0.75
+HUM 1116
+Technical Report Writing &
+Presentation
+Sessional
+1.50
+0.75
+Sub Total =
+6.00
+3.00
+Total =
+21.00
+18.00
+Teacher’s Name
+Abbreviations
+Designation
+Md. Mizanur Rahman
+MMR
+Associate Professor, A&S
+Md. Waheduzzaman Basunia Nouman
+WBN
+Assistant Professor, ME
+Azra Sadia Sultana
+ASS
+Assistant Professor, EEE
+Biplobi Guha Tuktuky
+BGT
+Lecturer, English
+Mahin Anjum
+MA
+Lecturer, EEE
+Sabnur Akter
+SA
+Lecturer, A&S
+Md. Masud Parves
+MMP
+Lecturer, ME
+Monjurul Alam
+MA
+Lecturer, ME
+Names are not arranged according to seniority
+Course Coordinator: Md. Masud Parves, Lecturer, ME
+Contact: 01833-810353
+
+
+Class Routine, Level-1, Term-I (Batch-23rd), (Syllabus of 2021), Summer 2026 (Before Mid)
+ROOM NO. - 108
+Pd
+1
+2
+3
+LEISURE (10:50-11:30)
+4
+5
+6
+7
+8
+9
+Day/ Time
+8:00-8:55
+9:00-9:55
+10:00-10:55
+11:30-12:25
+12:30-1:25
+1:30-2:25
+2:30-3:25
+3:30-4:25
+4:20-5:05
+Sun
+PHY 1105 (SA)
+HUM 1115 (BGT)
+EEE 1159 (SH)
+HUM 1116 (BGT) (R 037)
+
+
+
+Mon
+MATH 1101
+(MMR)
+HUM 1115 (BGT)
+ME 1101 (WBN)
+EEE 1160 (MA) (R-09)
+
+
+
+Tue
+
+
+
+ME 1101 (WBN)
+MATH 1101
+(MMR)
+EEE 1159 (SH)
+
+
+
+Wed
+
+
+
+PHY 1105 (SA)
+EEE 1159 (SH) ME 1101 (WBN)
+
+
+
+Thu
+HUM 1115 (BGT) MATH 1101 (MMR)
+PHY 1105 (SA)
+ME 1108 (MMP) Sec-B (R 034/Foundry)
+ME 1108 (MA) Sec-A (R 034/Foundry)
+
+--- Page 2 ---
+Bangladesh Army University of Science and Technology (BAUST)
+Department of Mechanical Engineering (ME)
+Course Co-ordinator
+Head, Dept. of ME
+
+
+Course Code
+Course Title
+Type of
+Course
+Contact
+Hours
+Credit
+Hours
+CSE 1271
+Computer Programming
+Theory
+3.00
+3.00
+CHEM 1203
+Chemistry
+Theory
+4.00
+4.00
+MATH 1201
+Mathematics-II
+Theory
+3.00
+3.00
+PHY 1205
+Physics-II
+Theory
+3.00
+3.00
+HUM 1215
+Bengali Language and Literature
+Theory
+2.00
+2.00
+Sub Total=
+15.00
+15.00
+CSE 1272
+Computer Programming Sessional
+Sessional
+3.00
+1.50
+CHEM 1204
+Chemistry Sessional
+Sessional
+3.00
+1.50
+PHY 1206
+Physics Sessional
+Sessional
+3.00
+1.50
+Sub Total =
+9.00
+4.50
+Total =
+24.00
+19.50
+Teachers Name
+Abbreviations
+Designation
+Md. Mizanur Rahman
+MMR
+Associate Professor, A&S
+Md. Nahid Parvez Roni
+NPR
+Lecturer, A&S
+Sunayana Ghosh
+SG
+Lecturer, CSE
+Sabnur Akter
+SA
+Lecturer, A&S
+Tamanna-E-Ferdous
+TEF
+Lecturer (Adjunct), A&S
+Md. Abu Saleh
+AS
+Lecturer, A&S
+Md. Ridwanul Hasan
+MRH
+Lecturer, A&S
+Names are not arranged according to seniority
+Course Coordinator: Eftekher Ahmed Reyad, Lecturer, ME
+Contact: 01746-309525
+
+Class Routine, Level-1, Term-II (Batch-22nd), (Syllabus of 2021), Summer 2026 (Before Mid)
+ROOM NO.- 102
+Pd
+1
+2
+3
+LEISURE (10:50-11:30)
+4
+5
+6
+7
+8
+9
+Day/ Time
+8:00-8:55
+9:00-9:55
+10:00-10:55
+11:30-12:25
+12:30-1:25
+1:30-2:25
+2:30-3:25
+3:30-4:25
+4:20-5:05
+Sun
+
+
+CHEM 1203 (NPR)
+(R 103)
+CSE 1272 (SG) (R 110)
+
+
+
+Mon
+CHEM 1203 (NPR)
+(R 40)
+MATH 1201 (MMR)
+(R 40)
+CSE 1271 (SG)
+(R 40)
+PHY 1205 (SA)
+(R 40)
+HUM 1215
+(TEF) (R 40)
+
+
+
+
+Tue
+CSE 1271 (SG)
+(R 40)
+HUM 1215 (TEF)
+(R 40)
+PHY 1205 (SA)
+(R 40)
+PHY 1206 (MRH) (Physics Lab)
+
+
+
+Wed
+MATH 1201 (MMR)
+CSE 1271 (SG)
+CHEM 1203 (NPR)
+CHEM 1204 (AS) (Chemistry Lab)
+
+
+
+Thu
+
+
+
+CHEM 1203 (NPR) MATH 1201
+(MMR)
+PHY 1205 (SA)
+
+--- Page 3 ---
+Bangladesh Army University of Science and Technology (BAUST)
+Department of Mechanical Engineering (ME)
+Course Co-ordinator
+Head, Dept. of ME
+
+
+Course Code
+Course Title
+Type of
+Course
+Contact
+Hours
+Credit
+Hours
+ME 2101
+Engineering Thermodynamics
+Theory
+3.00
+3.00
+ME 2103
+Engineering Mechanics-I
+Theory
+4.00
+4.00
+ME 2111
+Numerical Analysis
+Theory
+3.00
+3.00
+HUM 2117
+Economics
+Theory
+2.00
+2.00
+MATH 2101
+Mathematics-III
+Theory
+3.00
+3.00
+Sub Total =
+15.00
+15.00
+ME 2100
+Mechanical Engineering Drawing
+Sessional
+3.00
+1.50
+ME 2102
+Engineering Thermodynamics
+Sessional
+Sessional
+3.00
+1.50
+ME 2104
+Engineering Mechanics -I Sessional
+Sessional
+3.00
+1.50
+ME 2112
+Numerical Analysis Sessional
+Sessional
+3.00
+1.50
+Sub Total =
+12.00
+6.00
+Total =
+27.00
+21.00
+Teachers Name
+Abbreviations
+Designation
+Dr. Md. Syful Islam
+MSI
+Professor, ME
+Dr. A M N Mijanur Rahman
+MMR
+Professor, ME
+Sahanaz Parvin
+SP
+Assistant Professor, A&S
+Md. Abdullah Al Mohotadi
+AAM
+Lecturer, ME
+Md. Tausifuz Zaman
+TZ
+Lecturer, ME
+Iqbal Nafis Razee
+INR
+Lecturer, ME
+Eftekher Ahmed Reyad
+EAR
+Lecturer, ME
+Md. Masud Parves
+MMP
+Lecturer, ME
+Monjurul Alam
+MA
+Lecturer, ME
+Mridul Kanti Das
+MKD
+Lecturer, AIS
+Names are not arranged according to seniority
+Course Coordinator: Md Abdullah Al Mohotadi, Lecturer, ME
+Contact: 01774-658810
+
+
+Class Routine, Level-2, Term-I (Batch-21st), (Syllabus of 2021), Summer 2026 (Before Mid)
+ROOM NO.- 108
+Pd
+1
+2
+3
+LEISURE (10:50-11:30)
+4
+5
+6
+7
+8
+9
+Day/ Time
+8:00-8:55
+9:00-9:55
+10:00-10:55
+11:30-12:25
+12:30-1:25
+1:30-2:25
+2:30-3:25 3:30-4:25 4:20-5:05
+Sun
+ME 2112 (R 110) Sec-B (TZ, MA)/
+ME 2100 (R 40) Sec-A (AAM, EAR)
+ME 2111 (AAM)
+ME 2101 (MMR) HUM 2117 (MKD)
+
+
+
+Mon
+
+
+
+ME 2111 (AAM)
+ME 2103 (MMP)
+MATH 2101 (SP)
+
+
+
+Tue
+ME 2101 (MMR) MATH 2101 (SP)
+ME 2103 (MMP)
+ME 2104 (037) Sec-A (MSI)/
+ME 2102 (R 36) Sec-B (INR)
+
+
+
+Wed
+ME 2103 (MMP) MATH 2101 (SP)
+ME 2101 (MMR)
+ME 2104 (037) Sec-B (MSI)/
+ME 2102 (R 36) Sec-A (INR)
+
+
+
+Thu
+ME 2112 (R 110) Sec-A (TZ, MMP)/
+ME 2100 (R 40) Sec-B (AAM, EAR)
+HUM 2117 (MKD)
+ME 2111 (AAM)
+ME 2103 (MMP)
+
+--- Page 4 ---
+Bangladesh Army University of Science and Technology (BAUST)
+Department of Mechanical Engineering (ME)
+Course Co-ordinator
+Head, Dept. of ME
+
+
+Course Code
+Course Title
+Type of
+Course
+Contact
+Hours
+Credit
+Hours
+ME 2207
+Engineering Metallurgy
+Theory
+3.00
+3.00
+ME 2209
+Mechanics of Solids
+Theory
+3.00
+3.00
+EEE 2259
+Electrical Machines and Electronics
+Technology
+Theory
+4.00
+4.00
+MATH 2201
+Mathematics -IV
+Theory
+3.00
+3.00
+HUM 2225
+History of the Emergence of
+Bangladesh
+Theory
+2.00
+2.00
+HUM 2219
+Accounting
+Theory
+2.00
+2.00
+Sub Total =
+17.00
+17.00
+ME 2208
+Engineering Metallurgy Sessional
+Sessional
+1.50
+0.75
+ME 2210
+Mechanics of Solids Sessional
+Sessional
+1.50
+0.75
+EEE 2260
+Electrical Machines and Electronics
+Technology
+Sessional
+3.00
+1.50
+Sub Total =
+6.00
+3.00
+Total =
+23.00
+20.00
+Teachers Name
+Abbreviations
+Designation
+Md. Mahmudul Adil
+MMA
+Assistant Professor, ME
+Kabid Ahmed Akib
+KAA
+Lecturer, ME
+Jayed Bin Jabbar Sajid
+JBJS
+Lecturer, EEE
+Rezaul Karim
+RK
+Lecturer, AIS
+Monjurul Alam
+MA
+Lecturer, ME
+Md. Nahid Hasan Shoaib
+NHS
+Lecturer, EEE
+Zannatul Safa
+ZS
+Lecturer A&S
+Jobayer Bhuiyan
+JB
+Lecturer A&S
+Names are not arranged according to seniority
+Course Coordinator: Md. Tausifuz Zaman, Lecturer, ME
+Contact: 01758-774856
+
+Class Routine, Level-2, Term-II (Batch-20th), (Syllabus of 2021), Summer 2026 (Before Mid)
+ROOM NO.- 32A
+Pd
+1
+2
+3
+LEISURE (10:50-11:30)
+4
+5
+6
+7
+8
+9
+Day/ Time
+8:00-8:55
+9:00-9:55
+10:00-10:55
+11:30-12:25
+12:30-1:25
+1:30-2:25
+2:30-3:25
+3:30-4:25
+4:20-5:05
+Sun
+
+
+
+EEE 2259 (JBJS)
+(R 102)
+ME 2209
+(MMA) (R 102)
+MATH 2201
+(JB) (R 102)
+
+
+
+Mon
+EEE 2259
+(JBJS)
+HUM 2219 (RK)
+ME 2207 (KAA)
+ME 2210 (TZ) (R 37)
+
+
+
+Tue
+ME 2207 (KAA)
+(R 103)
+MATH 2201
+(JB) (R 103)
+EEE 2259
+(JBJS) (R 103)
+ME 2209 (MMA)
+HUM 2219 (RK)
+
+
+
+
+Wed
+EEE 2260 (NHS) (R 202)
+ME 2207 (KAA)
+
+
+HUM 2225
+(ZS) Seminar Hall
+
+Thu
+ME 2208 (R 39) (MA)
+ME 2209 (MMA)
+EEE 2259
+(JBJS)
+MATH 2201
+(JB)
+
+--- Page 5 ---
+Bangladesh Army University of Science and Technology (BAUST)
+Department of Mechanical Engineering (ME)
+Course Co-ordinator
+Head, Dept. of ME
+
+
+Course Code
+Course Title
+Type of
+Course
+Contact
+Hours
+Credit
+Hours
+ME 3101
+Heat Transfer –I
+Theory
+3.00
+3.00
+ME 3103
+Engineering Mechanics -II
+Theory
+3.00
+3.00
+ME 3105
+Fluid Mechanics –I
+Theory
+3.00
+3.00
+ME 3113
+Machine Design –I
+Theory
+3.00
+3.00
+HUM 3111
+Sociology
+Theory
+2.00
+2.00
+HUM 3113
+Engineering Ethics
+Theory
+2.00
+2.00
+Sub Total=
+16.00
+16.00
+ME 3104
+Engineering Mechanics -II
+Sessional
+Sessional
+3.00
+1.50
+ME 3106
+Fluid Mechanics -I Sessional
+Sessional
+1.50
+0.75
+ME 3114
+Machine Design-I Sessional
+Sessional
+1.50
+0.75
+ME 3116
+Capstone Project
+Sessional
+3.00
+1.50
+Sub Total =
+09.00
+4.50
+Total =
+25.00
+20.50
+Teachers Name
+Abbreviations
+Designation
+Md. Mahbub Rahman
+MMR(s)
+Associate. Professor, A&S
+Md. Waheduzzaman Basunia
+Nouman
+WBN
+Assistant Professor, ME
+Md Abdullah Al Mohotadi
+AAM
+Lecturer, ME
+Md. Tausifuz Zaman
+TZ
+Lecturer, ME
+Iqbal Nafis Razee
+INR
+Lecturer, ME
+Md Mozammal Hossain Ashik
+MHA
+Lecturer, ME
+Umme Fahmida
+UF
+Lecturer, A&S
+Names are not arranged according to seniority
+Course Coordinator: Tasfia Tasnim, Assistant Professor, ME
+Contact: 01759-805908
+Class Routine, Level-3, Term-I (Batch-19th), (Syllabus of 2021), Summer 2026 (Before Mid)
+ROOM NO.- 102
+Pd
+1
+2
+3
+LEISURE (10:50-11:30)
+4
+5
+6
+7
+8
+9
+Day/ Time
+8:00-8:55
+9:00-9:55
+10:00-10:55
+11:30-12:25
+12:30-1:25
+1:30-2:25
+2:30-3:25
+3:30-4:25
+4:20-5:05
+Sun
+HUM 3111 (UF)
+(R 103)
+ME 3101 (MHA)
+(R 103)
+
+ME 3114 (INR) (R 37)
+
+
+
+Mon
+ME 3113 (TZ)
+ME 3101 (MHA)
+ME 3103 (TZ)
+
+ME 3105 (AAM)
+HUM 3113
+MMR(s)
+
+
+
+Tue
+ME 3116 (R 37)
+ME 3105 (AAM)
+(R 40)
+ME 3113 (TZ)
+(R 40)
+ME 3103 (TZ)
+(R 40)
+
+
+
+Wed
+ME 3104 (R 37) (WBN)
+ME 3105 (AAM)
+ME 3113 (TZ)
+ME 3103 (TZ)
+
+
+
+Thu
+HUM 3111 (UF) HUM 3113 MMR(s) ME 3101 (MHA)
+ME 3106 (AAM) (R 32B)
+
+--- Page 6 ---
+Bangladesh Army University of Science and Technology (BAUST)
+Department of Mechanical Engineering (ME)
+Course Co-ordinator
+Head, Dept. of ME
+
+
+Course
+Code
+Course Title
+Type of
+Course
+Contact
+Hours
+Credit
+Hours
+ME 3201
+Heat Transfer –II
+Theory
+3.00
+3.00
+ME 3205
+Fluid Mechanics –II
+Theory
+3.00
+3.00
+ME 3207
+Measurement, Instrumentation and
+Quality Control
+Theory
+3.00
+3.00
+ME 3213
+Machine Design – II
+Theory
+3.00
+3.00
+IPE 3277
+Production Process
+Theory
+3.00
+3.00
+Sub Total =
+15.00
+15.00
+ME 3202
+Heat Transfer Sessional
+Sessional
+3.00
+1.50
+ME 3206
+Fluid Mechanics- II Sessional
+Sessional
+1.50
+0.75
+ME 3208
+Measurement, Instrumentation and
+Quality Control Sessional
+Sessional
+1.50
+0.75
+ME 3214
+Machine Design -II Sessional
+Sessional
+1.50
+0.75
+IPE 3278
+Production Process Sessional
+Sessional
+1.50
+0.75
+Sub Total =
+9.00
+4.50
+Total =
+24.00
+19.50
+Teachers Name
+Abbreviations
+Designation
+Tasfia Tasnim
+TT
+Assistant Professor, ME
+Md. Mahmudul Adil
+MMA
+Assistant Professor, ME
+Hrittik Mural
+HM
+Lecturer, IPE
+Md. Al Amin
+AA
+Lecturer, IPE
+Md. Abu Daud
+AD
+Lecturer, ME
+Iqbal Nafis Razee
+INR
+Lecturer, ME
+Md Mozammal Hossain Ashik
+MHA
+Lecturer, ME
+Monjurul Alam
+MA
+Lecturer, ME
+Names are not arranged according to seniority
+Course Coordinator: Iqbal Nafis Razee, Lecturer, ME
+Contact: 01300-560747
+
+Class Routine, Level-3, Term-II (Batch-18th) (Syllabus of 2021) Summer 2026 (Before Mid)
+ROOM NO.- 32A
+Pd
+1
+2
+3
+LEISURE (10:50-11:30)
+4
+5
+6
+7
+8
+9
+Day/ Time
+8:00-8:55
+9:00-9:55
+10:00-10:55
+11:30-12:25
+12:30-1:25
+1:30-2:25
+2:30-3:25 3:30-4:25
+4:20-5:05
+Sun
+ME 3205 (INR)
+ME 3213 (MMA)
+ME 3201 (AD)
+IPE 3278 (AA) (R 34)
+
+
+
+Mon
+ME 3202 (TT) (R 36)
+ME 3201 (AD)
+ME 3207 (MA) IPE 3277 (HM)
+
+
+
+Tue
+ME 3207 (MA)
+ME 3205 (INR)
+IPE 3277 (HM)
+ME 3206 (MHA) (R 32B)
+
+
+
+Wed
+ME 3207 (MA)
+IPE 3277 (HM)
+ME 3213 (MMA)
+ME 3208 (MHA) (R 107)/ ME 3214 (MMA) (R 107)
+
+
+
+Thu
+ME 3205 (INR)
+ME 3213 (MMA)
+ME 3201 (AD)
+
+--- Page 7 ---
+Bangladesh Army University of Science and Technology (BAUST)
+Department of Mechanical Engineering (ME)
+Course Co-ordinator
+Head, Dept. of ME
+
+
+Course Code
+Course Title
+Type of
+Course
+Contact
+Hours
+Credit
+Hours
+ME 4101
+Internal Combustion Engines
+Theory
+3.00
+3.00
+ME 4105
+Fluid Machinery
+Theory
+3.00
+3.00
+ME 4117
+Refrigeration and Air Conditioning
+Theory
+3.00
+3.00
+IPE 4115
+Industrial Management
+Theory
+3.00
+3.00
+ME 4133
+Composite Materials
+Theory
+3.00
+3.00
+ME 4135
+Railway Engineering
+Theory
+3.00
+3.00
+Sub Total
+18.00
+18.00
+ME 4102
+Internal Combustion Engines Sessional
+Sessional
+3.00
+1.50
+ME 4106
+Fluid Machinery Sessional
+Sessional
+1.50
+0.75
+ME 4170
+Industrial Training
+Sessional
+2.00
+1.00
+ME 4000
+Project and Thesis-I
+Sessional
+6.00
+3.00
+Sub Total
+12.50
+6.25
+Total =
+30.50
+24.25
+Teachers Name
+Abbreviations
+Designation
+Dr. Md. Syful Islam
+MSI
+Professor, ME
+Tasfia Tasnim
+TT
+Assistant Professor, ME
+Md. Abu Daud
+AD
+Lecturer, ME
+Hrittik Mural
+HM
+Lecturer, IPE
+Eftekher Ahmed Reyad
+EAR
+Lecturer, ME
+Md. Masud Parves
+MMP
+Lecturer, ME
+Monjur Alam
+MA
+Lecturer, ME
+Md. Zahid Hasan
+MHZ
+Adjunct Faculty, ME
+Names are not arranged according to seniority
+Course Coordinator: Kabid Ahmed Akib, Lecturer, ME
+Contact: 01937-711667
+
+Class Routine, Level-4, Term-I (Batch-17th) (Syllabus of 2021) Summer 2026 (Before Mid)
+ROOM NO.- 103
+Pd
+1
+2
+3
+LEISURE (10:50-11:30)
+4
+5
+6
+7
+8
+9
+Day/ Time
+8:00-8:55
+9:00-9:55
+10:00-10:55
+11:30-12:25
+12:30-1:25
+1:30-2:25
+2:30-3:25
+3:30-4:25
+4:20-5:05
+Sun
+
+
+ME 4133 (TT)
+(R 32B)
+IPE 4115 (HM)
+ME 4105 (MMP)
+ME 4117 (MA)
+
+
+
+Mon
+ME 4106 (EAR) (R 32B)
+IPE 4115 (HM)
+ME 4101 (MSI)
+ME 4135 (AD)/(MZH)
+
+
+
+Tue
+
+
+ME 4101
+(MSI) (R 102)
+ME 4117 (MA)
+ME 4105 (MMP)
+ME 4135 (AD)/(MZH)
+ME 4133 (TT) (R 32A)
+
+
+
+Wed
+ME 4102 (AD) (R 036)
+ME 4117 (MA)
+ME 4133 (TT)
+ME 4105 (MMP)
+
+
+
+Thu
+IPE 4115 (HM)
+ME 4135
+(AD)/(MZH)
+ME 4101
+(MSI)
+ME 4000 (R 40)
+
+--- Page 8 ---
+Bangladesh Army University of Science and Technology (BAUST)
+Department of Mechanical Engineering (ME)
+Course Co-ordinator
+Head, Dept. of ME
+
+
+Course Code
+Course Title
+Type of
+Course
+Contact
+Hours
+Credit
+Hours
+ME 4217
+Power Plant Engineering
+Theory
+3.0
+3.00
+ME 4219
+Automobile Engineering
+Theory
+3.0
+3.00
+ME 4233
+Mechatronics
+Theory
+3.0
+3.00
+IPE 4207
+Tool Engineering & Machine Tools
+Theory
+3.0
+3.00
+ME 4237
+Aerodynamics
+Theory
+3.0
+3.00
+Sub Total
+15.00
+15.00
+ME 4218
+Steam Laboratories Sessional
+Sessional
+3.0
+1.50
+IPE 4208
+Tool Engineering & Machine Tools
+Sessional
+Sessional
+1.5
+0.75
+ME 4000
+Project and Thesis-II
+Sessional
+6.0
+3.00
+Sub Total =
+10.50
+5.25
+Total =
+25.50
+20.25
+Teachers Name
+Abbreviations
+Designation
+Dr. A.K.M. Nurul Amin
+NA
+Professor, IPE
+Dr. A M N Mijanur Rahman
+MMR
+Professor, ME
+Md. Abu Daud
+AD
+Lecturer, ME
+Md. Mahabub-A-Khoda
+MAK
+Lecturer, IPE
+Eftekher Ahmed Reyad
+EAR
+Lecturer, ME
+Md Mozammal Hossain Ashik
+MHA
+Lecturer, ME
+Names are not arranged according to seniority
+Course Coordinator: Md. Abu Daud, Lecturer, ME
+Contact: 01761683344
+
+Level-4, Term-II (Batch-16th) (Syllabus of 2021) Summer 2026 (Before Mid)
+ROOM NO.- 103
+Pd
+1
+2
+3
+LEISURE (10:50-11:30)
+4
+5
+6
+7
+8
+9
+Day/ Time
+8:00-8:55
+9:00-9:55
+10:00-10:55
+11:30-12:25
+12:30-1:25
+1:30-2:25
+2:30-3:25 3:30-4:25 4:20-5:05
+Sun
+ME 4237 (MHA)
+(R 102)
+ME 4217 (MMR)
+(R102)
+IPE 4207 (NA) (R 102)
+ME 4218 (AD) (R 36)
+ME 4218 (AD) (R 36) (2nd
+Syll)
+Mon
+ME 4217 (MMR)
+IPE 4207 (NA)
+ME 4219 (AD)
+
+
+
+
+
+
+Tue
+ME 4000 (R 36)
+ME 4219
+(AD) (R 102)
+ME 4217
+(MMR) (R 102)
+ME 4233 (EAR)
+(R 102)
+
+
+
+Wed
+ME 4237 (MHA)
+IPE 4207 (NA)
+ME 4233 (EAR)
+IPE 4208 (MAK) (R 34)
+
+
+
+Thu
+
+
+
+ME 4233 (EAR)
+ME 4237 (MHA)
+ME 4219 (AD)

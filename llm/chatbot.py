@@ -268,69 +268,76 @@ def is_translation_request(text: str) -> tuple[bool, str]:
 
 def rewrite_query_with_history(question: str, history: list = None) -> str:
     """
-    If conversation history exists and question genuinely uses pronouns (e.g. 'tar phone koto', 'oitar fee koto'),
-    blend previous context entity for RAG search without paying the latency penalty of an extra serial LLM call.
+    Smart Contextual Query Expansion for follow-ups (e.g. 'contact', 'phone number', 'amar seat kothay').
+    Correctly extracts the teacher, person, course, or student roll from the preceding turns
+    without latency penalty.
     """
     if not history or not isinstance(history, list) or len(history) < 2:
         return question
 
-    # If it's a translation/conversion command, don't mangle the query
     is_trans, _ = is_translation_request(question)
     if is_trans:
         return question
 
     q_lower = question.strip().lower()
-    q_tokens = set(q_lower.split())
+    q_tokens = set(re.findall(r'[a-zA-Zঀ-৿]+', q_lower))
 
-    # Correction indicators where user is correcting previous turn
-    correction_signals = {"bolini", "bolchi", "bolechi", "bollam", "not", "instead", "meant", "mean", "বলিনি", "বলেছি", "বলছি", "নয়", "না"}
-    is_correction = any(s in q_tokens for s in correction_signals) or any(s in q_lower for s in ["bolini", "bolchi", "bolechi", "বলিনি", "বলেছি", "বলছি"])
-
-    # Standalone topic keywords that indicate a completely new question
-    standalone_topics = {
-        "dept", "department", "departments", "koyta", "koyti", "fee", "fees", "cost", 
-        "admission", "eligibility", "hostel", "hall", "grading", "grade", "cgpa", 
-        "vc", "registrar", "cse", "eee", "me", "ce", "ipe", "bba", "english", 
-        "location", "address", "helpline", "phone", "email", "scholarship", "waiver",
-        "বিভাগ", "অনুষদ", "ভর্তি", "ফি", "খরচ", "হল", "হোস্টেল", "উপাচার্য", "ভিসি"
+    contact_followup_terms = {
+        "contact", "phone", "email", "mail", "number", "no", "call", "hotline", "jogajog", "thaken",
+        "যোগাযোগ", "ফোন", "নাম্বার", "নম্বর", "ইমেইল", "মেইল", "কল", "মোবাইল"
     }
-    
-    # If the user is asking an independent topic question (and not correcting previous turn), keep it clean
-    if not is_correction and len(q_tokens.intersection(standalone_topics)) > 0 and not any(p in q_tokens for p in ["tar", "tader", "ota", "oita", "তার", "তাদের", "সেটার"]):
-        return question
-
-    dependent_pronouns = {"tar", "tader", "ota", "oita", "he", "she", "his", "her", "their", "it", "its"}
-    followup_tokens = {
+    general_followup_terms = {
         "time", "slot", "room", "seat", "somoy", "shomoy", "kobe", "kokhon", "tarikh",
-        "date", "when", "building", "kothay", "কবে", "কখন", "সময়", "সময়", "রুম", "সিট", "স্লট", "কোথায়"
+        "date", "when", "building", "kothay", "details", "routine", "class",
+        "কবে", "কখন", "সময়", "সময়", "রুম", "সিট", "স্লট", "কোথায়", "রুটিন", "ক্লাস", "বিস্তারিত"
     }
-    is_short_followup = len(q_tokens) <= 4 and (bool(q_tokens & followup_tokens) or any(t in q_lower for t in ["সময়", "সময়", "রুম", "সিট", "স্লট", "কখন", "কবে", "কোথায়"]))
 
-    has_dependent_pronoun = is_correction or is_short_followup or len(q_tokens.intersection(dependent_pronouns)) > 0 or any(p in q_lower for p in ["তার", "তাদের", "ওটা", "সেটার", "উনার"])
+    is_contact_followup = len(q_tokens) <= 3 and bool(q_tokens & contact_followup_terms)
+    is_short_followup = is_contact_followup or (len(q_tokens) <= 4 and bool(q_tokens & general_followup_terms))
+    has_pronoun = any(p in q_tokens for p in ["tar", "tader", "ota", "oita", "unro", "unar", "his", "her", "their", "it", "its"]) or any(p in q_lower for p in ["তার", "তাদের", "উনার", "সেটার"])
 
-    if not has_dependent_pronoun:
+    if not (is_short_followup or has_pronoun):
         return question
 
-    last_user_msg = ""
+    # 1. Search for last teacher / person name in recent history
+    last_person = ""
+    for msg in reversed(history[-4:]):
+        if isinstance(msg, dict):
+            content = str(msg.get("content", ""))
+            # Check for teacher/officer label in assistant response
+            pm = re.search(r'(?:শিক্ষক/কর্মকর্তার নাম|শিক্ষকের নাম|পূর্ণনাম|পূর্ণ নাম|Full Name|Name)[\s\*\:]+([A-Za-z\s\.\-]{3,35})', content, re.I)
+            if pm:
+                cand = pm.group(1).strip()
+                if not any(k in cand.lower() for k in ["baust", "student", "roll", "cse", "ipe", "department", "academic"]):
+                    last_person = cand
+                    break
+
+    # 2. Search for student roll if seat/routine query
     last_roll = ""
     for msg in reversed(history[-4:]):
         if isinstance(msg, dict):
-            c = str(msg.get("content", "")).strip()
-            if not last_roll:
-                rm = re.search(r'\b(08\d{6,14})\b', c)
-                if rm:
-                    last_roll = rm.group(1)
-            if msg.get("role") in ["user", "student"] and not last_user_msg:
-                last_user_msg = c
+            rm = re.search(r'\b(08\d{6,14})\b', str(msg.get("content", "")))
+            if rm:
+                last_roll = rm.group(1)
+                break
 
-    if last_roll and is_short_followup:
+    if last_person and is_contact_followup:
+        return f"{last_person} contact phone email"
+
+    if last_person and is_short_followup and not last_roll:
+        return f"{last_person} {question}"
+
+    if last_roll and (is_short_followup or has_pronoun) and not last_person:
         return f"{last_roll} {question}"
 
-    if not last_user_msg:
-        return question
+    # Fallback to last user query if nothing specific extracted
+    for msg in reversed(history[-4:]):
+        if isinstance(msg, dict) and msg.get("role") in ["user", "student"]:
+            u_text = str(msg.get("content", "")).strip()
+            if u_text and len(u_text) > 3:
+                return f"{u_text} {question}"
 
-    # Fast heuristic query blending: achieves maximum RAG retrieval recall with 0ms extra latency
-    return f"{last_user_msg} {question}"
+    return question
 
 
 def call_gemini_generate(prompt: str, temperature: float = 0.2, preferred_model: str = None, response_mime_type: str = None) -> str:
@@ -1166,6 +1173,17 @@ def synthesize_smart_answer(context: str, question: str, history: list = None) -
             "✉️ **Email:** [admission@baust.edu.bd](mailto:admission@baust.edu.bd)\n"
             "🌐 **Website:** [www.baust.edu.bd](https://www.baust.edu.bd)"
         )
+
+    # 15.2 Universal Faculty Profile & Contact Details Synthesizer Fallback
+    if "Faculty Member Profile & Contact Details" in context:
+        lines = []
+        for line in context.splitlines():
+            l_str = line.strip()
+            if l_str.startswith("*"):
+                lines.append(l_str)
+        if lines:
+            res_str = "\n".join(lines)
+            return res_str.replace("সাইদপুর", "সৈয়দপুর").replace("সায়েদপুর", "সৈয়দপুর")
 
     # 15.3 Faculty Routine Short Form Synthesizer Fallback
     if "Faculty Routine Short Form & Teacher Profile" in context:

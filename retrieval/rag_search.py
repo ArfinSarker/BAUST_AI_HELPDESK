@@ -5,6 +5,7 @@ import math
 import pickle
 import threading
 from collections import Counter
+from typing import Optional, List, Dict, Tuple
 import glob
 import numpy as np
 
@@ -459,50 +460,32 @@ def get_department_faculty_file_content(question: str) -> str:
     return None
 
 
-def find_student_matches_by_name(query: str, max_results: int = 12) -> tuple[list[dict], str]:
+_STUDENT_CACHE = None
+_STUDENT_CACHE_MTIME = 0.0
+
+def get_student_database() -> dict:
     """
-    Scans student records across knowledge base for student names.
-    Returns (matches, disambiguation_context_or_empty).
-    - If multiple students match: returns a disambiguation list and prompts for ID/Roll.
-    - If exactly one student matches: returns that student's complete exam seat and schedule record.
-    - If zero match: returns empty so standard RAG hybrid search proceeds.
+    Returns an in-memory O(1) dictionary mapping student roll -> student info.
+    Auto-invalidates if seatplan files change.
     """
-    clean_q = query.strip()
-    if not clean_q or len(clean_q) < 3:
-        return [], ""
-
-    q_lower = clean_q.lower()
-    non_name_indicators = [
-        "fee", "fees", "cost", "taka", "admission", "borti", "calendar", "kalke",
-        "routine", "schedule", "somoy", "time", "date", "kobe", "kokhon", "break",
-        "holiday", "vc", "vice chancellor", "dean", "head", "provost", "hall",
-        "hostel", "bus", "transport", "picnic", "phone", "email", "contact",
-        "what", "how", "who", "where", "koto", "kivabe", "ki", "kothay", "syllabus",
-        "department", "bivag", "credit", "waiver", "scholarship", "grade", "cgpa"
-    ]
-    if any(re.search(r'\b' + re.escape(w) + r'\b', q_lower) for w in non_name_indicators):
-        return [], ""
-
-    # Do not intercept if query already has a roll/ID number
-    if re.search(r'\b\d{6,16}\b', clean_q):
-        return [], ""
-
-    raw_tokens = re.findall(r'[a-zA-Z]{3,}', q_lower)
-    if not raw_tokens:
-        raw_tokens = [w for w in re.sub(r'[^\u0980-\u09FF\s]', ' ', clean_q).split() if len(w) >= 3]
-        if not raw_tokens:
-            return [], ""
-
+    global _STUDENT_CACHE, _STUDENT_CACHE_MTIME
     kb_dir = os.path.join(BASE_DIR, "knowledge_base")
     student_files = glob.glob(os.path.join(kb_dir, "*seatplan*.txt")) + glob.glob(os.path.join(kb_dir, "*student*.txt"))
     if not student_files:
-        return [], ""
+        return {}
 
-    results = []
-    seen_rolls = set()
+    max_mtime = max((os.path.getmtime(p) for p in student_files if os.path.exists(p)), default=0.0)
+    if _STUDENT_CACHE is not None and max_mtime == _STUDENT_CACHE_MTIME:
+        return _STUDENT_CACHE
+
+    cache = {}
+    slot_map = {
+        'A': ('Slot-A', '09:00 AM - 10:00 AM'),
+        'B': ('Slot-B', '11:00 AM - 12:00 PM'),
+        'C': ('Slot-C', '01:00 PM - 02:00 PM')
+    }
 
     for fpath in student_files:
-        fname = os.path.basename(fpath)
         try:
             with open(fpath, "r", encoding="utf-8") as f:
                 lines = [line.strip() for line in f.readlines() if line.strip()]
@@ -512,59 +495,282 @@ def find_student_matches_by_name(query: str, max_results: int = 12) -> tuple[lis
         current_level = ""
         current_slot = ""
         current_prog = "Computer Science and Engineering"
-        slot_map = {
-            'A': ('Slot-A', '09:00 AM - 10:00 AM'),
-            'B': ('Slot-B', '11:00 AM - 12:00 PM'),
-            'C': ('Slot-C', '01:00 PM - 02:00 PM')
-        }
 
         for idx, l in enumerate(lines):
-            prog_m = re.match(r'^(?:Programme|Program):\s*(.*)', l, re.I)
-            if prog_m:
-                current_prog = prog_m.group(1).strip()
-            lvl_m = re.match(r'^(Level\s*[-–]?\s*\d+\s*Term\s*[-–]?\s*[IVX0-9]+.*)', l, re.I)
-            if lvl_m:
-                current_level = lvl_m.group(1).strip()
-            slot_m = re.match(r'^(Slot\s*[-–:]?\s*[A-Z0-9].*)', l, re.I)
-            if slot_m:
-                current_slot = slot_m.group(1).strip()
+            pm = re.match(r'^(?:Programme|Program):\s*(.*)', l, re.I)
+            if pm: current_prog = pm.group(1).strip()
+            lm = re.match(r'^(Level\s*[-–]?\s*\d+\s*Term\s*[-–]?\s*[IVX0-9]+.*)', l, re.I)
+            if lm: current_level = lm.group(1).strip()
+            sm = re.match(r'^(Slot\s*[-–:]?\s*[A-Z0-9].*)', l, re.I)
+            if sm: current_slot = sm.group(1).strip()
 
             if re.match(r'^\d{8,16}$', l) and idx + 1 < len(lines):
                 roll = l
-                if roll in seen_rolls:
+                if roll in cache:
                     continue
                 name = lines[idx + 1]
-                name_low = name.lower()
+                room = lines[idx + 2] if idx + 2 < len(lines) else ""
+                seat = lines[idx + 3] if idx + 3 < len(lines) else ""
 
-                name_words = set(re.findall(r'[a-zA-Z\u0980-\u09FF]+', name_low))
-                if all(tok in name_words for tok in raw_tokens):
-                    room = lines[idx + 2] if idx + 2 < len(lines) else ""
-                    seat = lines[idx + 3] if idx + 3 < len(lines) else ""
+                seat_pfx = re.match(r'^([ABC])-\d+-\d+', seat.strip(), re.I)
+                if seat_pfx:
+                    sk = seat_pfx.group(1).upper()
+                    s_name, s_time = slot_map.get(sk, (f"Slot-{sk}", ""))
+                else:
+                    s_name = current_slot or "Slot-A"
+                    s_time = ""
 
-                    seat_pfx = re.match(r'^([ABC])-\d+-\d+', seat.strip(), re.I)
-                    if seat_pfx:
-                        sk = seat_pfx.group(1).upper()
-                        s_name, s_time = slot_map.get(sk, (f"Slot-{sk}", ""))
-                    else:
-                        s_name = current_slot or "Slot-A"
-                        s_time = ""
+                lt_m = re.search(r'Level\s*[-–]?\s*(\d+)\s*Term\s*[-–]?\s*([IVX0-9]+)', current_level, re.I)
+                norm_lt = f"{lt_m.group(1)}-{lt_m.group(2)}" if lt_m else current_level
 
-                    seen_rolls.add(roll)
-                    results.append({
-                        "roll": roll,
-                        "name": name,
-                        "programme": current_prog,
-                        "level": current_level,
-                        "slot": s_name,
-                        "time": s_time,
-                        "room": room,
-                        "seat": seat,
-                        "source": fname
-                    })
-                    if len(results) >= max_results:
-                        break
-        if len(results) >= max_results:
-            break
+                last_char = roll[-1] if roll else "0"
+                parity = "ODD" if last_char.isdigit() and int(last_char) % 2 != 0 else "EVEN"
+
+                cache[roll] = {
+                    "roll": roll,
+                    "name": name,
+                    "programme": current_prog,
+                    "level": current_level,
+                    "level_term": norm_lt,
+                    "parity": parity,
+                    "slot": s_name,
+                    "time": s_time,
+                    "room": room,
+                    "seat": seat,
+                    "source": os.path.basename(fpath)
+                }
+
+    _STUDENT_CACHE = cache
+    _STUDENT_CACHE_MTIME = max_mtime
+    return _STUDENT_CACHE
+
+
+def get_bangladesh_temporal_context() -> dict:
+    import datetime
+    tz_bd = datetime.timezone(datetime.timedelta(hours=6))
+    now_bd = datetime.datetime.now(tz_bd)
+    today_name = now_bd.strftime("%A")
+    date_str = now_bd.strftime("%d %B %Y")
+    time_str = now_bd.strftime("%I:%M %p")
+    tomorrow = now_bd + datetime.timedelta(days=1)
+    tomorrow_name = tomorrow.strftime("%A")
+
+    is_today_weekend = today_name in ["Friday", "Saturday"]
+    is_tomorrow_weekend = tomorrow_name in ["Friday", "Saturday"]
+
+    if today_name in ["Thursday", "Friday", "Saturday"]:
+        next_class_day = "Sunday"
+    else:
+        next_class_day = tomorrow_name
+
+    bn_day_map = {
+        "Friday": "শুক্রবার",
+        "Saturday": "শনিবার",
+        "Sunday": "রবিবার",
+        "Monday": "সোমবার",
+        "Tuesday": "মঙ্গলবার",
+        "Wednesday": "বুধবার",
+        "Thursday": "বৃহস্পতিবার"
+    }
+
+    return {
+        "today_en": today_name,
+        "today_bn": bn_day_map.get(today_name, today_name),
+        "tomorrow_en": tomorrow_name,
+        "tomorrow_bn": bn_day_map.get(tomorrow_name, tomorrow_name),
+        "next_class_en": next_class_day,
+        "next_class_bn": bn_day_map.get(next_class_day, next_class_day),
+        "is_today_weekend": is_today_weekend,
+        "is_tomorrow_weekend": is_tomorrow_weekend,
+        "date_str": date_str,
+        "time_str": time_str
+    }
+
+
+def get_class_routine_content(dept: str = "CSE", level_term: str = "3-II") -> str:
+    kb_dir = os.path.join(BASE_DIR, "knowledge_base")
+    routine_files = glob.glob(os.path.join(kb_dir, "*routine*.txt"))
+    for fpath in routine_files:
+        try:
+            with open(fpath, "r", encoding="utf-8") as f:
+                text = f.read()
+                norm_lt = (level_term or "").replace(" ", "").upper()
+                if "3-II" in norm_lt or "3-2" in norm_lt or not level_term:
+                    return text
+        except Exception:
+            continue
+    return ""
+
+
+ROUTINE_KEYWORDS = [
+    "routine", "class", "classes", "lab", "kalke", "ajke", "schedule", "period",
+    "somoy", "shomoy", "kobe", "kokhon", "timetable", "time table", "ক্লাস",
+    "রুটিন", "ল্যাব", "সময়সূচি", "সময়সূচি", "কি কি ক্লাস", "কখন ক্লাস", "পড়াশোনা",
+    "আজকে", "কালকে", "আগামীকাল", "পরশু", "sunday", "monday", "tuesday", "wednesday",
+    "thursday", "রবিবার", "সোমবার", "মঙ্গলবার", "বুধবার", "বৃহস্পতিবার"
+]
+
+
+def is_routine_query(query: str) -> bool:
+    if not query:
+        return False
+    q_low = query.lower()
+    return any(re.search(r'\b' + re.escape(w) + r'\b', q_low) or (len(w) >= 3 and w in q_low) for w in ROUTINE_KEYWORDS)
+
+
+def resolve_student_or_routine_query(question: str, history: list = None) -> Optional[str]:
+    """
+    Authoritative Resolver for:
+    1. Student Class Routine queries ("kalke amar ki ki class ache", "amar class routine ki").
+    2. Student Exam Seatplan queries ("amar seat kothay", "exam room kothay", "0802410205101019").
+    3. General Batch Class Routine queries ("CSE 3-II class routine").
+    """
+    if not question:
+        return None
+
+    clean_q = question.strip()
+    q_low = clean_q.lower()
+    is_routine = is_routine_query(clean_q)
+
+    # 1. Extract student roll from question or history
+    roll_match = re.search(r'\b(08\d{6,14})\b', clean_q)
+    if not roll_match and history:
+        for msg in reversed(history[-4:]):
+            if isinstance(msg, dict):
+                m = re.search(r'\b(08\d{6,14})\b', str(msg.get("content", "")))
+                if m:
+                    roll_match = m
+                    break
+
+    st_db = get_student_database()
+
+    # Case A: Student Roll Found
+    if roll_match:
+        roll = roll_match.group(1)
+        s = st_db.get(roll)
+        if s:
+            if is_routine:
+                temporal = get_bangladesh_temporal_context()
+                routine_text = get_class_routine_content(s["programme"], s["level_term"])
+                if routine_text:
+                    weekend_today_note = "[সাপ্তাহিক ছুটি / WEEKEND - আজ কোনো ক্লাস নেই]" if temporal['is_today_weekend'] else "[ক্লাস ডে / REGULAR CLASS DAY]"
+                    weekend_tmrw_note = "[সাপ্তাহিক ছুটি / WEEKEND - আগামীকাল কোনো ক্লাস নেই]" if temporal['is_tomorrow_weekend'] else "[ক্লাস ডে / REGULAR CLASS DAY]"
+
+                    doc = (
+                        f"--- Document: Student Profile & Official Class & Lab Routine (Authoritative Source: class_and_lab_routine.txt) ---\n"
+                        f"STUDENT IDENTITY:\n"
+                        f"* Student Name: {s['name']}\n"
+                        f"* Student ID / Roll: {s['roll']} (Roll Parity / Group: {s['parity']})\n"
+                        f"* Programme / Department: {s['programme']}\n"
+                        f"* Academic Level & Term: {s['level']} (Level-Term Code: {s['level_term']}, Section: A)\n\n"
+                        f"TEMPORAL CONTEXT (BANGLADESH TIME - UTC+6):\n"
+                        f"* Current Date: {temporal['date_str']} | Current Time: {temporal['time_str']}\n"
+                        f"* Today: {temporal['today_en']} ({temporal['today_bn']}) {weekend_today_note}\n"
+                        f"* Tomorrow: {temporal['tomorrow_en']} ({temporal['tomorrow_bn']}) {weekend_tmrw_note}\n"
+                        f"* Next Regular Academic Class Day: {temporal['next_class_en']} ({temporal['next_class_bn']})\n\n"
+                        f"OFFICIAL BATCH CLASS & LAB ROUTINE (Department: {s['programme']}, {s['level']}, Section: A):\n"
+                        f"{routine_text}\n\n"
+                        f"STUDENT EXAMINATION SEATPLAN ALLOCATION (REFERENCE ONLY - DO NOT OVERRIDE ROUTINE):\n"
+                        f"* Examination Slot: {s['slot']} ({s['time']})\n"
+                        f"* Allocated Exam Room: {s['room']}\n"
+                        f"* Allocated Seat Number: {s['seat']}\n"
+                    )
+                    return doc
+                else:
+                    return (
+                        f"--- Document: Student Profile Found (Class Routine Status) ---\n"
+                        f"* Student Name: {s['name']}\n"
+                        f"* Student ID / Roll: {s['roll']}\n"
+                        f"* Programme: {s['programme']}\n"
+                        f"* Academic Level & Term: {s['level']}\n"
+                        f"* Note: The official class routine for {s['level']} is currently not published/uploaded in the knowledge base. Only CSE Level- 3 Term- II class routine is currently available in the system.\n"
+                    )
+            else:
+                # User asked about seat/room/exam or entered only ID
+                single_doc = (
+                    f"--- Document: Single Student Match (Source: {s['source']} | Status: CURRENT & AUTHORITATIVE) ---\n"
+                    f"* Student Name: {s['name']}\n"
+                    f"* Student ID / Roll: {s['roll']}\n"
+                    f"* Programme: {s['programme']}\n"
+                    f"* Level & Term: {s['level']}\n"
+                    f"* Examination Slot: {s['slot']}\n"
+                    f"* Examination Time: {s['time']}\n"
+                    f"* Allocated Exam Room: {s['room']}\n"
+                    f"* Allocated Seat Number: {s['seat']}\n"
+                )
+                return single_doc
+
+    # Case B: No roll found, but user asks for Class Routine (e.g. "CSE 3-II class routine" or "routine")
+    if is_routine:
+        lt_match = re.search(r'\b(3[-–]?[iI]{2}|3[-–]?2|level\s*[-–]?\s*3\s*term\s*[-–]?\s*(?:2|ii))\b', q_low)
+        dept_match = any(re.search(pat, q_low) for pat in DEPT_PATTERNS.get("cse", []))
+        if lt_match or dept_match or "routine" in q_low or "class" in q_low:
+            temporal = get_bangladesh_temporal_context()
+            routine_text = get_class_routine_content("CSE", "3-II")
+            if routine_text:
+                weekend_today_note = "[সাপ্তাহিক ছুটি / WEEKEND - আজ কোনো ক্লাস নেই]" if temporal['is_today_weekend'] else "[ক্লাস ডে / REGULAR CLASS DAY]"
+                weekend_tmrw_note = "[সাপ্তাহিক ছুটি / WEEKEND - আগামীকাল কোনো ক্লাস নেই]" if temporal['is_tomorrow_weekend'] else "[ক্লাস ডে / REGULAR CLASS DAY]"
+
+                return (
+                    f"--- Document: Official Class & Lab Routine (Authoritative Source: class_and_lab_routine.txt) ---\n"
+                    f"TEMPORAL CONTEXT (BANGLADESH TIME - UTC+6):\n"
+                    f"* Current Date: {temporal['date_str']} | Current Time: {temporal['time_str']}\n"
+                    f"* Today: {temporal['today_en']} ({temporal['today_bn']}) {weekend_today_note}\n"
+                    f"* Tomorrow: {temporal['tomorrow_en']} ({temporal['tomorrow_bn']}) {weekend_tmrw_note}\n"
+                    f"* Next Regular Academic Class Day: {temporal['next_class_en']} ({temporal['next_class_bn']})\n\n"
+                    f"OFFICIAL BATCH CLASS & LAB ROUTINE:\n"
+                    f"{routine_text}\n"
+                )
+
+    return None
+
+
+def find_student_matches_by_name(query: str, max_results: int = 12) -> tuple[list[dict], str]:
+    """
+    Scans student records across knowledge base for student names.
+    Returns (matches, disambiguation_context_or_empty).
+    - If multiple students match: returns a disambiguation list and prompts for ID/Roll.
+    - If exactly one student matches: returns that student's complete record (routine or exam seat).
+    - If zero match: returns empty so standard RAG hybrid search proceeds.
+    """
+    clean_q = query.strip()
+    if not clean_q or len(clean_q) < 3:
+        return [], ""
+
+    q_lower = clean_q.lower()
+    non_name_indicators = [
+        "fee", "fees", "cost", "taka", "admission", "borti", "calendar",
+        "vc", "vice chancellor", "dean", "head", "provost", "hall",
+        "hostel", "bus", "transport", "picnic", "phone", "email", "contact",
+        "what", "how", "who", "where", "koto", "kivabe", "syllabus",
+        "bivag", "credit", "waiver", "scholarship", "grade", "cgpa"
+    ]
+    if any(re.search(r'\b' + re.escape(w) + r'\b', q_lower) for w in non_name_indicators):
+        return [], ""
+
+    # Do not intercept if query already has a roll/ID number
+    if re.search(r'\b\d{6,16}\b', clean_q):
+        return [], ""
+
+    raw_tokens = [w for w in re.findall(r'[a-zA-Z]{3,}', q_lower) if w not in ["class", "routine", "kalke", "ajke", "amar", "ache", "ki"]]
+    if not raw_tokens:
+        raw_tokens = [w for w in re.sub(r'[^\u0980-\u09FF\s]', ' ', clean_q).split() if len(w) >= 3 and w not in ["ক্লাস", "রুটিন", "ল্যাব", "আমার", "আছে", "কি"]]
+        if not raw_tokens:
+            return [], ""
+
+    st_db = get_student_database()
+    results = []
+    seen_names = set()
+
+    for s in st_db.values():
+        name_low = s["name"].lower()
+        name_words = set(re.findall(r'[a-zA-Z\u0980-\u09FF]+', name_low))
+        if all(tok in name_words for tok in raw_tokens):
+            if s["roll"] not in seen_names:
+                seen_names.add(s["roll"])
+                results.append(s)
+                if len(results) >= max_results:
+                    break
 
     if not results:
         return [], ""
@@ -582,6 +788,26 @@ def find_student_matches_by_name(query: str, max_results: int = 12) -> tuple[lis
         return results, "\n".join(doc_lines)
 
     s = results[0]
+    if is_routine_query(clean_q):
+        temporal = get_bangladesh_temporal_context()
+        routine_text = get_class_routine_content(s["programme"], s["level_term"])
+        if routine_text:
+            return results, (
+                f"--- Document: Student Profile & Official Class & Lab Routine (Authoritative Source: class_and_lab_routine.txt) ---\n"
+                f"STUDENT IDENTITY:\n"
+                f"* Student Name: {s['name']}\n"
+                f"* Student ID / Roll: {s['roll']} (Roll Parity / Group: {s['parity']})\n"
+                f"* Programme / Department: {s['programme']}\n"
+                f"* Academic Level & Term: {s['level']} (Level-Term Code: {s['level_term']}, Section: A)\n\n"
+                f"TEMPORAL CONTEXT (BANGLADESH TIME - UTC+6):\n"
+                f"* Current Date: {temporal['date_str']} | Current Time: {temporal['time_str']}\n"
+                f"* Today: {temporal['today_en']} ({temporal['today_bn']})\n"
+                f"* Tomorrow: {temporal['tomorrow_en']} ({temporal['tomorrow_bn']})\n"
+                f"* Next Regular Academic Class Day: {temporal['next_class_en']} ({temporal['next_class_bn']})\n\n"
+                f"OFFICIAL BATCH CLASS & LAB ROUTINE:\n"
+                f"{routine_text}\n"
+            )
+
     single_doc = (
         f"--- Document: Single Student Match (Source: {s['source']} | Status: CURRENT & AUTHORITATIVE) ---\n"
         f"* Student Name: {s['name']}\n"
@@ -619,6 +845,11 @@ def search_information(question: str, top_k: int = 4, history: list = None) -> s
 
     if is_greeting(question):
         return ""
+
+    # Authoritative Resolver for Student Profile, Class Routine and Exam Seatplan
+    student_or_routine_doc = resolve_student_or_routine_query(question, history=history)
+    if student_or_routine_doc:
+        return student_or_routine_doc
 
     # Check for student name query (disambiguation if multiple, direct if single)
     name_matches, disambiguation_doc = find_student_matches_by_name(question)

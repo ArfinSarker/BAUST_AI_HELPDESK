@@ -1,0 +1,84 @@
+# Bangladesh Army University of Science and Technology (BAUST), Saidpur
+
+## Department of Computer Science and Engineering (CSE)
+
+### Batchwise Class Routine, Summer 2026
+**Level-Term:** 3-II | **Section:** A
+
+## Class Routine
+
+| Day | 08.00 AM - 08.55 AM | 09.00 AM - 09.55 AM | 10.00 AM - 10.55 AM | 11.30 AM - 12.25 PM | 12.30 PM - 01.25 PM | 01.30 PM - 02.25 PM | 02.30 PM - 03.25 PM | 03.30 PM - 04.25 PM | 04.30 PM - 05.25 PM |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **Sun** | CSE 3202 (MZH, MI) #EVEN# [311 - Network Lab] | CSE 3207 (GR) [307 - Embedded System Lab] | CSE 3205 (MI) [307 - Embedded System Lab] | CSE 3203 (FTZ) [307 - Embedded System Lab] | - | - | - | - | - |
+| **Mon** | CSE 3203 (FTZ) [408] | CSE 3205 (MI) [307 - Embedded System Lab] | CSE 3207 (GR) [307 - Embedded System Lab] | CSE 3201 (MZH) [307 - Embedded System Lab] | CSE 3200 (ASF, GC) [411 - Database Lab] | - | - | - | - |
+| **Tue** | CSE 3210 (AKZ, RH) #ODD# [402 - Microprocessor Lab] | CSE 3205 (MI) [304] | CSE 3201 (MZH) [304] | CSE 3209 (AKZ) [304] | - | - | - | - | - |
+| **Wed** | CSE 3204 (FTZ, RH) [411 - Database Lab] | CSE 3209 (AKZ) [304] | CSE 3203 (FTZ) [304] | CSE 3201 (MZH) [304] | - | - | - | - | - |
+| **Thu** | CSE 3209 (AKZ) [204] | CSE 3207 (GR) [204] | CSE 3206 (MI, RH) [311 - Network Lab] | - | - | - | - | - | - |
+
+---
+
+## Course Details
+
+| Course No. | Course Title | Hours/Week (Theory) | Hours/Week (Sessional) | Credit Hours |
+| :--- | :--- | :--- | :--- | :--- |
+| **CSE 3200** | Web Engineering Project | - | 1.50 | 3.0 |
+| **CSE 3201** | Artificial Intelligence | 3.0 | - | 3.0 |
+| **CSE 3202** | Artificial Intelligence Sessional | - | 0.75 | 1.50 |
+| **CSE 3203** | Operating System | 3.0 | - | 3.0 |
+| **CSE 3204** | Operating System Sessional | - | 1.50 | 3.0 |
+| **CSE 3205** | Computer Networks | 3.0 | - | 3.0 |
+| **CSE 3206** | Computer Networks Sessional | - | 1.50 | 3.0 |
+| **CSE 3207** | Mathematical Analysis for Computer Science | 3.0 | - | 3.0 |
+| **CSE 3209** | Information System Design | 3.0 | - | 3.0 |
+| **CSE 3210** | Information System Design Sessional | - | 0.75 | 1.50 |
+| **Total** | | **15.0** | **6.0** | **27.0** |
+
+---
+
+## Active Faculty Members
+
+* **Fatema Tuz Zohra**
+  * **Designation:** Assistant Professor, CSE
+  * **Short Form:** FTZ
+
+* **AKZ Rasel Rahman**
+  * **Designation:** Lecturer, CSE
+  * **Short Form:** AKZ
+
+* **Md. Asif Iqbal**
+  * **Designation:** Assistant Software Engineer, CSE
+  * **Short Form:** ASF
+
+* **Gourab Chandra Biswas**
+  * **Designation:** Lecturer, CSE
+  * **Short Form:** GC
+
+* **S. M Golam Rifat**
+  * **Designation:** Lecturer, CSE
+  * **Short Form:** GR
+
+* **Md. Minhazul Islam**
+  * **Designation:** Lecturer, CSE
+  * **Short Form:** MI
+
+* **Md Zahim Hassan**
+  * **Designation:** Lecturer, CSE
+  * **Short Form:** MZH
+
+* **MD. Rabby Hossain**
+  * **Designation:** Lecturer, CSE
+  * **Short Form:** RH
+
+---
+
+## Faculty Members on Study Leave
+
+* *None currently listed*
+
+## Ex-Faculty / Former Faculty Members
+
+* *None currently listed*
+
+## Adjunct Faculty Members
+
+* *None currently listed*

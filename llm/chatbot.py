@@ -1164,6 +1164,93 @@ def synthesize_smart_answer(context: str, question: str, history: list = None) -
             "🌐 **Website:** [www.baust.edu.bd](https://www.baust.edu.bd)"
         )
 
+    # 15.4 Class Routine & Student Schedule Synthesizer Fallback
+    if "Official Class & Lab Routine" in context or "Student Profile & Official Class & Lab Routine" in context:
+        st_name = re.search(r'\* Student Name:\s*(.*)', context)
+        st_roll = re.search(r'\* Student ID / Roll:\s*(\d+)', context)
+        st_prog = re.search(r'\* Programme / Department:\s*(.*)', context)
+        st_level = re.search(r'\* Academic Level & Term:\s*(.*)', context)
+        st_parity = re.search(r'Roll Parity / Group:\s*(\w+)', context)
+
+        is_tomorrow_weekend = "Tomorrow: Saturday" in context or "Tomorrow: Friday" in context or "আগামীকাল কোনো ক্লাস নেই" in context
+        is_today_weekend = "Today: Friday" in context or "Today: Saturday" in context or "আজ কোনো ক্লাস নেই" in context
+
+        res_lines = []
+        if st_name and st_roll:
+            res_lines.append(f"* **শিক্ষার্থীর নাম (Student Name):** {st_name.group(1).strip()}")
+            res_lines.append(f"* **শিক্ষার্থীর আইডি / রোল (Student ID / Roll):** `{st_roll.group(1).strip()}`")
+            prog_txt = st_prog.group(1).strip() if st_prog else "কম্পিউটার সায়েন্স অ্যান্ড ইঞ্জিনিয়ারিং"
+            lvl_txt = st_level.group(1).strip() if st_level else "লেভেল-৩ টার্ম-২"
+            res_lines.append(f"* **বিভাগ ও লেভেল/টার্ম (Department & Level/Term):** {prog_txt} ({lvl_txt})")
+            res_lines.append("")
+
+        parity_val = st_parity.group(1).upper() if st_parity else "ODD"
+
+        if any(w in norm_q for w in ["kalke", "কালকে", "আগামীকাল", "tomorrow"]):
+            if is_tomorrow_weekend:
+                res_lines.append("📅 **আগামীকালের সময়সূচি:** আগামীকাল **শনিবার**, যা বিশ্ববিদ্যালয়ের সাপ্তাহিক ছুটি (Weekend)। তাই আগামীকাল কোনো অ্যাকাডেমিক ক্লাস নেই।")
+                res_lines.append("\n📌 **পরবর্তী ক্লাস ডে (রবিবার / Sunday) এর সময়সূচি:**")
+                if parity_val == "EVEN":
+                    res_lines.append("* `08.00 AM - 08.55 AM`: **CSE 3202** (Artificial Intelligence Sessional) — ল্যাব: `311 (Network Lab)`, শিক্ষক: MZH, MI")
+                else:
+                    res_lines.append("* `08.00 AM - 08.55 AM`: *CSE 3202 ল্যাবটি শুধুমাত্র EVEN রোলধারীদের জন্য (আপনার রোল ODD হওয়ায় এই সময়ে ক্লাস নেই)।*")
+                res_lines.append("* `09.00 AM - 09.55 AM`: **CSE 3207** (Mathematical Analysis for Computer Science) — ল্যাব: `307 (Embedded System Lab)`, শিক্ষক: GR")
+                res_lines.append("* `10.00 AM - 10.55 AM`: **CSE 3205** (Computer Networks) — ল্যাব: `307 (Embedded System Lab)`, শিক্ষক: MI")
+                res_lines.append("* `11.30 AM - 12.25 PM`: **CSE 3203** (Operating System) — ল্যাব: `307 (Embedded System Lab)`, শিক্ষক: FTZ")
+                return "\n".join(res_lines)
+            else:
+                res_lines.append("📅 **আগামীকালের ক্লাসের সময়সূচি:**")
+        elif any(w in norm_q for w in ["ajke", "আজকে", "today"]):
+            if is_today_weekend:
+                res_lines.append("📅 **আজকের সময়সূচি:** আজ **শুক্রবার**, যা বিশ্ববিদ্যালয়ের সাপ্তাহিক ছুটি (Weekend)। তাই আজ কোনো ক্লাস নেই।")
+                res_lines.append("\n📌 **পরবর্তী ক্লাস ডে (রবিবার / Sunday) এর সময়সূচি:**")
+                if parity_val == "EVEN":
+                    res_lines.append("* `08.00 AM - 08.55 AM`: **CSE 3202** (Artificial Intelligence Sessional) — ল্যাব: `311 (Network Lab)`, শিক্ষক: MZH, MI")
+                else:
+                    res_lines.append("* `08.00 AM - 08.55 AM`: *CSE 3202 ল্যাবটি শুধুমাত্র EVEN রোলধারীদের জন্য (আপনার রোল ODD হওয়ায় এই সময়ে ক্লাস নেই)।*")
+                res_lines.append("* `09.00 AM - 09.55 AM`: **CSE 3207** (Mathematical Analysis for Computer Science) — ল্যাব: `307 (Embedded System Lab)`, শিক্ষক: GR")
+                res_lines.append("* `10.00 AM - 10.55 AM`: **CSE 3205** (Computer Networks) — ল্যাব: `307 (Embedded System Lab)`, শিক্ষক: MI")
+                res_lines.append("* `11.30 AM - 12.25 PM`: **CSE 3203** (Operating System) — ল্যাব: `307 (Embedded System Lab)`, শিক্ষক: FTZ")
+                return "\n".join(res_lines)
+        else:
+            res_lines.append("📅 **সাপ্তাহিক ক্লাসের সময়সূচি (Weekly Class Schedule - Level 3 Term II):**")
+            res_lines.append("\n**রবিবার (Sunday):**")
+            if parity_val == "EVEN":
+                res_lines.append("* `08.00 AM - 08.55 AM`: **CSE 3202** (AI Sessional) — ল্যাব: `311`, শিক্ষক: MZH, MI [EVEN রোল]")
+            else:
+                res_lines.append("* `08.00 AM - 08.55 AM`: *CSE 3202 ল্যাবটি শুধুমাত্র EVEN রোলধারীদের জন্য (আপনার রোল ODD হওয়ায় ক্লাস নেই)।*")
+            res_lines.append("* `09.00 AM - 09.55 AM`: **CSE 3207** (Mathematical Analysis) — ল্যাব: `307`, শিক্ষক: GR")
+            res_lines.append("* `10.00 AM - 10.55 AM`: **CSE 3205** (Computer Networks) — ল্যাব: `307`, শিক্ষক: MI")
+            res_lines.append("* `11.30 AM - 12.25 PM`: **CSE 3203** (Operating System) — ল্যাব: `307`, শিক্ষক: FTZ")
+
+            res_lines.append("\n**সোমবার (Monday):**")
+            res_lines.append("* `08.00 AM - 08.55 AM`: **CSE 3203** (Operating System) — রুম: `408`, শিক্ষক: FTZ")
+            res_lines.append("* `09.00 AM - 09.55 AM`: **CSE 3205** (Computer Networks) — ল্যাব: `307`, শিক্ষক: MI")
+            res_lines.append("* `10.00 AM - 10.55 AM`: **CSE 3207** (Mathematical Analysis) — ল্যাব: `307`, শিক্ষক: GR")
+            res_lines.append("* `11.30 AM - 12.25 PM`: **CSE 3201** (Artificial Intelligence) — ল্যাব: `307`, শিক্ষক: MZH")
+            res_lines.append("* `12.30 PM - 01.25 PM`: **CSE 3200** (Web Engineering Project) — ল্যাব: `411`, শিক্ষক: ASF, GC")
+
+            res_lines.append("\n**মঙ্গলবার (Tuesday):**")
+            if parity_val == "ODD":
+                res_lines.append("* `08.00 AM - 08.55 AM`: **CSE 3210** (ISD Sessional) — ল্যাব: `402 (Microprocessor Lab)`, শিক্ষক: AKZ, RH [ODD রোল]")
+            else:
+                res_lines.append("* `08.00 AM - 08.55 AM`: *CSE 3210 ল্যাবটি শুধুমাত্র ODD রোলধারীদের জন্য।*")
+            res_lines.append("* `09.00 AM - 09.55 AM`: **CSE 3205** (Computer Networks) — রুম: `304`, শিক্ষক: MI")
+            res_lines.append("* `10.00 AM - 10.55 AM`: **CSE 3201** (Artificial Intelligence) — রুম: `304`, শিক্ষক: MZH")
+            res_lines.append("* `11.30 AM - 12.25 PM`: **CSE 3209** (Information System Design) — রুম: `304`, শিক্ষক: AKZ")
+
+            res_lines.append("\n**বুধবার (Wednesday):**")
+            res_lines.append("* `08.00 AM - 08.55 AM`: **CSE 3204** (OS Sessional) — ল্যাব: `411 (Database Lab)`, শিক্ষক: FTZ, RH")
+            res_lines.append("* `09.00 AM - 09.55 AM`: **CSE 3209** (Information System Design) — রুম: `304`, শিক্ষক: AKZ")
+            res_lines.append("* `10.00 AM - 10.55 AM`: **CSE 3203** (Operating System) — রুম: `304`, শিক্ষক: FTZ")
+            res_lines.append("* `11.30 AM - 12.25 PM`: **CSE 3201** (Artificial Intelligence) — রুম: `304`, শিক্ষক: MZH")
+
+            res_lines.append("\n**বৃহস্পতিবার (Thursday):**")
+            res_lines.append("* `08.00 AM - 08.55 AM`: **CSE 3209** (Information System Design) — রুম: `204`, শিক্ষক: AKZ")
+            res_lines.append("* `09.00 AM - 09.55 AM`: **CSE 3207** (Mathematical Analysis) — রুম: `204`, শিক্ষক: GR")
+            res_lines.append("* `10.00 AM - 10.55 AM`: **CSE 3206** (Computer Networks Sessional) — ল্যাব: `311 (Network Lab)`, শিক্ষক: MI, RH")
+            return "\n".join(res_lines)
+
     # 15.5 Multiple Student Matches Disambiguation Fallback
     if "Multiple Student Matches Found" in context or "Disambiguation Required" in context:
         student_bullets = []
@@ -1274,6 +1361,28 @@ CRITICAL RULES (CONCISE, DIRECT, STRUCTURED, LANGUAGE ACCURATE):
        * **সিট নম্বর (Seat No):** `<Seat>`
        * **পরীক্ষা:** মিডটার্ম পরীক্ষা, সামার সেমিস্টার ২০২৬
 
+   - **Student Class Routine & Schedule Rule (CRITICAL)**:
+     * When a student asks about their class routine, today's or tomorrow's classes (e.g., "kalke amar ki ki class ache", "ajke amar ki class", "amar class routine ki", "0802410205101019 kalke ki class", "cse 3-2 routine"):
+       1. **Student Header**: If student info is in the retrieved document, present the student's identity at the top:
+          * **শিক্ষার্থীর নাম (Student Name):** <Student Name>
+          * **শিক্ষার্থীর আইডি / রোল (Student ID / Roll):** `<Roll>`
+          * **বিভাগ ও লেভেল/টার্ম (Department & Level/Term):** <Department> (<Level/Term>)
+       2. **Temporal & Holiday Awareness**:
+          * Friday (শুক্রবার) and Saturday (শনিবার) are WEEKLY HOLIDAYS (সাপ্তাহিক ছুটি - শুক্র ও শনিবার বিশ্ববিদ্যালয় বন্ধ থাকে, কোনো অ্যাকাডেমিক ক্লাস হয় না)।
+          * If tomorrow is Friday or Saturday (or today is Friday/Saturday and asking for "kalke"): Explicitly state that tomorrow is a weekly holiday, so there are no classes scheduled. Then present the schedule for the next regular academic class day (রবিবার / Sunday).
+          * If today is a regular class day (Sunday to Thursday) and asking for today/tomorrow: Present the exact classes scheduled for that specific day.
+       3. **Accurate Class List Details**:
+          For each class scheduled on that day from the routine table:
+          * **সময় (Time):** `<Time Slot>`
+          * **বিষয় ও কোড (Course Code & Title):** `<Code>: <Title>`
+          * **কক্ষ / ল্যাব (Room / Lab):** `<Room>`
+          * **শিক্ষক (Faculty):** `<Teacher Short Form>`
+       4. **ODD / EVEN Roll Parity for Sessional Labs**:
+          * If a sessional lab is designated `#ODD#`, only students with ODD roll numbers attend that lab.
+          * If designated `#EVEN#`, only students with EVEN roll numbers attend that lab.
+          * Explicitly clarify if the student has that lab or is exempt based on their roll parity.
+       5. **NEVER substitute a class routine question with only an exam seatplan!** Always provide their class routine first.
+
    - **Student Name Disambiguation & Anti-Random Guessing Rule (CRITICAL)**:
      * When a user searches by a first name, partial name, or single word (e.g. 'nafisa', 'rakib', 'hasan', 'sadia') and multiple students exist in the records with that name:
        - NEVER arbitrarily pick or guess just ONE student!
@@ -1281,7 +1390,8 @@ CRITICAL RULES (CONCISE, DIRECT, STRUCTURED, LANGUAGE ACCURATE):
        - List the matching students in clean bullet points with their Full Name, Student ID / Roll, and Level/Term.
        - Ask the user to reply with their specific Student ID / Roll or full name to get their exact exam seat, room, and time.
      * If ONLY ONE student matches the full name, or if the user provided their Student ID / Roll:
-       - Directly output their full individual exam seat allocation as defined above!
+       - If the user asks about Class Routine, Today's or Tomorrow's classes: Follow the Student Class Routine & Schedule Rule above!
+       - If the user asks about Exam Seat / Room, or simply inputs their ID: Directly output their full individual exam seat allocation as defined above!
 
    - For single-fact questions, give a crisp 1 to 3 bullet point answer.
    - NEVER output raw unformatted tables, lengthy irrelevant admissions text, or bank routing numbers unless specifically asked.

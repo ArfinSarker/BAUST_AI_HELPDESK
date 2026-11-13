@@ -492,6 +492,23 @@
     "is_authoritative": 1,
     "notes": ""
   },
+  "class_and_lab_routine.txt": {
+    "filename": "class_and_lab_routine.txt",
+    "title": "Class And Lab Routine",
+    "doc_type": "routine",
+    "academic_year": "2026",
+    "semester": "Summer",
+    "version": "1.0",
+    "issuing_authority": "Department of CSE",
+    "effective_date": "2026-11-13",
+    "expiry_date": "",
+    "upload_date": "2026-11-13 17:50:13",
+    "last_updated": "2026-11-13 17:50:13",
+    "status": "active",
+    "superseded_by": null,
+    "is_authoritative": 1,
+    "notes": ""
+  },
   "cse_midterm_seatplan_summer_2026.txt": {
     "filename": "cse_midterm_seatplan_summer_2026.txt",
     "title": "Midterm Examination Summer Semester 2026 (Regular) and Winter Semester 2026 (Special) - Schedule",

@@ -238,6 +238,9 @@ def clean_llm_response(text: str) -> str:
     text = re.sub(r'ক্লাস\s+ব্র্যা?ক\b', 'ক্লাস ব্রেক', text)
     text = re.sub(r'\bব্র্যাক\b(?=\s*(?:হবে|শুরু|শেষ|চলবে|থাকবে|এর|এ|পর্যন্ত))', 'ব্রেক', text)
 
+    # Fix Saidpur spelling error: সাইদপুর / সায়েদপুর -> সৈয়দপুর
+    text = text.replace("সাইদপুর", "সৈয়দপুর").replace("সায়েদপুর", "সৈয়দপুর")
+
     return text.strip()
 
 
@@ -1164,6 +1167,17 @@ def synthesize_smart_answer(context: str, question: str, history: list = None) -
             "🌐 **Website:** [www.baust.edu.bd](https://www.baust.edu.bd)"
         )
 
+    # 15.3 Faculty Routine Short Form Synthesizer Fallback
+    if "Faculty Routine Short Form & Teacher Profile" in context:
+        lines = []
+        for line in context.splitlines():
+            l_str = line.strip()
+            if l_str.startswith("*"):
+                lines.append(l_str)
+        if lines:
+            res_str = "\n".join(lines)
+            return res_str.replace("সাইদপুর", "সৈয়দপুর").replace("সায়েদপুর", "সৈয়দপুর")
+
     # 15.4 Class Routine & Student Schedule Synthesizer Fallback
     if "Official Class & Lab Routine" in context or "Student Profile & Official Class & Lab Routine" in context:
         st_name = re.search(r'\* Student Name:\s*(.*)', context)
@@ -1422,7 +1436,12 @@ CRITICAL RULES (CONCISE, DIRECT, STRUCTURED, LANGUAGE ACCURATE):
      * If the user corrects a mistaken department or entity from a previous turn (e.g. "ami ce bolini ami bolechi cse" or "not CE, I meant CSE"):
      * Do NOT simply say an empty apology asking how you can help. **Immediately resolve the original question for the corrected department**:
        e.g., "দুঃখিত ভুল বোঝাবুঝির জন্য। আমাদের অফিসিয়াল রেকর্ড বা ডাটাবেসে সিএসই (CSE) বিভাগের পিকনিক সংক্রান্ত কোনো তথ্য বা নোটিশ নেই।"
-6. **ACCURATE BENGALI SPELLING & ACADEMIC TERMINOLOGY**:
+6. **ACCURATE BENGALI SPELLING & ACADEMIC TERMINOLOGY (CRITICAL)**:
+   - **Saidpur Spelling Rule (MANDATORY)**: The official name and location of the university is **সৈয়দপুর** বা **সৈয়দপুর** (e.g., "বাংলাদেশ আর্মি ইউনিভার্সিটি অব সায়েন্স অ্যান্ড টেকনোলজি (BAUST), সৈয়দপুর")।
+     **NEVER EVER write 'সাইদপুর' or 'সায়েদপুর'!** If 'সাইদপুর' is written, it is an unacceptable spelling mistake.
+   - **Teacher / Faculty Routine Short Form Rule (CRITICAL)**: In BAUST academic routines, teachers are referenced by initials/short forms (e.g. `GR` = S. M Golam Rifat / এস. এম. গোলাম রিফাত, `FTZ` = Fatema Tuz Zohra, `AKZ` = A K Z Rasel Rahman, `MI` = Md. Minhazul Islam, `MZH` = Md Zahim Hassan, `RH` = MD. Rabby Hossain, `GC` = Gourab Chandra Biswas, `ASF` = Md. Asif Iqbal). When asked who a teacher is (e.g. 'GR ke', 'GR sir ke', 'who is GR'):
+     * NEVER guess or hallucinate any other name (such as Golam Rabbani)!
+     * Always output their exact full name, designation, department, and routine course as stated in the retrieved documents.
    - For 'Semester Break', ALWAYS write **সেমিস্টার ব্রেক** বা **সেমিস্টার বিরতি** (NEVER spell as 'ব্র্যাক' or 'ব্রাক').
    - For 'Midterm', write **মিডটার্ম** বা **মিড-টার্ম পরীক্ষা**।
    - Maintain accurate standard Bengali spelling and avoid phonetic transliteration errors.
@@ -1509,8 +1528,9 @@ def generate_answer_stream(context: str, question: str, history: list = None):
                                     for part in parts:
                                         if "text" in part and part["text"]:
                                             token = part["text"]
-                                            full_answer_accumulator.append(token)
-                                            yield token
+                                            token_clean = token.replace("সাইদপুর", "সৈয়দপুর").replace("সায়েদপুর", "সৈয়দপুর")
+                                            full_answer_accumulator.append(token_clean)
+                                            yield token_clean
                                             streamed_successfully = True
                             except Exception:
                                 pass

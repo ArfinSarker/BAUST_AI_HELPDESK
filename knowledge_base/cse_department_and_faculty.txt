@@ -57,6 +57,7 @@ The following laboratories are maintained by the Department of Computer Science 
 ### Fatema Tuz Zohra
 - **Designation**: Assistant Professor
 - **Department**: Computer Science and Engineering
+- **Short Form / Initials**: FTZ
 - **Phone**: 01728646700
 - **Email**: fatema@baust.edu.bd, fatematuzzohramishu@gmail.com
 - **Education / Qualifications**: B.Sc. Engg in CSE, CUET; M.Sc. in CSE, Jahangirnagar University
@@ -105,6 +106,7 @@ The following laboratories are maintained by the Department of Computer Science 
 ### Md Zahim Hassan
 - **Designation**: Lecturer & Program Coordinator
 - **Department**: Computer Science and Engineering
+- **Short Form / Initials**: MZH
 - **Phone**: 01736393334
 - **Email**: zahimhassan@baust.edu.bd
 - **Education / Qualifications**: M.Sc.(Engg.) in CSE, RUET (On-going); B.Sc.(Engg.) in CSE, KUET
@@ -153,6 +155,7 @@ The following laboratories are maintained by the Department of Computer Science 
 ### A K Z Rasel Rahman
 - **Designation**: Lecturer
 - **Department**: Computer Science and Engineering
+- **Short Form / Initials**: AKZ
 - **Phone**: 01701133689
 - **Email**: rasel@baust.edu.bd, rasel17716@cseku.ac.bd
 - **Education / Qualifications**: B.Sc. in CSE, KU; M.Sc. in CSE, KU
@@ -168,6 +171,7 @@ The following laboratories are maintained by the Department of Computer Science 
 ### S. M Golam Rifat
 - **Designation**: Lecturer
 - **Department**: Computer Science and Engineering
+- **Short Form / Initials**: GR
 - **Phone**: 01759810833 (WhatsApp)
 - **Email**: golamrifat@baust.edu.bd, golamrifat@gmail.com
 - **Education / Qualifications**: M.Sc. Engg. in CSE, RUET (On-going); B.Sc. Engg. in CSE, RUET
@@ -192,6 +196,7 @@ The following laboratories are maintained by the Department of Computer Science 
 ### Md. Minhazul Islam
 - **Designation**: Lecturer
 - **Department**: Computer Science and Engineering
+- **Short Form / Initials**: MI
 - **Phone**: 01714501019
 - **Email**: minhaz@baust.edu.bd, minhaz7553@gmail.com
 - **Education / Qualifications**: M.Sc. Engg. in CSE, RUET (On-going); B.Sc. Engg. in CSE, RUET
@@ -224,6 +229,7 @@ The following laboratories are maintained by the Department of Computer Science 
 ### Gourab Chandra Biswas
 - **Designation**: Lecturer
 - **Department**: Computer Science & Engineering (CSE)
+- **Short Form / Initials**: GC
 - **Phone**: 01785794036
 - **Email**: gourabbiswas@baust.edu.bd, gourabbiswas338@gmail.com
 - **Education / Qualifications**: B.Sc. (Engr.) in CSE, CUET
@@ -232,6 +238,7 @@ The following laboratories are maintained by the Department of Computer Science 
 ### MD. Rabby Hossain
 - **Designation**: Lecturer
 - **Department**: Computer Science & Engineering (CSE)
+- **Short Form / Initials**: RH
 - **Phone**: 01324145340
 - **Email**: riyadcse@baust.edu.bd, riyadsdp333@gmail.com
 - **Education / Qualifications**: B.Sc. (Engr.) in CSE, BUET

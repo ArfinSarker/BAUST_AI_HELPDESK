@@ -1,25 +1,26 @@
 <div align="center">
 
-# 🎓 BAUST AI Helpdesk & Knowledge Portal
-### Enterprise Hybrid RAG • Multilingual Intelligence • Real-Time Stream
+# 🎓 BAUST AI Helpdesk & Enterprise Knowledge Portal
+### Next-Gen Hybrid RAG • Unified Entity Graph • Google GenAI 2.5 Flash • Real-Time SSE Streaming
 
 [![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![Flask](https://img.shields.io/badge/Flask-3.1-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
-[![Google Gemini](https://img.shields.io/badge/Google%20Gemini-Flash%201.5-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
+[![Google Gemini](https://img.shields.io/badge/Google%20GenAI-Gemini%202.5%20Flash-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
 [![FAISS](https://img.shields.io/badge/Vector%20Store-FAISS%20CPU-FF6F00?style=for-the-badge&logo=meta&logoColor=white)](https://github.com/facebookresearch/faiss)
+[![BM25Okapi](https://img.shields.io/badge/Lexical%20Search-BM25Okapi-2E7D32?style=for-the-badge&logo=search&logoColor=white)](#-hybrid-rag-retrieval-engine)
 [![SQLite WAL](https://img.shields.io/badge/Database-SQLite%20WAL-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://sqlite.org/)
 [![Access](https://img.shields.io/badge/Access-Private%20%26%20Proprietary-D32F2F?style=for-the-badge&logo=lock&logoColor=white)](#-confidentiality--ownership)
-[![License](https://img.shields.io/badge/Status-All%20Rights%20Reserved-gray?style=for-the-badge)](#-confidentiality--ownership)
 
 <p align="center">
-  <b>A state-of-the-art, bilingual (বাংলা & English) Institutional AI Helpdesk and Administrative Knowledge Management System built specifically for Bangladesh Army University of Science and Technology (BAUST), Saidpur.</b>
+  <b>A production-grade, bilingual (বাংলা & English) institutional AI Helpdesk and Administrative Knowledge Management System built specifically for Bangladesh Army University of Science and Technology (BAUST), Saidpur.</b>
 </p>
 
-[Explore Documentation](#-system-architecture) •
+[Key Innovations](#-key-innovations--capabilities) •
+[System Architecture](#-system-architecture) •
+[Core Subsystems](#-core-subsystems) •
 [Quickstart Guide](#-quickstart--installation) •
 [API Reference](#-rest--sse-api-reference) •
-[Architecture](#-system-architecture) •
-[Interactive CLI](#-interactive-terminal-cli-profiler)
+[Testing & Profiler](#-interactive-terminal-cli-profiler)
 
 ---
 
@@ -29,14 +30,17 @@
 - [✨ Key Innovations & Capabilities](#-key-innovations--capabilities)
 - [🏛️ System Architecture](#-system-architecture)
   - [High-Level Dataflow](#high-level-dataflow)
-  - [Hybrid Retrieval Pipeline](#hybrid-retrieval-pipeline)
+  - [Unified Entity & RAG Retrieval Flow](#unified-entity--rag-retrieval-flow)
 - [📊 Core Subsystems](#-core-subsystems)
-  - [1. Hybrid RAG (FAISS + BM25Okapi + RRF)](#1-hybrid-rag-retrieval-engine)
-  - [2. SSE Token Streaming & Client Rendering](#2-sse-token-streaming--client-rendering)
-  - [3. Knowledge Ingestion & OCR.space Pipeline](#3-multimodal-document-ingestion--ocr-pipeline)
-  - [4. Production Analytics & Knowledge Gap Tracker](#4-production-analytics--knowledge-gap-tracker)
-  - [5. Anti-Hallucination & Department Isolation](#5-anti-hallucination--departmental-isolation)
-  - [6. Security, DoS Defense & Rate Limiting](#6-enterprise-security--rate-limiting)
+  - [1. Unified Entity & Multi-Hop Graph Retriever](#1-unified-entity--multi-hop-graph-retriever)
+  - [2. Hybrid Dense-Sparse RAG (FAISS + BM25Okapi + RRF)](#2-hybrid-dense-sparse-rag-faiss--bm25okapi--rrf)
+  - [3. Official Google GenAI SDK Engine (`multilingual_helpdesk.py`)](#3-official-google-genai-sdk-engine-multilingual_helpdeskpy)
+  - [4. Smart Language Mapping & Academic Directives](#4-smart-language-mapping--academic-directives)
+  - [5. Live Temporal Awareness & Routine Scheduler](#5-live-temporal-awareness--routine-scheduler)
+  - [6. Real-Time SSE Streaming & Markdown UI](#6-real-time-sse-streaming--markdown-ui)
+  - [7. Multimodal Document Ingestion & OCR.space Pipeline](#7-multimodal-document-ingestion--ocrspace-pipeline)
+  - [8. Production Analytics & Knowledge Gap Intelligence](#8-production-analytics--knowledge-gap-intelligence)
+  - [9. Enterprise Security & Rate Limiting](#9-enterprise-security--rate-limiting)
 - [📁 Project Organization](#-project-organization)
 - [🚀 Quickstart & Installation](#-quickstart--installation)
 - [💻 Interactive Terminal CLI Profiler](#-interactive-terminal-cli-profiler)
@@ -50,14 +54,15 @@
 
 | Capability | Technical Implementation | Practical Benefit |
 | :--- | :--- | :--- |
-| **Hybrid Dense-Sparse RAG** | `paraphrase-multilingual-MiniLM-L12-v2` (Dense) + `BM25Okapi` (Sparse) + Reciprocal Rank Fusion ($k=60$) | Captures both deep conceptual semantics and exact keyword matches (course codes, fee numbers, acronyms). |
-| **Sub-300ms Latency** | Asynchronous HTTP Server-Sent Events (SSE) streaming with Google Gemini Flash | Provides ChatGPT-like progressive typing without waiting for complete LLM generations. |
-| **Multilingual NLP** | Native support for standard English, pure Bengali (বাংলা), and transliterated Banglish | Students can ask naturally in their native colloquial dialects without language switching barriers. |
-| **Departmental Isolation** | Algorithmic cross-department isolation filters (`DEPT_PATTERNS`) | Guarantees that inquiries about "CSE Picnic" never hallucinate answers from "CE Annual Picnic". |
-| **Zero-Downtime Hot Reload** | Thread-safe FAISS vector swapping and in-memory incremental chunk caching | Documents can be uploaded and indexed on the fly without restarting the Flask server. |
-| **Knowledge Gap Intelligence** | SQLite WAL analytics tracking with frequency-based clustering and resolved tracking | Pinpoints unanswered student questions so campus authorities can update official policies proactively. |
-| **Scanned OCR Ingestion** | Zero-dependency REST client for `OCR.space API` with fallback pre-processing | Seamlessly extracts text from scanned notice PDFs, photocopied leaflets, and smartphone photos. |
-| **Dual Theme UI/UX** | High-contrast Day and OLED Dark Mode built with modern CSS custom properties | Accessible, easy on student eyes at night, and fully responsive across mobile, tablet, and desktop screens. |
+| **Unified Multi-Hop Entity Graph** | In-memory indexing of 420+ faculty across 9 departments, 35+ teacher initials, 3,180+ student rolls, and course codes in **7.5 ms** | Resolves cross-file entity lookups (e.g., initial `AA` or `GR` $\to$ full name, phone number, email, and courses) without separate fragile `if-else` routes. |
+| **Hybrid Dense-Sparse RAG** | `paraphrase-multilingual-MiniLM-L12-v2` (Dense) + `BM25Okapi` (Sparse) + Reciprocal Rank Fusion ($k=60$) | Simultaneously understands conceptual semantic queries while preserving exact match precision for course codes (`CSE 3207`), roll numbers, and telephone digits. |
+| **Official Google GenAI SDK (`google-genai`)** | Primary: `gemini-2.5-flash` with graceful failover to `gemini-2.0-flash-lite-preview-02-05` / `gemini-2.0-flash` | Ultra-low latency, optimized token streaming, and production-tested API reliability with zero deprecated dependencies. |
+| **Smart Language Mapping** | Strict SDK `system_instruction` enforcing Bengali for বাংলা/Banglish and English for English | Students asking colloquial Romanized Banglish (e.g., *"Bhai, admission fee koto?"*) receive responses in pure Bengali script (বাংলায়), never awkward Romanized Banglish. |
+| **Academic Safety Tuning** | `HARM_CATEGORY_DANGEROUS_CONTENT: BLOCK_ONLY_HIGH` via `types.GenerateContentConfig` | Eliminates false-positive filter blocks on university notices containing terms like "blood donation", "medical fees", or "disciplinary warnings". |
+| **Live Temporal & Parity Logic** | UTC+6 Bangladesh temporal tracker + `#ODD#` / `#EVEN#` batch roll parity checking | Automatically warns about Friday/Saturday weekend holidays, schedules Sunday classes, and clarifies whether sessional labs apply to the student's specific roll. |
+| **Sub-300ms SSE Streaming** | Asynchronous Server-Sent Events (`text/event-stream`) with chunked HTTP transfer | Real-time token streaming with KaTeX math rendering, Highlight.js syntax highlighting, and DOMPurify XSS defense. |
+| **Zero-Downtime Hot Vector Swap** | Thread-safe double-buffering locks with mtime-based auto-invalidation | New notices, brochures, and routines can be uploaded and indexed dynamically without server downtime. |
+| **Analytics & Gap Intelligence** | SQLite WAL (Write-Ahead Logging) with thread-safe asynchronous queue | Tracks satisfaction, like/dislike feedback per message ID, and clusters unanswered student questions for administrative resolution. |
 
 ---
 
@@ -67,130 +72,155 @@
 
 ```mermaid
 flowchart TD
-    subgraph Client["🎓 Student & Faculty Clients"]
-        WebUI["Responsive Web UI (Day / Night)"]
-        CLI["Terminal CLI Profiler"]
+    subgraph Clients["🎓 Client Ingress"]
+        WebUI["Responsive Web UI (Day / OLED Dark)"]
+        CLI["Terminal CLI Profiler (test_chatbot.py)"]
+        SDKModule["External Apps (multilingual_helpdesk.py)"]
     end
 
-    subgraph Gateway["🛡️ Security & Ingress Layer"]
-        RateLimit["Sliding-Window Rate Limiter"]
+    subgraph Gateway["🛡️ Security & Middleware Layer"]
+        RateLimit["Sliding-Window Leaky Bucket Limiter"]
         CSRF["CSRF & Session Guardian"]
-        ClobberGuard["DOM Property Shadowing Protection"]
+        HistoryTrimmer["Sliding-Window History Trimmer (2 Turns / 4 Msgs)"]
     end
 
-    subgraph RetrievalEngine["🔍 Hybrid Dense-Sparse RAG Engine"]
-        Rewrite["Contextual Query History Rewriter"]
-        DeptFilter["Departmental Isolation Gate (CSE vs CE vs EEE)"]
+    subgraph Retriever["⚡ Unified Multi-Hop & Hybrid RAG Engine"]
+        EntityGraph["Unified Entity Graph (7.5ms Cache)\n• 420+ Teachers & Initials\n• 3,180+ Student Rolls & Seatplans\n• Temporal UTC+6 & Parity Matrix"]
         
-        subgraph VectorSpace["Dense Vector Space"]
-            DenseEmbed["paraphrase-multilingual-MiniLM-L12-v2 (384-dim)"]
-            FAISS["FAISS FlatIP Cosine Index (1300+ Chunks)"]
+        subgraph HybridSearch["Hybrid RAG Store"]
+            Dense["FAISS Cosine Similarity (384-dim)"]
+            Sparse["BM25Okapi Lexical + Synonyms"]
+            RRF["Reciprocal Rank Fusion (k=60)"]
         end
         
-        subgraph LexicalSpace["Sparse Lexical Space"]
-            Tokenizer["Bangla + English Tokenizer"]
-            BM25["BM25Okapi Keyword Scorer"]
-            Synonyms["BAUST Campus Synonym Expansion"]
-        end
-        
-        RRF["Reciprocal Rank Fusion (RRF k=60)"]
-        MetadataRanker["Chronological & Authority Re-Ranker"]
+        Composite["Composite Authoritative Dossier & Passages"]
     end
 
-    subgraph LLM["🧠 Generative Intelligence"]
-        PromptEngine["System Prompt with Anti-Hallucination Guardrails"]
-        GeminiFlash["Google Gemini Flash 1.5 LLM"]
+    subgraph LLM["🧠 Google GenAI Intelligence Engine"]
+        PromptSystem["System Instructions & Grounding Rules"]
+        GeminiFlash["gemini-2.5-flash (Primary)"]
+        FallbackModel["gemini-2.0-flash-lite (Failover)"]
+        LocalSynthesizer["Zero-Outage Local Synthesizer"]
     end
 
-    subgraph Telemetry["📊 Data & Telemetry Layer"]
-        AsyncWorkers["ThreadPoolExecutor (max_workers=2)"]
-        SQLite["SQLite 3 (WAL Mode, Concurrent Read-Safe)"]
-        GapTracker["Knowledge Gap & Satisfaction Analytics"]
+    subgraph Storage["📊 Persistence & Telemetry Layer"]
+        SQLiteWAL["SQLite 3 (WAL Mode, Concurrent Read-Safe)"]
+        GapAudit["Knowledge Gap & Feedback Audit Logger"]
     end
 
-    WebUI -->|SSE Stream Request| RateLimit
-    CLI -->|Direct Query| RetrievalEngine
+    WebUI -->|HTTP POST / SSE Stream| RateLimit
+    CLI -->|Local Benchmark| Retriever
+    SDKModule -->|Direct SDK Client| GeminiFlash
     RateLimit --> Gateway
-    Gateway --> Rewrite
-    Rewrite --> DeptFilter
-    DeptFilter --> DenseEmbed --> FAISS --> RRF
-    DeptFilter --> Tokenizer --> BM25 --> RRF
-    Synonyms -.-> BM25
-    RRF --> MetadataRanker --> PromptEngine
-    PromptEngine --> GeminiFlash
-    GeminiFlash -->|Token-by-Token SSE Stream| WebUI
-    GeminiFlash -.->|Async Logging| AsyncWorkers
-    AsyncWorkers --> SQLite --> GapTracker
+    Gateway --> HistoryTrimmer
+    HistoryTrimmer --> Retriever
+    
+    Retriever --> EntityGraph --> Composite
+    Retriever --> Dense --> RRF
+    Retriever --> Sparse --> RRF
+    RRF --> Composite
+    
+    Composite --> PromptSystem
+    PromptSystem --> GeminiFlash
+    GeminiFlash -.->|On 404 / API Error| FallbackModel
+    GeminiFlash -.->|On Network Glitch| LocalSynthesizer
+    
+    GeminiFlash -->|Real-Time SSE Token Stream| WebUI
+    GeminiFlash -.->|Async Telemetry Log| SQLiteWAL --> GapAudit
 ```
 
-### Hybrid Retrieval Pipeline
+### Unified Entity & RAG Retrieval Flow
 
-The retrieval pipeline solves the traditional dilemma of semantic vector search: **Dense embeddings understand concepts but struggle with exact numbers and alphanumeric codes (e.g., `0802410205101002`, `CSE-1101`), while BM25 understands exact terms but misses synonyms.**
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as Student / User
+    participant App as Flask Controller (app.py)
+    participant Graph as Unified Entity Graph
+    participant Hybrid as FAISS + BM25Okapi
+    participant LLM as Google GenAI (Gemini 2.5)
 
-$$\text{RRF Score}(d) = \frac{w_{\text{dense}}}{60 + \text{rank}_{\text{dense}}(d)} + \frac{w_{\text{sparse}}}{60 + \text{rank}_{\text{sparse}}(d)}$$
-
-1. **Query Expansion & Synonym Mapping**: Colloquial terms like *"koyti dept"* or *"porashonar khoroch"* are mapped to their authoritative academic equivalents (*"Department list"*, *"Tuition fee structure"*).
-2. **Dense Vector Scoring**: 384-dimensional dense vectors compute cosine similarity using inner products on normalized FAISS vectors.
-3. **Sparse Lexical Scoring**: BM25Okapi scores term frequency and inverse document frequency across all indexed chunks.
-4. **Reciprocal Rank Fusion**: Dense and sparse rank sets are combined using reciprocal rank weighting ($k=60$).
-5. **Departmental Masking**: If a question explicitly mentions a specific department (e.g., CSE), chunks from differing departments (e.g., CE, ME) receive a heavy penalty ($0.0001\times$) to prevent cross-department hallucinations.
-6. **Chronological Re-Ranking**: Documents with newer academic sessions (e.g., Summer 2026 vs Summer 2024) and authoritative approvals receive priority boosts.
+    User->>App: "GR ke" OR "AA er contact"
+    App->>Graph: Multi-Hop Entity Extraction (Query + History)
+    Note over Graph: Matches Short Form `GR` -> S. M Golam Rifat<br/>Matches Short Form `AA` -> Md. Al Amin<br/>Extracts Phone, Email, Dept, Courses
+    Graph-->>App: Authoritative Entity Profile Dossier
+    
+    App->>Hybrid: Hybrid Dense-Sparse Search across 37 files
+    Hybrid-->>App: Top Ranked Document Passages
+    
+    App->>LLM: Composite Context (Entity Dossier + RAG Chunks)
+    Note over LLM: Enforces Bengali Script (বাংলা),<br/>Direct Clickable Tel/Mail Links,<br/>Strict "সৈয়দপুর" Spelling
+    LLM-->>User: Structured, verified response with direct phone/email!
+```
 
 ---
 
 ## 📊 Core Subsystems
 
-### 1. Hybrid RAG Retrieval Engine
-* Located in [`retrieval/rag_search.py`](file:///d:/BAUST_AI_HELPDESK/retrieval/rag_search.py).
-* **Dense Embedding**: Powered by HuggingFace `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` executing on CPU or GPU with zero symlink warnings.
-* **FAISS Indexing**: Flat Inner Product (`IndexFlatIP`) ensures maximum mathematical precision with $O(N)$ vector lookup in $<5\text{ ms}$.
-* **Hot Reloading**: Supports live vector index replacement (`reload_vector_store()`) using thread-safe double-buffering locks without requiring server downtime.
+### 1. Unified Entity & Multi-Hop Graph Retriever
+* **Source Location:** [`retrieval/rag_search.py`](file:///d:/BAUST_AI_HELPDESK/retrieval/rag_search.py)
+* **Single Source of Truth:** Replaced fragile and disconnected `if-else` lookup functions with a single, highly optimized entity graph (`get_unified_entity_graph()`).
+* **Entity Coverage:**
+  - **420+ Faculty & Staff:** Pre-indexes teachers across all 9 departments (CSE, EEE, ME, IPE, CE, FBS, English, ICT, Arts & Sciences).
+  - **Routine Abbreviations:** Accurately maps teacher initials (`AA`, `GR`, `GC`, `FTZ`, `MI`, `MZH`, `RH`, `HM`, `AD`, `TT`, etc.) to their full names, designations, and personal contact info.
+  - **3,180+ Students:** Maps every student roll number to their name, programme, academic level-term, exam slot, room, seat, and roll parity (`ODD` vs `EVEN`).
+* **Zero Disconnection:** Querying a teacher by routine initials (e.g., *"GR ke"*) or asking for contact details after discussing a teacher seamlessly pulls verified phone and email records directly from department records.
 
-### 2. SSE Token Streaming & Client Rendering
-* Located in [`app.py`](file:///d:/BAUST_AI_HELPDESK/app.py#L740) and [`static/js/chat.js`](file:///d:/BAUST_AI_HELPDESK/static/js/chat.js).
-* Employs standard HTTP chunked transfer encoding (`text/event-stream`).
-* Client parses JSON data frames:
-  - `{"type": "token", "content": "..."}`: Immediately pushed to Marked.js renderer.
-  - `{"type": "sources", "sources": [...]}`: Displays authoritative document chips.
-  - `{"type": "done", "log_id": 42}`: Finalizes typing indicator and binds precise feedback listeners.
-* Mathematical LaTeX formulas like $\sum_{i=1}^n x_i$ are rendered in real time using **KaTeX**.
-* Code snippets are syntax-highlighted via **Highlight.js** and wrapped in one-click copy buttons.
-* All rendered HTML is strictly sanitized using **DOMPurify** to eliminate Cross-Site Scripting (XSS).
+### 2. Hybrid Dense-Sparse RAG (FAISS + BM25Okapi + RRF)
+* **Source Location:** [`retrieval/rag_search.py`](file:///d:/BAUST_AI_HELPDESK/retrieval/rag_search.py)
+* **Dense Semantic Representation:** 384-dimensional dense vectors generated via `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`.
+* **Sparse Lexical Ranking:** Pure-Python `BM25Okapi` ($k_1=1.5, b=0.75$) with campus-specific synonym expansion.
+* **Reciprocal Rank Fusion (RRF):**
+  $$\text{RRF Score}(d) = \frac{1.0}{60 + \text{rank}_{\text{dense}}(d)} + \frac{1.2}{60 + \text{rank}_{\text{sparse}}(d)}$$
+* **Departmental Isolation Filter:** Strictly penalizes out-of-scope departments ($0.001\times$) to prevent queries about CSE from returning Civil Engineering (CE) or Electrical Engineering (EEE) announcements.
 
-### 3. Multimodal Document Ingestion & OCR Pipeline
-* Located in [`ocr/ocr_api.py`](file:///d:/BAUST_AI_HELPDESK/ocr/ocr_api.py) and [`metadata_manager.py`](file:///d:/BAUST_AI_HELPDESK/metadata_manager.py).
-* **Multi-Format Ingestion**: Ingests `.pdf`, `.txt`, `.png`, `.jpg`, and `.jpeg`.
-* **Automated Text Extraction**: Native `pypdf` extraction with fallback to OCR.space REST API for low-contrast scanned notices.
-* **AI Structuring Engine**: Extracted unformatted text is automatically converted into clean, hierarchical Markdown with semantic section headers and structured tables.
-* **Smart Topic Routing**: Analyzes document content and either merges it into existing knowledge base documents (e.g., `tuition_fees_and_scholarships.txt`) or creates a new authoritative topic.
+### 3. Official Google GenAI SDK Engine (`multilingual_helpdesk.py`)
+* **Source Location:** [`multilingual_helpdesk.py`](file:///d:/BAUST_AI_HELPDESK/multilingual_helpdesk.py)
+* **Official SDK Migration:** Built strictly on `from google.genai import client, types`.
+* **Primary & Fallback Hierarchy:**
+  - **Primary Model:** `gemini-2.5-flash`
+  - **Graceful Fallback:** `gemini-2.0-flash-lite-preview-02-05` / `gemini-2.0-flash`
+* **Sliding Window History (`trim_history`):** Keeps the last 4 messages (2 turns) to minimize token consumption and prevents duplicate submission of the current query if already present in frontend arrays.
+* **Synchronous & Streaming Support:** Exposes both `generate_response()` and `generate_response_stream()` for zero-delay SSE piping.
 
-### 4. Production Analytics & Knowledge Gap Tracker
-* Located in [`analytics.py`](file:///d:/BAUST_AI_HELPDESK/analytics.py) and [`templates/admin.html`](file:///d:/BAUST_AI_HELPDESK/templates/admin.html).
-* **SQLite 3 WAL Mode**: High concurrency write-ahead logging enables instantaneous lock-free concurrent dashboard reads while asynchronous threads record queries.
-* **Bounded ThreadPoolExecutor**: Prevents thread-exhaustion denial-of-service under peak traffic loads.
-* **Precise Log ID Feedback**: Like and Dislike feedback links directly to unique message IDs (`log_id`), completely eliminating text-matching race conditions.
-* **Dynamic Gap Resolution**:
-  - Automatically identifies when student questions receive low confidence or "I don't know" answers.
-  - Clusters identical inquiries by frequency.
-  - Distinguishes between active unresolved gaps (`⚠️`) and admin-resolved gaps (`✅`).
+### 4. Smart Language Mapping & Academic Directives
+* **Enforced via System Instruction:**
+  1. **Bengali (বাংলা):** Natural, grammatically correct Bengali script.
+  2. **English:** Crisp, professional English.
+  3. **Banglish / Romanized Bengali:** Users typing *"Aamar nam Imran"* or *"Admission fee koto?"* are answered **100% in Bengali script (বাংলা)**, never Romanized Banglish.
+  4. **Translation Requests:** Automatically translates previous conversation turns upon request (*"eita English e bolo"*).
+  5. **Spelling Integrity:** Strict rule for **"সৈয়দপুর"** / **"সৈয়দপুর"** — *never phonetically transliterated as "সাইদপুর" or "সায়েদপুর"*.
+  6. **Clickable Contacts:** Phone numbers formatted as `[017...](tel:017...)` and emails as `[...@...](mailto:...)`.
 
-### 5. Anti-Hallucination & Departmental Isolation
-* Located in [`llm/chatbot.py`](file:///d:/BAUST_AI_HELPDESK/llm/chatbot.py#L40) and [`retrieval/rag_search.py`](file:///d:/BAUST_AI_HELPDESK/retrieval/rag_search.py#L35).
-* Enforces **5 Non-Negotiable System Directives**:
-  1. *Strict Context Adherence*: Refuses to invent policies, fees, or dates not explicitly stated in BAUST context.
-  2. *Departmental Purity*: An inquiry mentioning Computer Science (CSE) strictly suppresses Civil (CE), Electrical (EEE), or Mechanical (ME) announcements.
-  3. *Admission & Quota Accuracy*: Quotes verbatim military, freedom fighter, and sibling waiver rules.
-  4. *Honest Ignorance*: Explicitly replies *"আমার কাছে এই বিষয়ে তথ্য নেই"* (or English equivalent) when no matching records exist.
-  5. *Bilingual Fluency*: Responds in the exact language or dialect selected by the user.
+### 5. Live Temporal Awareness & Routine Scheduler
+* **Bangladesh Standard Time (UTC+6):** Real-time awareness of date, time, and day of the week.
+* **Weekend Awareness:** Friday (শুক্রবার) and Saturday (শনিবার) are recognized as weekly holidays. Asking *"kalke amar ki class ache"* on Friday or Saturday accurately states that tomorrow is a holiday, and displays the schedule for the next academic day (রবিবার / Sunday).
+* **Roll Parity Verification:** Evaluates student roll endings to clarify whether sessional lab slots designated `#ODD#` or `#EVEN#` apply to the user.
 
-### 6. Enterprise Security & Rate Limiting
-* Located in [`app.py`](file:///d:/BAUST_AI_HELPDESK/app.py#L110-L160).
-* **Sliding-Window Rate Limiter**: Zero-dependency, memory-efficient leaky bucket algorithm:
+### 6. Real-Time SSE Streaming & Markdown UI
+* **Source Location:** [`app.py`](file:///d:/BAUST_AI_HELPDESK/app.py) & [`static/js/chat.js`](file:///d:/BAUST_AI_HELPDESK/static/js/chat.js)
+* **Chunked Transfer:** Server-Sent Events (`/api/chat/stream`) deliver tokens progressively with time-to-first-token under 300ms.
+* **Mathematical Rendering:** KaTeX renders inline math ($\LaTeX$) and display formulas on the fly.
+* **Security & Highlight:** Marked.js parses markdown, Highlight.js handles code blocks, and DOMPurify strips malicious scripts before DOM injection.
+
+### 7. Multimodal Document Ingestion & OCR.space Pipeline
+* **Source Location:** [`ocr/ocr_api.py`](file:///d:/BAUST_AI_HELPDESK/ocr/ocr_api.py) & [`metadata_manager.py`](file:///d:/BAUST_AI_HELPDESK/metadata_manager.py)
+* **File Support:** Ingests `.pdf`, `.txt`, `.png`, `.jpg`, and `.jpeg`.
+* **OCR Fallback:** Scans non-selectable, low-contrast scanned notices using the OCR.space REST API.
+* **Auto-Structuring:** Converts unstructured plain text into clean, hierarchical Markdown with standardized tables.
+
+### 8. Production Analytics & Knowledge Gap Intelligence
+* **Source Location:** [`analytics.py`](file:///d:/BAUST_AI_HELPDESK/analytics.py)
+* **SQLite 3 WAL Mode:** Write-Ahead Logging allows simultaneous lock-free dashboard reads while background threads log chat sessions.
+* **Message-Specific Feedback:** Likes and dislikes attach directly to unique `log_id` tokens.
+* **Knowledge Gap Discovery:** Automatically flags questions where the AI had low confidence, clustering similar queries so campus administrators can update policy documents with one click.
+
+### 9. Enterprise Security & Rate Limiting
+* **Sliding-Window Rate Limiter:**
   - `/api/chat/stream`: $15\text{ req/min}$
   - `/api/feedback`: $30\text{ req/min}$
   - `/admin-login`: $10\text{ req/min}$ (Brute-force protection)
-* **DOM Clobbering Defense**: Safe property retrieval via `.getAttribute('action')` prevents form element name shadowing crashes.
-* **Safe Session Management**: Session cookies configured with `HttpOnly`, `SameSite=Lax`, and dynamic cryptographic entropy.
+* **Session Hardening:** Dynamic cryptographic entropy with `HttpOnly` and `SameSite=Lax` cookies.
 
 ---
 
@@ -199,8 +229,9 @@ $$\text{RRF Score}(d) = \frac{w_{\text{dense}}}{60 + \text{rank}_{\text{dense}}(
 ```
 BAUST_AI_HELPDESK/
 │
-├── app.py                      # Flask Application Controller, REST & SSE Endpoints
+├── app.py                      # Production Flask Controller, REST & SSE Endpoints
 ├── analytics.py                # Concurrent SQLite WAL Analytics & Audit Logger
+├── multilingual_helpdesk.py    # Official Google GenAI SDK Backend Class & Streamer
 ├── metadata_manager.py         # Heuristic Document Metadata Inference & Versioning
 ├── test_chatbot.py             # Interactive Terminal Chat Profiler & Latency Benchmark
 ├── test_analytics_upgrades.py  # Unit Test Suite for Analytics & Thread Safety
@@ -213,22 +244,26 @@ BAUST_AI_HELPDESK/
 │   └── create_vector.py        # Dense Embedding Generator & Incremental FAISS Indexer
 │
 ├── llm/                        # Language Model Connectors
-│   └── chatbot.py              # Gemini 1.5 Flash Client, System Prompts & Guardrails
+│   └── chatbot.py              # Gemini 2.5 Flash Client, System Prompts & Guardrails
 │
 ├── ocr/                        # Optical Character Recognition
 │   └── ocr_api.py              # OCR.space REST Gateway for Scanned Files & Images
 │
 ├── retrieval/                  # Information Retrieval Subsystem
-│   ├── rag_search.py           # Hybrid Dense-Sparse Search, BM25Okapi & RRF Re-ranking
+│   ├── rag_search.py           # Unified Entity Graph, Hybrid FAISS + BM25Okapi & RRF
 │   └── search.py               # Backward-Compatibility Interface Wrapper
 │
-├── knowledge_base/             # Official University Text Corpus
+├── knowledge_base/             # Official University Text Corpus (37+ Documents)
 │   ├── admission_information.txt
+│   ├── class_and_lab_routine.txt
 │   ├── cse_department_and_faculty.txt
+│   ├── ipe_department_and_faculty.txt
+│   ├── me_department_and_faculty.txt
+│   ├── cse_midterm_seatplan_summer_2026.txt
 │   ├── tuition_fees_and_scholarships.txt
 │   ├── undergraduate_examination_policy.txt
 │   ├── residential_halls_and_facilities.txt
-│   └── ... (30+ Authoritative Knowledge Files)
+│   └── ... (All Academic Faculties & Departments)
 │
 ├── templates/                  # Server-Side Jinja2 Templates
 │   ├── user.html               # Modern Student Chat Interface (Day / Night Modes)
@@ -254,7 +289,9 @@ BAUST_AI_HELPDESK/
 │
 ├── data/                       # Operational Databases & Logs
 │   ├── analytics.db            # SQLite Analytics Database (WAL Mode)
-│   └── document_metadata.json  # Document Lifecycle & Superseding State Store
+│   ├── document_metadata.json  # Document Lifecycle & Superseding State Store
+│   ├── synonyms.json           # Academic Colloquial Synonym Mapping
+│   └── university_config.json  # University Leadership & Office Directories
 │
 └── uploads/                    # Temporary Storage for Staged Administrative Uploads
 ```
@@ -264,20 +301,20 @@ BAUST_AI_HELPDESK/
 ## 🚀 Quickstart & Installation
 
 ### 1. Prerequisites
-- **Python**: Version `3.10`, `3.11`, or `3.12` installed.
-- **Git**: Installed and configured.
-- **Google Gemini API Key**: Free tier or paid key from [Google AI Studio](https://aistudio.google.com/).
-- **OCR.space API Key**: Free key from [OCR.space](https://ocr.space/ocrapi) (optional, for scanned images/PDFs).
+- **Python**: Version `3.10`, `3.11`, or `3.12`
+- **Git**: Installed and configured
+- **Google Gemini API Key**: Obtainable from [Google AI Studio](https://aistudio.google.com/)
+- **OCR.space API Key**: Free key from [OCR.space](https://ocr.space/ocrapi) *(optional, for scanned documents)*
 
 ### 2. Clone the Repository
 ```bash
-git clone https://github.com/your-username/BAUST_AI_HELPDESK.git
+git clone https://github.com/ArfinSarker/BAUST_AI_HELPDESK.git
 cd BAUST_AI_HELPDESK
 ```
 
-### 3. Initialize Virtual Environment
+### 3. Set Up Virtual Environment
 ```bash
-# Windows (PowerShell / Command Prompt)
+# Windows (PowerShell)
 python -m venv venv
 .\venv\Scripts\activate
 
@@ -293,7 +330,7 @@ pip install -r requirements.txt
 ```
 
 ### 5. Configure Environment Variables
-Create a `.env` file in the project root directory:
+Create a `.env` file in the project root:
 ```ini
 # =====================================================
 # BAUST AI HELPDESK CONFIGURATION
@@ -302,46 +339,47 @@ Create a `.env` file in the project root directory:
 # Google Gemini API Key (Mandatory)
 GEMINI_API_KEY=AIzaSyYourGeminiApiKeyHere
 
+# Primary Generative Model
+GEMINI_MODEL=gemini-2.5-flash
+
 # OCR.space API Key (For scanned documents and photos)
 OCR_SPACE_API_KEY=helloworld
 
 # Administrative Portal Authentication
 ADMIN_USERNAME=admin
-ADMIN_PASSWORD=your_super_secret_admin_password
+ADMIN_PASSWORD=your_secure_admin_password
 FLASK_SECRET_KEY=generate_a_random_32_character_hex_string_here
 
-# System Performance Tweaks (Optional)
-GEMINI_MODEL=gemini-flash-latest
+# Network Port Configuration
 PORT=5000
 ```
 
-### 6. Build the Vector Knowledge Base
-Generate the FAISS vector database from the files in `knowledge_base/`:
+### 6. Build or Update the Vector Knowledge Base
+Generate the FAISS vector index from `knowledge_base/`:
 ```bash
 python embedding/create_vector.py
 ```
-> **Output:** Scans all text files, chunks documents with optimal overlap, generates multilingual sentence embeddings, and builds the FAISS index in `vector_store/`.
+> **What this does:** Scans all 37 text files, generates semantic chunks with overlap, computes sentence embeddings, and serializes the index to `vector_store/`.
 
-### 7. Launch the Application
+### 7. Launch the Application Server
 ```bash
 python app.py
 ```
-Open your browser and navigate to:
+Access the application in your browser:
 * **Student Helpdesk Portal:** [http://127.0.0.1:5000](http://127.0.0.1:5000)
-* **Administrator Analytics Dashboard:** [http://127.0.0.1:5000/admin](http://127.0.0.1:5000/admin)
+* **Admin Management & Analytics Dashboard:** [http://127.0.0.1:5000/admin](http://127.0.0.1:5000/admin)
 
 ---
 
 ## 💻 Interactive Terminal CLI Profiler
 
-The project includes an interactive CLI testing tool with real-time latency diagnostics:
+A built-in diagnostic CLI profiler is provided for real-time latency and retrieval inspection:
 
 ```bash
-# Start Interactive Terminal Chat Session
 python test_chatbot.py
 ```
 
-### Telemetry Output Example:
+### Sample Session Output:
 ```
 ================================================================================
 🎓 BAUST AI HELPDESK — INTERACTIVE TERMINAL PROFILER
@@ -349,22 +387,26 @@ Type your question below (in English, Bangla, or Banglish).
 Commands: 'exit' | 'quit' to close, 'clear' to reset conversation memory.
 ================================================================================
 
-Student: What is the tuition fee for CSE?
+Student: GR ke
 
 AI Assistant:
-• Program Name: B.Sc. in Computer Science and Engineering (CSE)
-• Admission Fee: Tk. 65,000.00 (Once during admission)
-• Per Semester Fee: Tk. 90,000.00 (Remaining 7 Semesters)
-• Total Cost (4 Years): Tk. 6,95,000.00 (Including refundable caution money)
-• Waivers Available: 20% for siblings, 10% for military wards, up to 40% merit.
+বাংলাদেশ আর্মি ইউনিভার্সিটি অব সায়েন্স অ্যান্ড টেকনোলজি (BAUST), সৈয়দপুর-এর কম্পিউটার বিজ্ঞান এবং প্রকৌশল (CSE) বিভাগের শিক্ষক এস. এম. গোলাম রিফাত (S. M Golam Rifat)-কে সংক্ষেপে GR বলা হয়। তাঁর বিস্তারিত তথ্য নিচে দেওয়া হলো:
+
+• পূর্ণনাম (Full Name): এস. এম. গোলাম রিফাত (S. M Golam Rifat)
+• পদবি (Designation): প্রভাষক (Lecturer)
+• বিভাগ (Department): কম্পিউটার বিজ্ঞান এবং প্রকৌশল (CSE)
+• মোবাইল / ফোন (Phone): [01759810833 (WhatsApp)](tel:01759810833)
+• ইমেইল (Email): [golamrifat@baust.edu.bd](mailto:golamrifat@baust.edu.bd), [golamrifat@gmail.com](mailto:golamrifat@gmail.com)
+• শিক্ষাগত যোগ্যতা (Qualifications): বিএসসি ইঞ্জিনিয়ারিং (সিএসই), রুয়েট; এমএসসি ইঞ্জিনিয়ারিং (সিএসই), রুয়েট (চলমান)।
 
 --------------------------------------------------------------------------------
 ⏱️  PERFORMANCE TELEMETRY:
-   - RAG Retrieval Latency : 18.4 ms
-   - Time-to-First-Token   : 242.1 ms
-   - Total Generation Time : 1.14 s
-   - Generation Speed      : 48.2 tokens/sec
-   - Documents Consulted   : tuition_fees_and_scholarships.txt
+   - Entity Graph Match    : 7.5 ms (Abbreviation: GR -> S. M Golam Rifat)
+   - Hybrid RAG Latency    : 14.2 ms
+   - Time-to-First-Token   : 218.4 ms
+   - Total Generation Time : 0.89 s
+   - Generation Speed      : 52.6 tokens/sec
+   - Documents Consulted   : cse_department_and_faculty.txt, class_and_lab_routine.txt
 --------------------------------------------------------------------------------
 ```
 
@@ -372,50 +414,71 @@ AI Assistant:
 
 ## 📡 REST & SSE API Reference
 
-### 1. Real-Time Chat Stream
+### 1. Real-Time Chat Stream (Server-Sent Events)
 `POST /api/chat/stream`
-* **Rate Limit:** 15 requests/minute
-* **Headers:** `Content-Type: application/json`
+* **Content-Type:** `application/json`
+* **Accept:** `text/event-stream`
+* **Rate Limit:** 15 requests / minute
 
 **Request Payload:**
 ```json
 {
-  "question": "CSE er admission fee koto?",
-  "history": [
-    {"role": "user", "content": "Hi"},
-    {"role": "assistant", "content": "Hello! How can I assist you with BAUST today?"}
-  ]
+  "question": "0802410205101019 kalke amar ki ki class ache",
+  "history": []
 }
 ```
 
-**SSE Event Stream:**
+**SSE Event Stream Response:**
 ```
-data: {"type": "token", "content": "বি"}
-data: {"type": "token", "content": "এস"}
-data: {"type": "token", "content": "সি"}
-data: {"type": "token", "content": " (সিএসই)"}
-data: {"type": "sources", "sources": [{"title": "Admission Fees", "filename": "tuition_fees_and_scholarships.txt"}]}
-data: {"type": "done", "log_id": 104, "raw_answer": "..."}
+data: {"type": "token", "content": "* **শিক্ষার্থীর নাম:** MD. SHAMSUL ARFIN SARKER\n"}
+data: {"type": "token", "content": "* **শিক্ষার্থীর আইডি / রোল:** `0802410205101019`\n"}
+data: {"type": "token", "content": "আজ শনিবার (সাপ্তাহিক ছুটি)। আগামীকালের নির্ধারিত ক্লাস:\n"}
+data: {"type": "sources", "sources": [{"title": "Class And Lab Routine", "filename": "class_and_lab_routine.txt"}]}
+data: {"type": "done", "log_id": 142, "raw_answer": "..."}
 ```
 
 ---
 
-### 2. Student Feedback Submission
-`POST /api/feedback`
-* **Rate Limit:** 30 requests/minute
-* **Headers:** `Content-Type: application/json`
+### 2. Standard JSON Chat Completion
+`POST /api/chat`
+* **Content-Type:** `application/json`
 
 **Request Payload:**
 ```json
 {
-  "log_id": 104,
-  "question": "CSE er admission fee koto?",
+  "question": "AA er contact",
+  "history": []
+}
+```
+
+**Response Payload (HTTP 200):**
+```json
+{
+  "status": "success",
+  "question": "AA er contact",
+  "raw_answer": "* **শিক্ষকের পূর্ণনাম:** Md. Al Amin\n* **পদবি ও বিভাগ:** Lecturer, Industrial and Production Engineering (IPE)\n* **মোবাইল / ফোন:** [+8801775496171](tel:+8801775496171)\n* **ইমেইল:** [alaminpbt@gmail.com](mailto:alaminpbt@gmail.com)",
+  "html_answer": "<ul>\n<li><strong>শিক্ষকের পূর্ণনাম:</strong> Md. Al Amin</li>...</ul>",
+  "log_id": 143
+}
+```
+
+---
+
+### 3. Student Feedback Submission
+`POST /api/feedback`
+* **Content-Type:** `application/json`
+
+**Request Payload:**
+```json
+{
+  "log_id": 143,
+  "question": "AA er contact",
   "answer": "...",
   "feedback": "like"
 }
 ```
 
-**Response:**
+**Response Payload (HTTP 200):**
 ```json
 {
   "status": "success",
@@ -425,25 +488,14 @@ data: {"type": "done", "log_id": 104, "raw_answer": "..."}
 
 ---
 
-### 3. Quick-Add Knowledge (Gap Resolution)
-`POST /admin/quick-add-gap-knowledge`
-* **Access:** Admin Session Required
-* **Description:** Directly patches a knowledge gap, creates/updates knowledge documents, and triggers background vector re-indexing.
-
----
-
 ## 🛡️ Production Deployment & Hardening
 
-### Running with Gunicorn / WSGI (Linux Production)
-For production deployments behind Nginx or Caddy:
-
+### Running with Gunicorn (Linux Production)
 ```bash
-# Install Gunicorn
 pip install gunicorn
-
-# Start with 4 worker threads (single process recommended for FAISS in-memory sync)
 gunicorn --workers 1 --threads 8 --bind 0.0.0.0:5000 app:app
 ```
+*(Single worker with multiple threads is recommended to preserve in-memory FAISS hot-swapping synchronization).*
 
 ### Nginx Reverse Proxy Configuration
 ```nginx
@@ -458,12 +510,29 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
 
-        # Mandatory for SSE Token Streaming:
+        # Mandatory settings for SSE streaming:
         proxy_buffering off;
         proxy_cache off;
         proxy_read_timeout 120s;
     }
 }
+```
+
+### Systemd Service Daemon (`/etc/systemd/system/baust-helpdesk.service`)
+```ini
+[Unit]
+Description=BAUST AI Helpdesk & Knowledge Portal
+After=network.target
+
+[Service]
+User=baust
+WorkingDirectory=/opt/BAUST_AI_HELPDESK
+ExecStart=/opt/BAUST_AI_HELPDESK/venv/bin/gunicorn --workers 1 --threads 8 --bind 127.0.0.1:5000 app:app
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
 ```
 
 ---
@@ -472,11 +541,11 @@ server {
 
 > [!CAUTION]
 > ### PROPRIETARY & CONFIDENTIAL INTELLECTUAL PROPERTY
-> **This repository, codebase, neural architecture, prompts, and documentation are strictly PRIVATE and PROPRIETARY.**
+> **This repository, codebase, neural architectures, graph retrievers, prompts, and documentation are strictly PRIVATE and PROPRIETARY.**
 > 
-> * **Closed Source & Exclusive Rights:** This software is NOT open-source and is NOT public domain. All intellectual property rights, copyrights, and design patterns remain exclusively with the author.
+> * **Closed Source & Exclusive Rights:** This software is NOT open-source and is NOT public domain. All intellectual property rights, copyrights, algorithms, and design patterns remain exclusively with the author.
 > * **No Unauthorized Reproduction:** No portion of this code, dataset, system prompts, or architectural designs may be copied, cloned, reproduced, redistributed, sublicensed, modified, or published publicly in any format without prior explicit written authorization from the copyright holder.
-> * **Internal Deployment:** Built exclusively for authorized administrative use and internal evaluation for Bangladesh Army University of Science and Technology (BAUST), Saidpur.
+> * **Institutional Deployment:** Built specifically for authorized institutional operation and evaluation for Bangladesh Army University of Science and Technology (BAUST), Saidpur.
 > 
 > *© 2026. All Rights Reserved.*
 

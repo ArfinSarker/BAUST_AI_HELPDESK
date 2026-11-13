@@ -632,15 +632,25 @@ def resolve_student_or_routine_query(question: str, history: list = None) -> Opt
     q_low = clean_q.lower()
     is_routine = is_routine_query(clean_q)
 
-    # 1. Extract student roll from question or history
+    # 1. Extract student roll:
+    # A roll must be explicitly in current question, OR history is only consulted IF query is genuinely a student follow-up!
     roll_match = re.search(r'\b(08\d{6,14})\b', clean_q)
+    roll_from_history = False
     if not roll_match and history:
-        for msg in reversed(history[-4:]):
-            if isinstance(msg, dict):
-                m = re.search(r'\b(08\d{6,14})\b', str(msg.get("content", "")))
-                if m:
-                    roll_match = m
-                    break
+        student_followup_terms = [
+            "seat", "room", "slot", "exam", "routine", "class", "kalke", "ajke", "schedule", "period",
+            "সিট", "রুম", "কক্ষ", "পরীক্ষা", "রুটিন", "ক্লাস", "আজকে", "কালকে", "আমার", "amar", "tar", "amr"
+        ]
+        is_student_q = any(re.search(r'\b' + re.escape(term) + r'\b', q_low) for term in student_followup_terms)
+        is_faculty_q = any(k in q_low for k in ["sir", "teacher", "faculty", "madam", "maam", "prof", "head", "hod", "gr", "ftz", "akz", "rifat", "zohra", "কে", "কার", "শিক্ষক", "স্যার"])
+        if is_student_q and not is_faculty_q:
+            for msg in reversed(history[-4:]):
+                if isinstance(msg, dict):
+                    m = re.search(r'\b(08\d{6,14})\b', str(msg.get("content", "")))
+                    if m:
+                        roll_match = m
+                        roll_from_history = True
+                        break
 
     st_db = get_student_database()
 
@@ -686,6 +696,9 @@ def resolve_student_or_routine_query(question: str, history: list = None) -> Opt
                         f"* Note: The official class routine for {s['level']} is currently not published/uploaded in the knowledge base. Only CSE Level- 3 Term- II class routine is currently available in the system.\n"
                     )
             else:
+                # If roll came only from history and query didn't ask for seat/room/exam, do not assume seat query!
+                if roll_from_history and not any(k in q_low for k in ["seat", "room", "exam", "slot", "সিট", "রুম", "কক্ষ", "পরীক্ষা"]):
+                    return None
                 # User asked about seat/room/exam or entered only ID
                 single_doc = (
                     f"--- Document: Single Student Match (Source: {s['source']} | Status: CURRENT & AUTHORITATIVE) ---\n"
@@ -833,15 +846,15 @@ DEPT_PATTERNS = {
     "ict": [r"\bict\b", r"আইসিটি"]
 }
 
-
 # =====================================================================
-# FACULTY SHORT FORM / INITIALS REGISTRY & RESOLVER
+# FACULTY REGISTRY & AUTHORITATIVE RESOLVER (SHORT FORMS & NAMES)
 # =====================================================================
-FACULTY_SHORT_FORMS = {
-    "GR": {
+FACULTY_REGISTRY = [
+    {
         "short_form": "GR",
         "name_en": "S. M Golam Rifat",
         "name_bn": "এস. এম. গোলাম রিফাত",
+        "aliases": ["gr", "golam rifat", "rifat", "s m golam rifat", "গোলাম রিফাত", "রিফাত"],
         "designation": "Lecturer (প্রভাষক)",
         "department": "Computer Science and Engineering (CSE)",
         "phone": "01759810833",
@@ -849,153 +862,182 @@ FACULTY_SHORT_FORMS = {
         "education": "M.Sc. Engg. in CSE, RUET (On-going); B.Sc. Engg. in CSE, RUET",
         "routine_role": "CSE 3207 (Mathematical Analysis for Computer Science)"
     },
-    "FTZ": {
+    {
         "short_form": "FTZ",
         "name_en": "Fatema Tuz Zohra",
         "name_bn": "ফাতেমা তুজ জোহরা",
+        "aliases": ["ftz", "fatema tuz zohra", "fatema", "zohra", "mishu", "ফাতেমা তুজ জোহরা", "ফাতেমা"],
         "designation": "Assistant Professor (সহকারী অধ্যাপক)",
         "department": "Computer Science and Engineering (CSE)",
-        "email": "ftzohra@baust.edu.bd",
+        "phone": "01728646700",
+        "email": "fatema@baust.edu.bd",
+        "education": "B.Sc. Engg in CSE, CUET; M.Sc. in CSE, Jahangirnagar University",
         "routine_role": "CSE 3203 (Operating System), CSE 3204 (Operating System Sessional)"
     },
-    "AKZ": {
+    {
         "short_form": "AKZ",
         "name_en": "A K Z Rasel Rahman",
         "name_bn": "এ কে জেড রাসেল রহমান",
+        "aliases": ["akz", "akz rasel rahman", "rasel rahman", "rasel", "রাসেল রহমান"],
         "designation": "Lecturer (প্রভাষক)",
         "department": "Computer Science and Engineering (CSE)",
-        "email": "akzrasel@baust.edu.bd",
+        "phone": "01701133689",
+        "email": "rasel@baust.edu.bd",
         "routine_role": "CSE 3209 (Information System Design), CSE 3210 (Information System Design Sessional)"
     },
-    "MI": {
+    {
         "short_form": "MI",
         "name_en": "Md. Minhazul Islam",
         "name_bn": "মো. মিনহাজুল ইসলাম",
+        "aliases": ["mi", "minhazul islam", "minhaz", "মিনহাজুল ইসলাম", "মিনহাজ"],
         "designation": "Lecturer (প্রভাষক)",
         "department": "Computer Science and Engineering (CSE)",
+        "phone": "01714501019",
         "email": "minhaz@baust.edu.bd",
+        "education": "M.Sc. Engg. in CSE, RUET (On-going); B.Sc. Engg. in CSE, RUET",
         "routine_role": "CSE 3205 (Computer Networks), CSE 3206 (Computer Networks Sessional), CSE 3202 (AI Sessional)"
     },
-    "MZH": {
+    {
         "short_form": "MZH",
         "name_en": "Md Zahim Hassan",
         "name_bn": "মো. জাহিম হাসান",
-        "designation": "Lecturer (প্রভাষক)",
+        "aliases": ["mzh", "zahim hassan", "zahim", "জাহিম হাসান", "জাহিম"],
+        "designation": "Lecturer & Program Coordinator (প্রভাষক ও প্রোগ্রাম কোঅর্ডিনেটর)",
         "department": "Computer Science and Engineering (CSE)",
-        "email": "zahim@baust.edu.bd",
+        "phone": "01736393334",
+        "email": "zahimhassan@baust.edu.bd",
+        "education": "M.Sc. Engg. in CSE, RUET (On-going); B.Sc. Engg. in CSE, KUET",
         "routine_role": "CSE 3201 (Artificial Intelligence), CSE 3202 (AI Sessional)"
     },
-    "RH": {
+    {
         "short_form": "RH",
         "name_en": "MD. Rabby Hossain",
         "name_bn": "মো. রাব্বি হোসেন",
+        "aliases": ["rh", "rabby hossain", "rabby", "riyad", "রাব্বি হোসেন", "রাব্বি"],
         "designation": "Lecturer (প্রভাষক)",
-        "department": "Computer Science and Engineering (CSE)",
-        "email": "rabby@baust.edu.bd",
+        "department": "Computer Science & Engineering (CSE)",
+        "phone": "01324145340",
+        "email": "riyadcse@baust.edu.bd",
+        "education": "B.Sc. (Engr.) in CSE, BUET",
         "routine_role": "CSE 3204 (OS Sessional), CSE 3206 (Computer Networks Sessional), CSE 3210 (ISD Sessional)"
     },
-    "GC": {
+    {
         "short_form": "GC",
         "name_en": "Gourab Chandra Biswas",
         "name_bn": "গৌরব চন্দ্র বিশ্বাস",
+        "aliases": ["gc", "gourab chandra biswas", "gourab biswas", "gourab", "গৌরব চন্দ্র বিশ্বাস", "গৌরব"],
         "designation": "Lecturer (প্রভাষক)",
-        "department": "Computer Science and Engineering (CSE)",
-        "email": "gourab@baust.edu.bd",
+        "department": "Computer Science & Engineering (CSE)",
+        "phone": "01785794036",
+        "email": "gourabbiswas@baust.edu.bd",
+        "education": "B.Sc. (Engr.) in CSE, CUET",
         "routine_role": "CSE 3200 (Web Engineering Project)"
     },
-    "ASF": {
+    {
         "short_form": "ASF",
         "name_en": "Md. Asif Iqbal",
         "name_bn": "মো. আসিফ ইকবাল",
+        "aliases": ["asf", "asif iqbal", "asif", "আসিফ ইকবাল"],
         "designation": "Assistant Software Engineer (সহকারী সফটওয়্যার প্রকৌশলী)",
         "department": "Computer Science and Engineering (CSE)",
         "routine_role": "CSE 3200 (Web Engineering Project)"
     },
-    "MMH": {
-        "short_form": "MMH",
-        "name_en": "Engr. Md. Mamun Hossain",
-        "name_bn": "প্রকৌ. মো. মামুন হোসেন",
-        "designation": "Associate Professor (সহযোগী অধ্যাপক)",
-        "department": "Computer Science and Engineering (CSE) / Head, ICT",
-        "phone": "01717690847",
-        "email": "mhossain@baust.edu.bd"
-    },
-    "NHC": {
+    {
         "short_form": "NHC",
         "name_en": "Dr. Md Nakib Hayat Chowdhury",
         "name_bn": "ড. মো. নাকিব হায়াত চৌধুরী",
+        "aliases": ["nhc", "nakib hayat chowdhury", "nakib hayat", "nakib", "নাকিব হায়াত চৌধুরী", "নাকিব"],
         "designation": "Associate Professor and Head (সহযোগী অধ্যাপক ও বিভাগীয় প্রধান)",
         "department": "Computer Science and Engineering (CSE)",
         "phone": "01703899959",
         "email": "nakib@baust.edu.bd"
     },
-    "MSA": {
+    {
+        "short_form": "MMH",
+        "name_en": "Engr. Md. Mamun Hossain",
+        "name_bn": "প্রকৌ. মো. মামুন হোসেন",
+        "aliases": ["mmh", "mamun hossain", "mamun", "মামুন হোসেন"],
+        "designation": "Associate Professor (সহযোগী অধ্যাপক)",
+        "department": "Computer Science and Engineering (CSE) / Head, ICT",
+        "phone": "01717690847",
+        "email": "mhossain@baust.edu.bd"
+    },
+    {
         "short_form": "MSA",
         "name_en": "Dr. Engr. Mohammed Sowket Ali",
         "name_bn": "ড. প্রকৌ. মোহাম্মদ শওকত আলী",
+        "aliases": ["msa", "sowket ali", "sowket", "শওকত আলী"],
         "designation": "Associate Professor (সহযোগী অধ্যাপক)",
         "department": "Computer Science and Engineering (CSE)",
         "phone": "01791895371",
         "email": "sowket@baust.edu.bd"
     },
-    "SMJA": {
+    {
         "short_form": "SMJA",
         "name_en": "Professor Dr. S.M. Jahangir Alam",
         "name_bn": "অধ্যাপক ড. এস.এম. জাহাঙ্গীর আলম",
+        "aliases": ["smja", "jahangir alam", "jahangir", "জাহাঙ্গীর আলম"],
         "designation": "Professor (অধ্যাপক)",
         "department": "Computer Science and Engineering (CSE)",
         "phone": "01766128002",
         "email": "jahangir@baust.edu.bd"
     }
-}
+]
 
 
-def resolve_faculty_short_form(question: str) -> Optional[str]:
+def resolve_faculty_member_or_initials(question: str) -> Optional[str]:
     """
     Identifies queries asking about a teacher by their routine short form / initials
-    (e.g., 'GR ke', 'routine e GR maane ki', 'who is GR', 'FTZ sir ke', 'AKZ details', 'MI ke').
+    (e.g., 'GR ke', 'routine e GR maane ki', 'who is GR', 'FTZ sir ke', 'AKZ details', 'MI ke')
+    OR by their name (e.g., 'Golam Rifat ke', 'Nakib sir ke', 'Mamun Hossain ke').
     Returns authoritative profile document with exact full name, designation, department, and courses.
     """
     if not question:
         return None
 
     clean_q = question.strip()
-    words = re.findall(r'\b[A-Za-z]{2,5}\b', clean_q)
-    matched_sf = None
-    for w in words:
-        w_up = w.upper()
-        if w_up in FACULTY_SHORT_FORMS:
-            # Check if query is interrogative or about identity/teacher/routine
-            interrogatives = ["ke", "who", "teacher", "sir", "madam", "maam", "faculty", "shikkhok", 
-                             "maane", "mane", "full name", "porichoy", "details", "routine", "kake",
-                             "কে", "কার", "শিক্ষক", "স্যার", "ম্যাডাম", "রুটিন", "নাম", "পরিচয়"]
-            q_low = clean_q.lower()
-            if len(clean_q.split()) <= 4 or any(k in q_low for k in interrogatives):
-                matched_sf = w_up
-                break
+    q_low = clean_q.lower()
+    tokens = [w for w in re.findall(r'[a-zA-Zঀ-৿]{2,}', q_low) if w not in ["ke", "who", "is", "sir", "madam", "maam", "teacher", "faculty", "er", "kake", "কে", "কার", "স্যার", "ম্যাডাম", "শিক্ষক", "রুটিন", "routine", "মাঝখানে", "বলতে", "মানে", "maane", "mane"]]
 
-    if not matched_sf:
+    matched = None
+    for item in FACULTY_REGISTRY:
+        sf_low = item["short_form"].lower()
+        # Direct word boundary match for short form (e.g. gr)
+        if re.search(r'\b' + re.escape(sf_low) + r'\b', q_low):
+            matched = item
+            break
+        # Match aliases
+        for alias in item["aliases"]:
+            if len(alias) >= 3 and alias in q_low:
+                matched = item
+                break
+            elif len(alias) == 2 and re.search(r'\b' + re.escape(alias) + r'\b', q_low):
+                matched = item
+                break
+        if matched:
+            break
+
+    if not matched:
         return None
 
-    info = FACULTY_SHORT_FORMS[matched_sf]
     contact_parts = []
-    if info.get("email"):
-        contact_parts.append(f"ইমেইল: [{info['email']}](mailto:{info['email']})")
-    if info.get("phone"):
-        contact_parts.append(f"ফোন: [{info['phone']}](tel:{info['phone']})")
+    if matched.get("email"):
+        contact_parts.append(f"ইমেইল: [{matched['email']}](mailto:{matched['email']})")
+    if matched.get("phone"):
+        contact_parts.append(f"ফোন: [{matched['phone']}](tel:{matched['phone']})")
     contact_str = " | ".join(contact_parts) if contact_parts else "বিভাগীয় অফিসে যোগাযোগ করুন"
 
     doc = (
         f"--- Document: Faculty Routine Short Form & Teacher Profile (Authoritative Source: cse_department_and_faculty.txt & class_and_lab_routine.txt) ---\n"
-        f"* **শিক্ষক সংক্ষেপণ (Faculty Short Form):** `{info['short_form']}`\n"
-        f"* **পূর্ণনাম (Full Name):** {info['name_bn']} ({info['name_en']})\n"
-        f"* **পদবি (Designation):** {info['designation']}\n"
-        f"* **বিভাগ (Department):** {info['department']}, বাংলাদেশ আর্মি ইউনিভার্সিটি অব সায়েন্স অ্যান্ড টেকনোলজি (BAUST), সৈয়দপুর।\n"
+        f"* **শিক্ষক সংক্ষেপণ (Faculty Short Form):** `{matched['short_form']}`\n"
+        f"* **পূর্ণনাম (Full Name):** {matched['name_bn']} ({matched['name_en']})\n"
+        f"* **পদবি (Designation):** {matched['designation']}\n"
+        f"* **বিভাগ (Department):** {matched['department']}, বাংলাদেশ আর্মি ইউনিভার্সিটি অব সায়েন্স অ্যান্ড টেকনোলজি (BAUST), সৈয়দপুর।\n"
     )
-    if info.get("routine_role"):
-        doc += f"* **রুটিনে দায়িত্বপ্রাপ্ত কোর্স (Courses in Routine):** {info['routine_role']}\n"
-    if info.get("education"):
-        doc += f"* **শিক্ষাগত যোগ্যতা (Education):** {info['education']}\n"
+    if matched.get("routine_role"):
+        doc += f"* **রুটিনে দায়িত্বপ্রাপ্ত কোর্স (Courses in Routine):** {matched['routine_role']}\n"
+    if matched.get("education"):
+        doc += f"* **শিক্ষাগত যোগ্যতা (Education):** {matched['education']}\n"
     doc += f"* **যোগাযোগ (Contact):** {contact_str}\n"
     return doc
 
@@ -1012,7 +1054,12 @@ def search_information(question: str, top_k: int = 4, history: list = None) -> s
     if is_greeting(question):
         return ""
 
-    # Authoritative Resolver for Student Profile, Class Routine and Exam Seatplan
+    # 1. Authoritative Resolver for Teacher / Faculty (Short Forms & Names like GR, FTZ, Golam Rifat, etc.)
+    faculty_doc = resolve_faculty_member_or_initials(question)
+    if faculty_doc:
+        return faculty_doc
+
+    # 2. Authoritative Resolver for Student Profile, Class Routine and Exam Seatplan
     student_or_routine_doc = resolve_student_or_routine_query(question, history=history)
     if student_or_routine_doc:
         return student_or_routine_doc
@@ -1021,11 +1068,6 @@ def search_information(question: str, top_k: int = 4, history: list = None) -> s
     name_matches, disambiguation_doc = find_student_matches_by_name(question)
     if disambiguation_doc:
         return disambiguation_doc
-
-    # Check for Teacher / Faculty Short Form or Routine Initials lookup (e.g. "GR ke", "FTZ ke", "AKZ ke")
-    faculty_sf_doc = resolve_faculty_short_form(question)
-    if faculty_sf_doc:
-        return faculty_sf_doc
 
     # Check for direct department faculty document lookup
     dept_faculty_doc = get_department_faculty_file_content(question)

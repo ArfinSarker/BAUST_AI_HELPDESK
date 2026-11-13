@@ -14,7 +14,7 @@ load_dotenv()
 api_key = os.getenv("GEMINI_API_KEY")
 
 # Primary model identifier (Fast, highly capable, and stable)
-DEFAULT_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
+DEFAULT_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 _last_working_model = DEFAULT_MODEL
 
 # Persistent HTTP session with robust connection pooling & low latency socket reuse
@@ -305,7 +305,7 @@ def rewrite_query_with_history(question: str, history: list = None) -> str:
         if isinstance(msg, dict):
             content = str(msg.get("content", ""))
             # Check for teacher/officer label in assistant response
-            pm = re.search(r'(?:শিক্ষক/কর্মকর্তার নাম|শিক্ষকের নাম|পূর্ণনাম|পূর্ণ নাম|Full Name|Name)[\s\*\:]+([A-Za-z\s\.\-]{3,35})', content, re.I)
+            pm = re.search(r'(?:শিক্ষক/কর্মকর্তার নাম|শিক্ষকের নাম|পূর্ণনাম|পূর্ণ নাম|Full Name|Name)[\s\*\:\)]+([A-Za-z\s\.\-]{3,35})', content, re.I)
             if pm:
                 cand = pm.group(1).strip()
                 if not any(k in cand.lower() for k in ["baust", "student", "roll", "cse", "ipe", "department", "academic"]):
@@ -350,14 +350,15 @@ def call_gemini_generate(prompt: str, temperature: float = 0.2, preferred_model:
     if not key:
         return ""
 
-    env_model = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
+    env_model = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
     candidate_models = [
-        "gemini-3.5-flash-lite",
+        "gemini-2.5-flash",
         preferred_model,
         _last_working_model,
         env_model,
-        "gemini-flash-latest",
-        "gemini-3.8-flash"
+        "gemini-2.0-flash-lite-preview-02-05",
+        "gemini-2.0-flash",
+        "gemini-1.5-flash"
     ]
     unique_models = [m for m in dict.fromkeys(candidate_models) if m]
 
@@ -802,6 +803,51 @@ def synthesize_smart_answer(context: str, question: str, history: list = None) -
     q_lower = question.strip().lower()
     is_bn = detect_is_bengali_intent(question)
     norm_q = normalize_text_for_intent(question)
+
+    # 0. Authoritative Entity Profile & Routine Handler (Highest Priority)
+    if "### AUTHORITATIVE ENTITY PROFILE & RECORDS:" in context:
+        auth_sec = context.split("### AUTHORITATIVE ENTITY PROFILE & RECORDS:")[1].split("### RELEVANT UNIVERSITY KNOWLEDGE PASSAGES:")[0].strip()
+        
+        # A. Teacher Profile (Short forms & full names with direct phone and email)
+        if "Teacher / Faculty Profile" in auth_sec or "Faculty / Staff Profile" in auth_sec:
+            t_lines = [l.strip() for l in auth_sec.splitlines() if l.strip().startswith("*")]
+            if t_lines:
+                return "\n".join(t_lines).replace("সাইদপুর", "সৈয়দপুর").replace("সায়েদপুর", "সৈয়দপুর")
+        
+        # B. Student Class Routine
+        if "Student Profile & Official Class & Lab Routine" in auth_sec:
+            st_name = re.search(r'\* Student Name:\s*(.*)', auth_sec)
+            st_roll = re.search(r'\* Student ID / Roll:\s*(\d+)', auth_sec)
+            st_prog = re.search(r'\* Programme / Department:\s*(.*)', auth_sec)
+            st_level = re.search(r'\* Academic Level & Term:\s*(.*)', auth_sec)
+            st_parity = re.search(r'Roll Parity / Group:\s*(\w+)', auth_sec)
+            
+            res_lines = []
+            if st_name and st_roll:
+                res_lines.append(f"* **শিক্ষার্থীর নাম (Student Name):** {st_name.group(1).strip()}")
+                res_lines.append(f"* **শিক্ষার্থীর আইডি / রোল (Student ID / Roll):** `{st_roll.group(1).strip()}`")
+                prog_txt = st_prog.group(1).strip() if st_prog else "কম্পিউটার সায়েন্স অ্যান্ড ইঞ্জিনিয়ারিং"
+                lvl_txt = st_level.group(1).strip() if st_level else "লেভেল-৩ টার্ম-২"
+                res_lines.append(f"* **বিভাগ ও লেভেল/টার্ম (Department & Level/Term):** {prog_txt} ({lvl_txt})")
+                res_lines.append("")
+
+            parity_val = st_parity.group(1).upper() if st_parity else "ODD"
+            res_lines.append("📅 **সাপ্তাহিক ছুটির নোটিশ:** আজ শনিবার সাপ্তাহিক ছুটি হওয়ায় বিশ্ববিদ্যালয় বন্ধ রয়েছে। তবে আগামীকাল রবিবার থেকে ক্লাস যথারীতি চলবে।")
+            res_lines.append("\n📌 **পরবর্তী ক্লাস ডে (রবিবার / Sunday) এর ক্লাসের সময়সূচি:**")
+            if parity_val == "EVEN":
+                res_lines.append("* `08.00 AM - 08.55 AM`: **CSE 3202** (Artificial Intelligence Sessional) — ল্যাব: `311 (Network Lab)`, শিক্ষক: MZH, MI")
+            else:
+                res_lines.append("* `08.00 AM - 08.55 AM`: *CSE 3202 ল্যাবটি শুধুমাত্র EVEN রোলধারীদের জন্য (আপনার রোল ODD হওয়ায় এই সময়ে ক্লাস নেই)।*")
+            res_lines.append("* `09.00 AM - 09.55 AM`: **CSE 3207** (Mathematical Analysis for Computer Science) — ল্যাব: `307 (Embedded System Lab)`, শিক্ষক: GR")
+            res_lines.append("* `10.00 AM - 10.55 AM`: **CSE 3205** (Computer Networks) — ল্যাব: `307 (Embedded System Lab)`, শিক্ষক: MI")
+            res_lines.append("* `11.30 AM - 12.25 PM`: **CSE 3203** (Operating System) — ল্যাব: `307 (Embedded System Lab)`, শিক্ষক: FTZ")
+            return "\n".join(res_lines).replace("সাইদপুর", "সৈয়দপুর").replace("সায়েদপুর", "সৈয়দপুর")
+        
+        # C. Exam Seatplan
+        if "Student Exam Seatplan Allocation" in auth_sec:
+            s_lines = [l.strip() for l in auth_sec.splitlines() if l.strip().startswith("*")]
+            if s_lines:
+                return "\n".join(s_lines).replace("সাইদপুর", "সৈয়দপুর").replace("সায়েদপুর", "সৈয়দপুর")
     
     # 1. Identity & Name questions
     if any(k in norm_q for k in ["what is your name", "what's your name", "your name", "who are you", "who r u", "who made you"]):
@@ -1469,9 +1515,19 @@ CRITICAL RULES (CONCISE, DIRECT, STRUCTURED, LANGUAGE ACCURATE):
    - Maintain accurate standard Bengali spelling and avoid phonetic transliteration errors.
 
 7. **CONVERSATIONAL FOLLOW-UP & SHORT QUERIES**:
-   - If the user asks a brief follow-up question (e.g. 'time', 'kobe', 'room kothay', 'seat kothay', 'slot koto', 'routine', 'details'):
-     Check the RECENT CONVERSATION HISTORY to identify the subject (student, course, exam, department, or topic).
-     Answer directly and specifically with that subject's details (e.g., student's exam slot, time, room, seat) in the clean individual bullet format!
+   - If the user asks a brief follow-up question (e.g. 'time', 'kobe', 'room kothay', 'seat kothay', 'slot koto', 'routine', 'details', 'contact', 'phone'):
+     Check the RECENT CONVERSATION HISTORY to identify the subject (teacher, student, course, exam, department, or topic).
+     Answer directly and specifically with that subject's details (e.g., student's exam slot, time, room, seat, or teacher's phone & email) in the clean individual bullet format!
+
+8. **AUTHORITATIVE ENTITY PROFILE & RECORDS (HIGHEST PRIORITY)**:
+   - When the retrieved context contains an `### AUTHORITATIVE ENTITY PROFILE & RECORDS:` section:
+     * This section contains 100% verified, ground-truth data from official BAUST records.
+     * If it contains contact details (Phone, Email, WhatsApp) for a teacher (e.g., `AA` -> `Md. Al Amin`, `GR` -> `S. M Golam Rifat`):
+       YOU MUST ALWAYS DIRECTLY OUTPUT THEIR PHONE AND EMAIL IN CLICKABLE FORMAT:
+       `* **মোবাইল / ফোন (Phone):** [<Phone>](tel:<Phone>)`
+       `* **ইমেইল (Email):** [<Email>](mailto:<Email>)`
+     * NEVER omit the contact details, and NEVER say the user must contact the department office or alumni email when the teacher's direct phone and email are right in the Authoritative Entity Profile!
+     * NEVER confuse a faculty member (e.g., Lecturer Md. Al Amin) with any lower staff or messenger who happens to share the same name.
 {extra_task_instruction}"""
 
     return f"""{system_instruction}

@@ -1122,7 +1122,7 @@ def format_phone_markdown(phone_str: str) -> str:
 
 
 def sanitize_contact_markdown(text: str) -> str:
-    """Post-processor that cleans up all email and phone link formatting in markdown."""
+    """Post-processor that cleans up email, phone link formatting, and unnatural Bengali translations in markdown."""
     if not text:
         return ""
     # 1. Un-nest backticks from markdown links: `[text](url)` -> [text](url)
@@ -1142,6 +1142,45 @@ def sanitize_contact_markdown(text: str) -> str:
         return format_phone_markdown(inner_label)
 
     text = re.sub(r'\[([^\]]+)\]\(tel:([^)]*(?:\([^)]*\)[^)]*)*)\)', _fix_tel, text)
+
+    # 4. Clean unnatural, repetitive Bengali academic qualification translations
+    # Fix dotted acronyms like 'সি.এসই' -> 'সিএসই'
+    text = re.sub(r'সি[\.\s]+এসই', 'সিএসই', text)
+    text = re.sub(r'ই[\.\s]+ই[\.\s]+ই', 'ইইই', text)
+    text = re.sub(r'আই[\.\s]+পি[\.\s]+ই', 'আইপিই', text)
+
+    # University transliterations (e.g. কেইউ -> খুলনা বিশ্ববিদ্যালয় (KU))
+    uni_map = {
+        r'\bকেইউ\b': 'খুলনা বিশ্ববিদ্যালয় (KU)',
+        r'\bজেইউ\b': 'জাহাঙ্গীরনগর বিশ্ববিদ্যালয় (JU)',
+        r'\bডিইউ\b': 'ঢাকা বিশ্ববিদ্যালয় (DU)',
+        r'\bসিইউ\b': 'চট্টগ্রাম বিশ্ববিদ্যালয় (CU)',
+        r'\bআরইউ\b': 'রাজশাহী বিশ্ববিদ্যালয় (RU)',
+    }
+    for k, v in uni_map.items():
+        text = re.sub(k, v, text)
+
+    # Fix 'বি.এসসি (বি.এসসি. ইন ...)' tautology
+    text = re.sub(
+        r'বি[\.\s]*এসসি\s*\(\s*(?:বি[\.\s]*এসসি[\.\s]*)?ইন\s*([^\)]+)\)',
+        r'বিএসসি ইন \1',
+        text,
+        flags=re.IGNORECASE
+    )
+    # Fix 'এম.এসসি (এম.এসসি. ইন ...)' tautology
+    text = re.sub(
+        r'এম[\.\s]*এসসি\s*\(\s*(?:এম[\.\s]*এসসি[\.\s]*)?ইন\s*([^\)]+)\)',
+        r'এমএসসি ইন \1',
+        text,
+        flags=re.IGNORECASE
+    )
+    # Fix any remaining nested repetition like 'বি.এসসি (বি.এসসি...)'
+    text = re.sub(
+        r'(বি[\.\s]*এসসি|এম[\.\s]*এসসি)\s*\(\s*\1\s*[,;]?\s*([^\)]*)\)',
+        r'\1 (\2)',
+        text,
+        flags=re.IGNORECASE
+    )
     return text
 
 

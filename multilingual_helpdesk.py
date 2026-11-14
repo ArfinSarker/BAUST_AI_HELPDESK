@@ -64,6 +64,7 @@ RAG GROUNDING & INTEGRITY RULES (ANTI-HALLUCINATION):
      e.g., `* **মোবাইল / ফোন (Phone):** [01759810833](tel:01759810833) (WhatsApp)`
      e.g., `* **ইমেইল (Email):** [email1@baust.edu.bd](mailto:email1@baust.edu.bd), [email2@gmail.com](mailto:email2@gmail.com)`
    - NEVER combine multiple emails into a single link like `[a, b](mailto:a, b)`. Each email and phone must be a separate link.
+   - For educational qualifications, format cleanly (e.g. `B.Sc. in CSE (KU), M.Sc. in CSE (KU)` or `বিএসসি ইন সিএসই (খুলনা বিশ্ববিদ্যালয় - KU)`). NEVER write repetitive or broken translations like `বি.এসসি (বি.এসসি. ইন সি.এসই, কেইউ)`.
 """
 
 

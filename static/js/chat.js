@@ -134,6 +134,19 @@
       return formatted.join(', ');
     });
 
+    // 4. Clean unnatural repetitive Bengali qualifications
+    res = res.replace(/সি[\.\s]+এসই/g, 'সিএসই');
+    res = res.replace(/ই[\.\s]+ই[\.\s]+ই/g, 'ইইই');
+    res = res.replace(/আই[\.\s]+পি[\.\s]+ই/g, 'আইপিই');
+    res = res.replace(/\bকেইউ\b/g, 'খুলনা বিশ্ববিদ্যালয় (KU)');
+    res = res.replace(/\bজেইউ\b/g, 'জাহাঙ্গীরনগর বিশ্ববিদ্যালয় (JU)');
+    res = res.replace(/\bডিইউ\b/g, 'ঢাকা বিশ্ববিদ্যালয় (DU)');
+    res = res.replace(/\bসিইউ\b/g, 'চট্টগ্রাম বিশ্ববিদ্যালয় (CU)');
+    res = res.replace(/\bআরইউ\b/g, 'রাজশাহী বিশ্ববিদ্যালয় (RU)');
+    res = res.replace(/বি[\.\s]*এসসি\s*\(\s*(?:বি[\.\s]*এসসি[\.\s]*)?ইন\s*([^\)]+)\)/gi, 'বিএসসি ইন $1');
+    res = res.replace(/এম[\.\s]*এসসি\s*\(\s*(?:এম[\.\s]*এসসি[\.\s]*)?ইন\s*([^\)]+)\)/gi, 'এমএসসি ইন $1');
+    res = res.replace(/(বি[\.\s]*এসসি|এম[\.\s]*এসসি)\s*\(\s*\1\s*[,;]?\s*([^\)]*)\)/gi, '$1 ($2)');
+
     return res;
   }
 

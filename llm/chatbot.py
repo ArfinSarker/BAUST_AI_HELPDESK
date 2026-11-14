@@ -1536,6 +1536,15 @@ CRITICAL RULES (CONCISE, DIRECT, STRUCTURED, LANGUAGE ACCURATE):
        (Each email/phone must be its own individual link! Never group multiple addresses into a single mailto or tel tag!)
      * NEVER omit the contact details, and NEVER say the user must contact the department office or alumni email when the teacher's direct phone and email are right in the Authoritative Entity Profile!
      * NEVER confuse a faculty member (e.g., Lecturer Md. Al Amin) with any lower staff or messenger who happens to share the same name.
+
+9. **ACADEMIC QUALIFICATIONS & DEGREE TRANSLATION (CRITICAL)**:
+   - When presenting educational qualifications (শিক্ষাগত যোগ্যতা):
+   - NEVER create redundant nested parentheses or repetitive phrases like `বি.এসসি (বি.এসসি. ইন সি.এসই, কেইউ)` or `এম.এসসি (এম.এসসি. ইন ...)`!
+   - NEVER phonetically transliterate university acronyms into awkward phonetic letters like "কেইউ" (write "খুলনা বিশ্ববিদ্যালয় (KU)" or keep "KU") or "জেইউ" (write "জাহাঙ্গীরনগর বিশ্ববিদ্যালয় (JU)" or "JU")!
+   - Format qualifications naturally, accurately, and cleanly:
+     * Either keep recognized standard degree format: `B.Sc. in CSE (KU), M.Sc. in CSE (KU)`
+     * Or in natural Bengali: `বিএসসি ইন সিএসই (খুলনা বিশ্ববিদ্যালয় / KU), এমএসসি ইন সিএসই (KU)`
+     * Degrees like B.Sc. should be written as `বিএসসি` (NOT `বি.এসসি`), CSE as `সিএসই` (NOT `সি.এসই`).
 {extra_task_instruction}"""
 
     return f"""{system_instruction}

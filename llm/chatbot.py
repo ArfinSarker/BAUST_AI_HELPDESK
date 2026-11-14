@@ -8,6 +8,7 @@ from collections import OrderedDict
 from dotenv import load_dotenv
 import requests
 from requests.adapters import HTTPAdapter
+from retrieval.rag_search import sanitize_contact_markdown
 
 load_dotenv()
 
@@ -812,7 +813,8 @@ def synthesize_smart_answer(context: str, question: str, history: list = None) -
         if "Teacher / Faculty Profile" in auth_sec or "Faculty / Staff Profile" in auth_sec:
             t_lines = [l.strip() for l in auth_sec.splitlines() if l.strip().startswith("*")]
             if t_lines:
-                return "\n".join(t_lines).replace("সাইদপুর", "সৈয়দপুর").replace("সায়েদপুর", "সৈয়দপুর")
+                res = "\n".join(t_lines).replace("সাইদপুর", "সৈয়দপুর").replace("সায়েদপুর", "সৈয়দপুর")
+                return sanitize_contact_markdown(res)
         
         # B. Student Class Routine
         if "Student Profile & Official Class & Lab Routine" in auth_sec:
@@ -1479,6 +1481,11 @@ CRITICAL RULES (CONCISE, DIRECT, STRUCTURED, LANGUAGE ACCURATE):
    - Format phone: [01769675588](tel:01769675588)
    - Format email: [admission@baust.edu.bd](mailto:admission@baust.edu.bd)
    - NEVER wrap Markdown links or contacts in backticks (write [01769675588](tel:01769675588), NOT `[01769675588](tel:...)`).
+   - MULTIPLE CONTACTS FORMAT (MANDATORY): If an entity has multiple emails or phones (e.g. rasel@baust.edu.bd and rasel17716@cseku.ac.bd), format each as an individual, separate clickable link separated by comma:
+     `[rasel@baust.edu.bd](mailto:rasel@baust.edu.bd), [rasel17716@cseku.ac.bd](mailto:rasel17716@cseku.ac.bd)`
+     NEVER put multiple emails inside a single markdown link like `[email1, email2](mailto:email1, email2)`!
+   - For phone with notes (like WhatsApp), put the note outside the link:
+     `[01759810833](tel:01759810833) (WhatsApp)`
 
 4. **FACULTY MEMBERS & TEACHER DIRECTORY RULES (STRICT SEPARATION)**:
    - When asked for teachers / faculty members of a department (e.g. CSE, EEE, ME, CE, IPE, BBA, English):
@@ -1523,9 +1530,10 @@ CRITICAL RULES (CONCISE, DIRECT, STRUCTURED, LANGUAGE ACCURATE):
    - When the retrieved context contains an `### AUTHORITATIVE ENTITY PROFILE & RECORDS:` section:
      * This section contains 100% verified, ground-truth data from official BAUST records.
      * If it contains contact details (Phone, Email, WhatsApp) for a teacher (e.g., `AA` -> `Md. Al Amin`, `GR` -> `S. M Golam Rifat`):
-       YOU MUST ALWAYS DIRECTLY OUTPUT THEIR PHONE AND EMAIL IN CLICKABLE FORMAT:
-       `* **মোবাইল / ফোন (Phone):** [<Phone>](tel:<Phone>)`
-       `* **ইমেইল (Email):** [<Email>](mailto:<Email>)`
+       YOU MUST ALWAYS DIRECTLY OUTPUT THEIR PHONE AND EMAIL IN CLEAN SEPARATE CLICKABLE FORMAT:
+       `* **মোবাইল / ফোন (Phone):** [01759810833](tel:01759810833) (WhatsApp)`
+       `* **ইমেইল (Email):** [email1@baust.edu.bd](mailto:email1@baust.edu.bd), [email2@gmail.com](mailto:email2@gmail.com)`
+       (Each email/phone must be its own individual link! Never group multiple addresses into a single mailto or tel tag!)
      * NEVER omit the contact details, and NEVER say the user must contact the department office or alumni email when the teacher's direct phone and email are right in the Authoritative Entity Profile!
      * NEVER confuse a faculty member (e.g., Lecturer Md. Al Amin) with any lower staff or messenger who happens to share the same name.
 {extra_task_instruction}"""
@@ -1658,6 +1666,6 @@ def generate_answer(context: str, question: str, history: list = None) -> str:
     if not ans or not ans.strip() or (len(ans.strip()) < 80 and len(context) > 120):
         ans = synthesize_smart_answer(context, question, history=history)
 
-    final_ans = ans.strip()
+    final_ans = sanitize_contact_markdown(ans.strip())
     set_cached_response(cache_key, final_ans)
     return final_ans

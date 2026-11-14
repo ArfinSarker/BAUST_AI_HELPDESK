@@ -35,7 +35,7 @@ from werkzeug.utils import secure_filename
 from ocr.ocr_api import extract_text_from_file
 from embedding.create_vector import build_vector_store
 from retrieval.rag_search import (
-    search_information, reload_vector_store, get_store
+    search_information, reload_vector_store, get_store, sanitize_contact_markdown
 )
 from llm.chatbot import (
     generate_answer, generate_answer_stream, structure_extracted_text,
@@ -454,6 +454,7 @@ def api_chat():
         
         # Generate model response
         raw_answer = generate_answer(context, question, history=history)
+        raw_answer = sanitize_contact_markdown(raw_answer)
         raw_answer = process_learned_facts(raw_answer)
         
         # Log chat asynchronously and retrieve log_id with bounded timeout
@@ -518,6 +519,7 @@ def api_chat_stream():
             # 3. Handle any background fact learning & log analytics
             complete_raw = "".join(full_answer_parts).strip()
             complete_cleaned = clean_llm_response(complete_raw)
+            complete_cleaned = sanitize_contact_markdown(complete_cleaned)
             complete_cleaned = process_learned_facts(complete_cleaned)
             future = log_chat_async(question, complete_cleaned, context)
             log_id = None

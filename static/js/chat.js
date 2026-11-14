@@ -101,6 +101,42 @@
   // ==========================================================================
   // XSS-SAFE RICH CONTENT RENDERER (DOMPurify + Marked + KaTeX + Highlight.js)
   // ==========================================================================
+  function sanitizeLinks(md) {
+    if (!md) return md;
+    // 1. Remove backticks around markdown links: `[text](url)` -> [text](url)
+    let res = md.replace(/`(\[[^\]]+\]\([^\)]+\))`?/g, '$1');
+
+    // 2. Fix multiple emails inside a single mailto: [a@b.com, c@d.com](mailto:...)
+    res = res.replace(/\[([^\]]*@[^\]]*)\]\(mailto:([^)]*)\)/gi, function (match, label, href) {
+      const combined = label + ' ' + href;
+      const emailMatches = combined.match(/[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/g);
+      if (emailMatches && emailMatches.length > 0) {
+        const unique = Array.from(new Set(emailMatches.map(e => e.toLowerCase())));
+        return unique.map(e => `[${e}](mailto:${e})`).join(', ');
+      }
+      return match;
+    });
+
+    // 3. Fix tel links with notes or multiple phones: [01759810833 (WhatsApp)](tel:...)
+    res = res.replace(/\[([^\]]+)\]\(tel:([^)]*(?:\([^)]*\)[^)]*)*)\)/gi, function (match, label) {
+      const parts = label.split(/[,/]/);
+      const formatted = parts.map(p => {
+        const trimmed = p.trim();
+        const numMatch = trimmed.match(/(\+?\d[\d\s\-]{8,15}\d|\d{10,14})/);
+        if (numMatch) {
+          const rawNum = numMatch[1].trim();
+          const cleanDigits = rawNum.replace(/[\s\-]/g, '');
+          const note = trimmed.replace(rawNum, '').trim();
+          return note ? `[${rawNum}](tel:${cleanDigits}) ${note}` : `[${rawNum}](tel:${cleanDigits})`;
+        }
+        return trimmed;
+      });
+      return formatted.join(', ');
+    });
+
+    return res;
+  }
+
   function renderRichContent(container, markdownText, isComplete = false) {
     if (!container) return;
     if (!markdownText) {
@@ -108,8 +144,8 @@
       return;
     }
 
-    // Clean broken link syntax formatting if any
-    const cleanMd = markdownText.replace(/`(\[[^\]]+\]\([^\)]+\))`/g, '$1');
+    // Clean broken link syntax and separate multiple contact links
+    const cleanMd = sanitizeLinks(markdownText);
 
     // 1. Convert Markdown to HTML
     let rawHtml = (window.marked && typeof window.marked.parse === 'function')
@@ -409,8 +445,8 @@
                 renderRichContent(streamContentDiv, accumulatedText, false);
                 scrollToBottom(false);
               } else if (parsed.type === 'done') {
-                if (parsed.raw_answer && parsed.raw_answer !== accumulatedText) {
-                  accumulatedText = parsed.raw_answer;
+                if (parsed.raw_answer) {
+                  accumulatedText = sanitizeLinks(parsed.raw_answer);
                 }
                 if (parsed.log_id) {
                   row.dataset.logId = parsed.log_id;

@@ -58,8 +58,12 @@ RAG GROUNDING & INTEGRITY RULES (ANTI-HALLUCINATION):
    - Do NOT assume, extrapolate, or hallucinate facts that are not explicitly present in the context.
 2. **Missing Information Protocol**:
    - If the provided context does not contain the answer to the user's question, politely state in the appropriate language that the information is currently not available in the database, and advise contacting official support.
-3. **Formatting**:
+3. **Formatting & Contact Links (MANDATORY)**:
    - Provide crisp, structured responses using markdown bullet points for readability. Wrap key identifiers (codes, dates, fees, room numbers) in backticks.
+   - For phone and email contacts, format each as an individual clickable link:
+     e.g., `* **মোবাইল / ফোন (Phone):** [01759810833](tel:01759810833) (WhatsApp)`
+     e.g., `* **ইমেইল (Email):** [email1@baust.edu.bd](mailto:email1@baust.edu.bd), [email2@gmail.com](mailto:email2@gmail.com)`
+   - NEVER combine multiple emails into a single link like `[a, b](mailto:a, b)`. Each email and phone must be a separate link.
 """
 
 

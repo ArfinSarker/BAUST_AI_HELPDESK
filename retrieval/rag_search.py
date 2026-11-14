@@ -1083,6 +1083,68 @@ def get_all_abbreviations_map() -> dict:
     return abbr
 
 
+def format_email_markdown(email_str: str) -> str:
+    """Formats one or multiple emails into clean, individual markdown mailto links separated by comma."""
+    if not email_str:
+        return ""
+    emails = re.findall(r'[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+', email_str)
+    if not emails:
+        return email_str.strip()
+    seen = set()
+    deduped = []
+    for e in emails:
+        el = e.lower()
+        if el not in seen:
+            seen.add(el)
+            deduped.append(e)
+    return ", ".join([f"[{e}](mailto:{e})" for e in deduped])
+
+
+def format_phone_markdown(phone_str: str) -> str:
+    """Formats one or multiple phone numbers into clean, individual markdown tel links with notes outside."""
+    if not phone_str:
+        return ""
+    parts = [p.strip() for p in re.split(r'[,/]', phone_str) if p.strip()]
+    formatted = []
+    for p in parts:
+        m = re.search(r'(\+?\d[\d\s\-]{8,15}\d|\d{10,14})', p)
+        if m:
+            num = m.group(1).strip()
+            clean_digits = re.sub(r'[\s\-]', '', num)
+            note = p.replace(num, '').strip()
+            if note:
+                formatted.append(f"[{num}](tel:{clean_digits}) {note}")
+            else:
+                formatted.append(f"[{num}](tel:{clean_digits})")
+        else:
+            formatted.append(p)
+    return ", ".join(formatted)
+
+
+def sanitize_contact_markdown(text: str) -> str:
+    """Post-processor that cleans up all email and phone link formatting in markdown."""
+    if not text:
+        return ""
+    # 1. Un-nest backticks from markdown links: `[text](url)` -> [text](url)
+    text = re.sub(r'`(\[[^\]]+\]\([^\)]+\))`', r'\1', text)
+
+    # 2. Fix malformed mailto: [email1, email2](mailto:email1, email2)
+    def _fix_mailto(match):
+        inner_label = match.group(1)
+        inner_href = match.group(2)
+        return format_email_markdown(inner_label + " " + inner_href)
+
+    text = re.sub(r'\[([^\]]*@[^\]]*)\]\(mailto:([^\)]*)\)', _fix_mailto, text)
+
+    # 3. Fix malformed tel: [phone (note)](tel:phone (note)) or [phone1, phone2](tel:...)
+    def _fix_tel(match):
+        inner_label = match.group(1)
+        return format_phone_markdown(inner_label)
+
+    text = re.sub(r'\[([^\]]+)\]\(tel:([^)]*(?:\([^)]*\)[^)]*)*)\)', _fix_tel, text)
+    return text
+
+
 def find_faculty_or_staff_by_name(query: str) -> Optional[str]:
     """Finds a faculty member by name or token match and returns formatted markdown."""
     fac, _, _, _ = get_unified_entity_graph()
@@ -1094,8 +1156,12 @@ def find_faculty_or_staff_by_name(query: str) -> Optional[str]:
     for f in fac:
         if all(tok in f["name"].lower() for tok in tokens):
             c_parts = []
-            if f.get("phone"): c_parts.append(f"ফোন: [{f['phone']}](tel:{f['phone']})")
-            if f.get("email"): c_parts.append(f"ইমেইল: [{f['email']}](mailto:{f['email']})")
+            if f.get("phone"):
+                cp = format_phone_markdown(f["phone"])
+                if cp: c_parts.append(f"ফোন: {cp}")
+            if f.get("email"):
+                ce = format_email_markdown(f["email"])
+                if ce: c_parts.append(f"ইমেইল: {ce}")
             c_str = " | ".join(c_parts) if c_parts else "বিভাগীয় অফিসে যোগাযোগ করুন"
             return (
                 f"--- Document: Faculty Member Profile (Authoritative Source: {f['source']}) ---\n"
@@ -1115,8 +1181,12 @@ def resolve_faculty_member_or_initials(question: str) -> Optional[str]:
         if w_up in abbr:
             info = abbr[w_up]
             c_parts = []
-            if info.get("phone"): c_parts.append(f"ফোন: [{info['phone']}](tel:{info['phone']})")
-            if info.get("email"): c_parts.append(f"ইমেইল: [{info['email']}](mailto:{info['email']})")
+            if info.get("phone"):
+                cp = format_phone_markdown(info["phone"])
+                if cp: c_parts.append(f"ফোন: {cp}")
+            if info.get("email"):
+                ce = format_email_markdown(info["email"])
+                if ce: c_parts.append(f"ইমেইল: {ce}")
             c_str = " | ".join(c_parts) if c_parts else "বিভাগীয় অফিসে যোগাযোগ করুন"
             return (
                 f"--- Document: Faculty Routine Short Form & Teacher Profile (Authoritative Source: class_and_lab_routine.txt) ---\n"
@@ -1193,9 +1263,11 @@ def search_information(question: str, top_k: int = 4, history: list = None) -> s
             f"* **বিভাগ (Department):** {matched_abbr.get('department', 'BAUST')}, বাংলাদেশ আর্মি ইউনিভার্সিটি অব সায়েন্স অ্যান্ড টেকনোলজি (BAUST), সৈয়দপুর।"
         ]
         if matched_abbr.get("phone"):
-            entity_lines.append(f"* **মোবাইল / ফোন (Phone):** [{matched_abbr['phone']}](tel:{matched_abbr['phone']})")
+            cp = format_phone_markdown(matched_abbr["phone"])
+            if cp: entity_lines.append(f"* **মোবাইল / ফোন (Phone):** {cp}")
         if matched_abbr.get("email"):
-            entity_lines.append(f"* **ইমেইল (Email):** [{matched_abbr['email']}](mailto:{matched_abbr['email']})")
+            ce = format_email_markdown(matched_abbr["email"])
+            if ce: entity_lines.append(f"* **ইমেইল (Email):** {ce}")
         if matched_abbr.get("qualifications"):
             entity_lines.append(f"* **শিক্ষাগত যোগ্যতা (Qualifications):** {matched_abbr['qualifications']}")
         entity_blocks.append("\n".join(entity_lines) + "\n")
@@ -1218,9 +1290,11 @@ def search_information(question: str, top_k: int = 4, history: list = None) -> s
                         f"* **বিভাগ (Department):** {f['department']}, বাংলাদেশ আর্মি ইউনিভার্সিটি অব সায়েন্স অ্যান্ড টেকনোলজি (BAUST), সৈয়দপুর।"
                     ]
                     if f.get("phone"):
-                        entity_lines.append(f"* **মোবাইল / ফোন (Phone):** [{f['phone']}](tel:{f['phone']})")
+                        cp = format_phone_markdown(f["phone"])
+                        if cp: entity_lines.append(f"* **মোবাইল / ফোন (Phone):** {cp}")
                     if f.get("email"):
-                        entity_lines.append(f"* **ইমেইল (Email):** [{f['email']}](mailto:{f['email']})")
+                        ce = format_email_markdown(f["email"])
+                        if ce: entity_lines.append(f"* **ইমেইল (Email):** {ce}")
                     if f.get("qualifications"):
                         entity_lines.append(f"* **শিক্ষাগত যোগ্যতা (Qualifications):** {f['qualifications']}")
                     entity_blocks.append("\n".join(entity_lines) + "\n")

@@ -833,6 +833,12 @@ def synthesize_smart_answer(context: str, question: str, history: list = None) -
                 res_lines.append(f"* **বিভাগ ও লেভেল/টার্ম (Department & Level/Term):** {prog_txt} ({lvl_txt})")
                 res_lines.append("")
 
+            # Check if pre-calculated VERIFIED AUTHORITATIVE DAILY SCHEDULE FOR STUDENT is present
+            if "VERIFIED AUTHORITATIVE DAILY SCHEDULE FOR STUDENT:" in auth_sec:
+                sched_part = auth_sec.split("VERIFIED AUTHORITATIVE DAILY SCHEDULE FOR STUDENT:")[1].split("OFFICIAL BATCH CLASS & LAB ROUTINE")[0].strip()
+                res_lines.append(sched_part)
+                return "\n".join(res_lines).replace("সাইদপুর", "সৈয়দপুর").replace("সায়েদপুর", "সৈয়দপুর")
+
             parity_val = st_parity.group(1).upper() if st_parity else "ODD"
             res_lines.append("📅 **সাপ্তাহিক ছুটির নোটিশ:** আজ শনিবার সাপ্তাহিক ছুটি হওয়ায় বিশ্ববিদ্যালয় বন্ধ রয়েছে। তবে আগামীকাল রবিবার থেকে ক্লাস যথারীতি চলবে।")
             res_lines.append("\n📌 **পরবর্তী ক্লাস ডে (রবিবার / Sunday) এর ক্লাসের সময়সূচি:**")
@@ -1462,6 +1468,10 @@ CRITICAL RULES (CONCISE, DIRECT, STRUCTURED, LANGUAGE ACCURATE):
           * If designated `#EVEN#`, only students with EVEN roll numbers attend that lab.
           * Explicitly clarify if the student has that lab or is exempt based on their roll parity.
        5. **NEVER substitute a class routine question with only an exam seatplan!** Always provide their class routine first.
+       6. **VERIFIED AUTHORITATIVE SCHEDULE (MANDATORY)**:
+          * If the retrieved document contains a "VERIFIED AUTHORITATIVE DAILY SCHEDULE FOR STUDENT", you MUST directly present that schedule!
+          * In BAUST CSE Level 3 Term 2 Summer 2026, Sunday (Sun) is a REGULAR class day with 4 classes scheduled from 08.00 AM to 12.25 PM (CSE 3207, CSE 3205, CSE 3203, and CSE 3202 for EVEN rolls).
+          * NEVER hallucinate or state that Sunday is empty or has no classes for CSE 3-II! Sunday classes start from 08.00 AM / 09.00 AM.
 
    - **Student Name Disambiguation & Anti-Random Guessing Rule (CRITICAL)**:
      * When a user searches by a first name, partial name, or single word (e.g. 'nafisa', 'rakib', 'hasan', 'sadia') and multiple students exist in the records with that name:

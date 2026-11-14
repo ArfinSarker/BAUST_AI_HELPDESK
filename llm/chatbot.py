@@ -839,19 +839,12 @@ def synthesize_smart_answer(context: str, question: str, history: list = None) -
                 res_lines.append(sched_part)
                 return "\n".join(res_lines).replace("সাইদপুর", "সৈয়দপুর").replace("সায়েদপুর", "সৈয়দপুর")
 
-            parity_val = st_parity.group(1).upper() if st_parity else "ODD"
-            res_lines.append("📅 **সাপ্তাহিক ছুটির নোটিশ:** আজ শনিবার সাপ্তাহিক ছুটি হওয়ায় বিশ্ববিদ্যালয় বন্ধ রয়েছে। তবে আগামীকাল রবিবার থেকে ক্লাস যথারীতি চলবে।")
-            res_lines.append("\n📌 **পরবর্তী ক্লাস ডে (রবিবার / Sunday) এর ক্লাসের সময়সূচি:**")
-            if parity_val == "EVEN":
-                res_lines.append("* `08.00 AM - 08.55 AM`: **CSE 3202** (Artificial Intelligence Sessional) — ল্যাব: `311 (Network Lab)`, শিক্ষক: MZH, MI")
-            else:
-                res_lines.append("* `08.00 AM - 08.55 AM`: *CSE 3202 ল্যাবটি শুধুমাত্র EVEN রোলধারীদের জন্য (আপনার রোল ODD হওয়ায় এই সময়ে ক্লাস নেই)।*")
-            res_lines.append("* `09.00 AM - 09.55 AM`: **CSE 3207** (Mathematical Analysis for Computer Science) — ল্যাব: `307 (Embedded System Lab)`, শিক্ষক: GR")
-            res_lines.append("* `10.00 AM - 10.55 AM`: **CSE 3205** (Computer Networks) — ল্যাব: `307 (Embedded System Lab)`, শিক্ষক: MI")
-            res_lines.append("* `11.30 AM - 12.25 PM`: **CSE 3203** (Operating System) — ল্যাব: `307 (Embedded System Lab)`, শিক্ষক: FTZ")
-            return "\n".join(res_lines).replace("সাইদপুর", "সৈয়দপুর").replace("সায়েদপুর", "সৈয়দপুর")
-        
-        # C. Exam Seatplan
+        # C. Batch / Section Class Routine (e.g. CSE 3-II Section B / Section A)
+        if "Official Class & Lab Routine" in auth_sec and "VERIFIED AUTHORITATIVE DAILY SCHEDULE FOR BATCH:" in auth_sec:
+            sched_part = auth_sec.split("VERIFIED AUTHORITATIVE DAILY SCHEDULE FOR BATCH:")[1].split("OFFICIAL BATCH CLASS & LAB ROUTINE")[0].strip()
+            return sched_part.replace("সাইদপুর", "সৈয়দপুর").replace("সায়েদপুর", "সৈয়দপুর")
+
+        # D. Exam Seatplan
         if "Student Exam Seatplan Allocation" in auth_sec:
             s_lines = [l.strip() for l in auth_sec.splitlines() if l.strip().startswith("*")]
             if s_lines:
@@ -1469,8 +1462,8 @@ CRITICAL RULES (CONCISE, DIRECT, STRUCTURED, LANGUAGE ACCURATE):
           * Explicitly clarify if the student has that lab or is exempt based on their roll parity.
        5. **NEVER substitute a class routine question with only an exam seatplan!** Always provide their class routine first.
        6. **VERIFIED AUTHORITATIVE SCHEDULE (MANDATORY)**:
-          * If the retrieved document contains a "VERIFIED AUTHORITATIVE DAILY SCHEDULE FOR STUDENT", you MUST directly present that schedule!
-          * In BAUST CSE Level 3 Term 2 Summer 2026, Sunday (Sun) is a REGULAR class day with 4 classes scheduled from 08.00 AM to 12.25 PM (CSE 3207, CSE 3205, CSE 3203, and CSE 3202 for EVEN rolls).
+          * If the retrieved document contains a "VERIFIED AUTHORITATIVE DAILY SCHEDULE FOR STUDENT" or "VERIFIED AUTHORITATIVE DAILY SCHEDULE FOR BATCH", you MUST directly present that schedule!
+          * In BAUST CSE Level 3 Term 2 Summer 2026, Sunday (Sun) is a REGULAR academic class day for both Section A and Section B. Present the exact classes from the verified schedule in context!
           * NEVER hallucinate or state that Sunday is empty or has no classes for CSE 3-II! Sunday classes start from 08.00 AM / 09.00 AM.
 
    - **Student Name Disambiguation & Anti-Random Guessing Rule (CRITICAL)**:

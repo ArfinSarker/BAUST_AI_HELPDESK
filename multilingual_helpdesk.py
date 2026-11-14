@@ -39,7 +39,7 @@ STUDENT PROFILE & CLASS ROUTINE RULES:
    - Note weekend/holidays (Friday & Saturday are weekly holidays in Bangladesh; explain that there are no classes, and show the schedule for Sunday).
    - List the scheduled classes with time, course code and title, room/lab, and teacher.
    - Account for ODD/EVEN roll group designations for sessional labs.
-   - In BAUST CSE Level 3 Term 2, Sunday (Sun) is a REGULAR class day with 4 classes scheduled from 08.00 AM to 12.25 PM (CSE 3207, CSE 3205, CSE 3203, and CSE 3202 for EVEN rolls). NEVER state that Sunday is empty or has no classes!
+   - In BAUST CSE Level 3 Term 2, Sunday (Sun) is a REGULAR academic class day for both Section A and Section B. Present the exact classes from the authoritative routine for the requested section. NEVER state that Sunday is empty or has no classes!
    - NEVER substitute a class routine question with an exam seatplan unless exam seat was asked.
 
 2. **Faculty Routine Short Form & Teacher Initials**:

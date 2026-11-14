@@ -587,210 +587,149 @@ def get_bangladesh_temporal_context() -> dict:
     }
 
 
-def get_student_daily_classes(day_name: str, parity: str = "ODD", dept: str = "CSE", level_term: str = "3-II") -> list[dict]:
-    """
-    Returns verified, structured class items for a specific day and student roll parity.
-    Accounts for #ODD# and #EVEN# designations and teacher full names.
-    """
-    day_key = day_name[:3].capitalize()
-    
-    # Pre-indexed verified timetable for CSE 3-II Summer 2026
-    timetable = {
-        "Sun": [
-            {
-                "time": "08.00 AM - 08.55 AM",
-                "code": "CSE 3202",
-                "title": "Artificial Intelligence Sessional",
-                "room": "311 (Network Lab)",
-                "teacher": "MZH, MI (Md Zahim Hassan, Md. Minhazul Islam)",
-                "parity": "EVEN",
-                "note_odd": "CSE 3202 ল্যাবটি শুধুমাত্র EVEN রোলধারীদের জন্য (আপনার রোল ODD হওয়ায় এই সময়ে ক্লাস নেই)"
-            },
-            {
-                "time": "09.00 AM - 09.55 AM",
-                "code": "CSE 3207",
-                "title": "Mathematical Analysis for Computer Science",
-                "room": "307 (Embedded System Lab)",
-                "teacher": "GR (S. M Golam Rifat)",
-                "parity": "ALL"
-            },
-            {
-                "time": "10.00 AM - 10.55 AM",
-                "code": "CSE 3205",
-                "title": "Computer Networks",
-                "room": "307 (Embedded System Lab)",
-                "teacher": "MI (Md. Minhazul Islam)",
-                "parity": "ALL"
-            },
-            {
-                "time": "11.30 AM - 12.25 PM",
-                "code": "CSE 3203",
-                "title": "Operating System",
-                "room": "307 (Embedded System Lab)",
-                "teacher": "FTZ (Fatema Tuz Zohra)",
-                "parity": "ALL"
-            }
-        ],
-        "Mon": [
-            {
-                "time": "08.00 AM - 08.55 AM",
-                "code": "CSE 3203",
-                "title": "Operating System",
-                "room": "408",
-                "teacher": "FTZ (Fatema Tuz Zohra)",
-                "parity": "ALL"
-            },
-            {
-                "time": "09.00 AM - 09.55 AM",
-                "code": "CSE 3205",
-                "title": "Computer Networks",
-                "room": "307 (Embedded System Lab)",
-                "teacher": "MI (Md. Minhazul Islam)",
-                "parity": "ALL"
-            },
-            {
-                "time": "10.00 AM - 10.55 AM",
-                "code": "CSE 3207",
-                "title": "Mathematical Analysis for Computer Science",
-                "room": "307 (Embedded System Lab)",
-                "teacher": "GR (S. M Golam Rifat)",
-                "parity": "ALL"
-            },
-            {
-                "time": "11.30 AM - 12.25 PM",
-                "code": "CSE 3201",
-                "title": "Artificial Intelligence",
-                "room": "307 (Embedded System Lab)",
-                "teacher": "MZH (Md Zahim Hassan)",
-                "parity": "ALL"
-            },
-            {
-                "time": "12.30 PM - 01.25 PM",
-                "code": "CSE 3200",
-                "title": "Web Engineering Project",
-                "room": "411 (Database Lab)",
-                "teacher": "ASF, GC (Md. Asif Iqbal, Gourab Chandra Biswas)",
-                "parity": "ALL"
-            }
-        ],
-        "Tue": [
-            {
-                "time": "08.00 AM - 08.55 AM",
-                "code": "CSE 3210",
-                "title": "Information System Design Sessional",
-                "room": "402 (Microprocessor Lab)",
-                "teacher": "AKZ, RH (A K Z Rasel Rahman, MD. Rabby Hossain)",
-                "parity": "ODD",
-                "note_even": "CSE 3210 ল্যাবটি শুধুমাত্র ODD রোলধারীদের জন্য (আপনার রোল EVEN হওয়ায় এই সময়ে ক্লাস নেই)"
-            },
-            {
-                "time": "09.00 AM - 09.55 AM",
-                "code": "CSE 3205",
-                "title": "Computer Networks",
-                "room": "304",
-                "teacher": "MI (Md. Minhazul Islam)",
-                "parity": "ALL"
-            },
-            {
-                "time": "10.00 AM - 10.55 AM",
-                "code": "CSE 3201",
-                "title": "Artificial Intelligence",
-                "room": "304",
-                "teacher": "MZH (Md Zahim Hassan)",
-                "parity": "ALL"
-            },
-            {
-                "time": "11.30 AM - 12.25 PM",
-                "code": "CSE 3209",
-                "title": "Information System Design",
-                "room": "304",
-                "teacher": "AKZ (A K Z Rasel Rahman)",
-                "parity": "ALL"
-            }
-        ],
-        "Wed": [
-            {
-                "time": "08.00 AM - 08.55 AM",
-                "code": "CSE 3204",
-                "title": "Operating System Sessional",
-                "room": "411 (Database Lab)",
-                "teacher": "FTZ, RH (Fatema Tuz Zohra, MD. Rabby Hossain)",
-                "parity": "ALL"
-            },
-            {
-                "time": "09.00 AM - 09.55 AM",
-                "code": "CSE 3209",
-                "title": "Information System Design",
-                "room": "304",
-                "teacher": "AKZ (A K Z Rasel Rahman)",
-                "parity": "ALL"
-            },
-            {
-                "time": "10.00 AM - 10.55 AM",
-                "code": "CSE 3203",
-                "title": "Operating System",
-                "room": "304",
-                "teacher": "FTZ (Fatema Tuz Zohra)",
-                "parity": "ALL"
-            },
-            {
-                "time": "11.30 AM - 12.25 PM",
-                "code": "CSE 3201",
-                "title": "Artificial Intelligence",
-                "room": "304",
-                "teacher": "MZH (Md Zahim Hassan)",
-                "parity": "ALL"
-            }
-        ],
-        "Thu": [
-            {
-                "time": "08.00 AM - 08.55 AM",
-                "code": "CSE 3209",
-                "title": "Information System Design",
-                "room": "204",
-                "teacher": "AKZ (A K Z Rasel Rahman)",
-                "parity": "ALL"
-            },
-            {
-                "time": "09.00 AM - 09.55 AM",
-                "code": "CSE 3207",
-                "title": "Mathematical Analysis for Computer Science",
-                "room": "204",
-                "teacher": "GR (S. M Golam Rifat)",
-                "parity": "ALL"
-            },
-            {
-                "time": "10.00 AM - 10.55 AM",
-                "code": "CSE 3206",
-                "title": "Computer Networks Sessional",
-                "room": "311 (Network Lab)",
-                "teacher": "MI, RH (Md. Minhazul Islam, MD. Rabby Hossain)",
-                "parity": "ALL"
-            }
-        ]
-    }
-    return timetable.get(day_key, [])
+_ROUTINE_CACHE = None
+_ROUTINE_CACHE_MTIME = 0.0
 
 
-def get_class_routine_content(dept: str = "CSE", level_term: str = "3-II") -> str:
+def parse_class_routine_tables() -> dict:
+    """
+    Dynamically and generically parses official class routines from knowledge_base/*routine*.txt.
+    Supports any Section (A, B, etc.), courses, faculty names, and day-by-day schedules with parities.
+    Auto-invalidates when routine files are edited or uploaded.
+    """
+    global _ROUTINE_CACHE, _ROUTINE_CACHE_MTIME
     kb_dir = os.path.join(BASE_DIR, "knowledge_base")
     routine_files = glob.glob(os.path.join(kb_dir, "*routine*.txt"))
+    if not routine_files:
+        return {}
+
+    max_mtime = max((os.path.getmtime(p) for p in routine_files if os.path.exists(p)), default=0.0)
+    if _ROUTINE_CACHE is not None and max_mtime == _ROUTINE_CACHE_MTIME:
+        return _ROUTINE_CACHE
+
+    sections_data = {}
+    table_pattern = re.compile(r'(\| Day\s*\|[^\n]+\n\|(?:\s*:?---+:?\s*\|)+\n(?:\|[^\n]+\n)+)', re.I)
+    course_pattern = re.compile(r'\|\s*(?:\*\*)?([A-Z]{2,4}\s*\d{4})(?:\*\*)?\s*\|\s*([^|]+?)\s*\|', re.I)
+    faculty_pattern = re.compile(r'\*\s*\*\*([^\*]+)\*\*\s*\n\s*\*\s*\*\*Designation:\*\*\s*([^\n]+)\s*\n\s*\*\s*\*\*Short Form:\*\*\s*([A-Za-z]+)', re.I)
+
     for fpath in routine_files:
         try:
             with open(fpath, "r", encoding="utf-8") as f:
-                lines = f.readlines()
-                norm_dept = (dept or "CSE").upper()
-                norm_lt = (level_term or "").replace(" ", "").upper()
-                if ("CSE" in norm_dept or "COMPUTER" in norm_dept) and ("3-II" in norm_lt or "3-2" in norm_lt or not level_term):
-                    res = []
-                    for l in lines:
-                        if l.startswith("## Additional Information"):
-                            break
-                        res.append(l)
-                    return "".join(res).strip()
-                return "".join(lines).strip()
+                content = f.read()
         except Exception:
             continue
+
+        blocks = re.split(r'(?=#+\s*Bangladesh Army University.*?(?:CSE|Computer Science))', content, flags=re.I | re.S)
+        for b in blocks:
+            sec_m = re.search(r'Section:\s*\*?\*?\s*([AB])', b, re.I)
+            lt_m = re.search(r'Level-Term:\s*\*?\*?\s*([^\n|]+)', b, re.I)
+            if not sec_m:
+                continue
+            sec = sec_m.group(1).upper()
+            lt = lt_m.group(1).strip() if lt_m else "3-II"
+
+            courses = {}
+            for cm in course_pattern.finditer(b):
+                c_code = cm.group(1).strip()
+                c_title = cm.group(2).strip()
+                courses[c_code] = c_title
+
+            teachers = {}
+            for fm in faculty_pattern.finditer(b):
+                t_name = fm.group(1).strip()
+                t_desig = fm.group(2).strip()
+                t_short = fm.group(3).strip().upper()
+                teachers[t_short] = f"{t_name} ({t_desig})"
+
+            days_map = {}
+            m_tab = table_pattern.search(b)
+            if m_tab:
+                lines = m_tab.group(1).strip().splitlines()
+                slots = [c.strip() for c in lines[0].split('|')[2:] if c.strip()]
+                for row in lines[2:]:
+                    cols = [c.strip() for c in row.split('|')]
+                    if len(cols) > 2:
+                        day_raw = re.sub(r'[*_]', '', cols[1]).strip()
+                        day_key = day_raw[:3].capitalize()
+                        days_map[day_key] = []
+                        row_classes = cols[2:]
+                        for s_idx, cell in enumerate(row_classes):
+                            if not cell or cell == '-' or s_idx >= len(slots):
+                                continue
+                            slot_time = slots[s_idx]
+
+                            code_m = re.search(r'([A-Z]{2,4}\s*\d{4})', cell)
+                            code = code_m.group(1) if code_m else cell
+                            title = courses.get(code, '')
+
+                            room_m = re.search(r'\[([^\]]+)\]', cell)
+                            room = room_m.group(1).strip() if room_m else 'TBA'
+
+                            t_m = re.search(r'\(([^)]+)\)', cell)
+                            t_initials = t_m.group(1).strip() if t_m else ''
+                            t_full = ', '.join([teachers.get(ti.strip().upper(), ti.strip()) for ti in t_initials.split(',') if ti.strip()]) if t_initials else 'TBA'
+
+                            parity = 'ALL'
+                            note_odd = ""
+                            note_even = ""
+                            if '#ODD#' in cell.upper():
+                                parity = 'ODD'
+                                note_odd = ""
+                                note_even = f"{code} ল্যাবটি শুধুমাত্র ODD রোলধারীদের জন্য (আপনার রোল EVEN হওয়ায় এই সময়ে আপনার কোনো ক্লাস নেই)"
+                            elif '#EVEN#' in cell.upper():
+                                parity = 'EVEN'
+                                note_odd = f"{code} ল্যাবটি শুধুমাত্র EVEN রোলধারীদের জন্য (আপনার রোল ODD হওয়ায় এই সময়ে আপনার কোনো ক্লাস নেই)"
+                                note_even = ""
+
+                            days_map[day_key].append({
+                                'time': slot_time,
+                                'code': code,
+                                'title': title,
+                                'room': room,
+                                'teacher': f"{t_initials} ({t_full})" if t_initials and t_full != t_initials else t_full,
+                                'parity': parity,
+                                'note_odd': note_odd,
+                                'note_even': note_even,
+                                'raw': cell
+                            })
+
+            sections_data[sec] = {
+                'level_term': lt,
+                'courses': courses,
+                'teachers': teachers,
+                'schedule': days_map,
+                'raw_block': b.strip()
+            }
+
+    _ROUTINE_CACHE = sections_data
+    _ROUTINE_CACHE_MTIME = max_mtime
+    return _ROUTINE_CACHE
+
+
+def get_student_daily_classes(day_name: str, parity: str = "ALL", dept: str = "CSE", level_term: str = "3-II", section: str = "A") -> list[dict]:
+    """
+    Returns verified, structured class items for a specific day, section, and roll parity.
+    Extracts directly from official parsed routine tables.
+    """
+    day_key = day_name[:3].capitalize()
+    routines = parse_class_routine_tables()
+    sec_key = (section or "A").upper()
+    sec_data = routines.get(sec_key) or routines.get("A")
+    if not sec_data:
+        return []
+    return sec_data["schedule"].get(day_key, [])
+
+
+def get_class_routine_content(dept: str = "CSE", level_term: str = "3-II", section: str = "") -> str:
+    """
+    Returns authoritative Markdown routine content for requested section or all sections.
+    """
+    routines = parse_class_routine_tables()
+    sec_key = (section or "").upper()
+    if sec_key and sec_key in routines:
+        return routines[sec_key]["raw_block"]
+    if routines:
+        return "\n\n---\n\n".join(sec["raw_block"] for sec in routines.values())
     return ""
 
 
@@ -815,7 +754,7 @@ def resolve_student_or_routine_query(question: str, history: list = None) -> Opt
     Authoritative Resolver for:
     1. Student Class Routine queries ("kalke amar ki ki class ache", "amar class routine ki").
     2. Student Exam Seatplan queries ("amar seat kothay", "exam room kothay", "0802410205101019").
-    3. General Batch Class Routine queries ("CSE 3-II class routine").
+    3. General Batch / Section Class Routine queries ("CSE 3-II section B kalke ki ki class", "section A routine").
     """
     if not question:
         return None
@@ -824,11 +763,18 @@ def resolve_student_or_routine_query(question: str, history: list = None) -> Opt
     q_low = clean_q.lower()
     is_routine = is_routine_query(clean_q)
 
+    # Detect Section mentioned in question (Section A, Section B, Sec A, Sec B)
+    sec_m = re.search(r'\b(?:section|sec)\s*[:\s-]?\s*([AB])\b|\b([AB])\s*(?:section|sec)\b', clean_q, re.I)
+    query_section = (sec_m.group(1) or sec_m.group(2)).upper() if sec_m else ""
+
+    # Detect personal pronoun (amar, amr, my, tar)
+    has_personal_pronoun = any(re.search(r'\b' + re.escape(w) + r'\b', q_low) for w in ["amar", "amr", "my", "tar", "আমার", "আমারটি", "তার"])
+
     # 1. Extract student roll:
-    # A roll must be explicitly in current question, OR history is only consulted IF query is genuinely a student follow-up!
+    # An explicit roll must be in question, OR history is consulted ONLY when user asks with a personal pronoun and without a specific section override!
     roll_match = re.search(r'\b(08\d{6,14})\b', clean_q)
     roll_from_history = False
-    if not roll_match and history:
+    if not roll_match and history and has_personal_pronoun and not query_section:
         student_followup_terms = [
             "seat", "room", "slot", "exam", "routine", "class", "kalke", "ajke", "schedule", "period",
             "সিট", "রুম", "কক্ষ", "পরীক্ষা", "রুটিন", "ক্লাস", "আজকে", "কালকে", "আমার", "amar", "tar", "amr"
@@ -846,14 +792,22 @@ def resolve_student_or_routine_query(question: str, history: list = None) -> Opt
 
     st_db = get_student_database()
 
-    # Case A: Student Roll Found
+    # Case A: Student Roll Found (Personal Query)
     if roll_match:
         roll = roll_match.group(1)
         s = st_db.get(roll)
         if s:
             if is_routine:
                 temporal = get_bangladesh_temporal_context()
-                routine_text = get_class_routine_content(s["programme"], s["level_term"])
+
+                # Determine student's section
+                if query_section:
+                    st_sec = query_section
+                else:
+                    last_3 = int(roll[-3:]) if roll[-3:].isdigit() else 0
+                    st_sec = "B" if last_3 > 50 else "A"
+
+                routine_text = get_class_routine_content(s["programme"], s["level_term"], section=st_sec)
                 if routine_text:
                     weekend_today_note = "[সাপ্তাহিক ছুটি / WEEKEND - আজ কোনো ক্লাস নেই]" if temporal['is_today_weekend'] else "[ক্লাস ডে / REGULAR CLASS DAY]"
                     weekend_tmrw_note = "[সাপ্তাহিক ছুটি / WEEKEND - আগামীকাল কোনো ক্লাস নেই]" if temporal['is_tomorrow_weekend'] else "[ক্লাস ডে / REGULAR CLASS DAY]"
@@ -871,12 +825,12 @@ def resolve_student_or_routine_query(question: str, history: list = None) -> Opt
                         target_day = temporal["next_class_en"]
                         target_day_bn = temporal["next_class_bn"]
 
-                    sched_items = get_student_daily_classes(target_day, parity=s["parity"], dept=s["programme"], level_term=s["level_term"])
+                    sched_items = get_student_daily_classes(target_day, parity=s["parity"], dept=s["programme"], level_term=s["level_term"], section=st_sec)
                     sched_lines = []
                     if target_day in ["Friday", "Saturday"]:
                         sched_lines.append(f"📅 **সাপ্তাহিক ছুটি:** আজ {target_day_bn} বিশ্ববিদ্যালয় বন্ধ রয়েছে। কোনো অ্যাকাডেমিক ক্লাস নেই।")
-                        next_items = get_student_daily_classes(temporal["next_class_en"], parity=s["parity"], dept=s["programme"], level_term=s["level_term"])
-                        sched_lines.append(f"\n📌 **পরবর্তী ক্লাস ডে ({temporal['next_class_bn']} / {temporal['next_class_en']})-এর ক্লাসের সময়সূচি (রোল: `{s['roll']}`, গ্রুপ: {s['parity']}):**")
+                        next_items = get_student_daily_classes(temporal["next_class_en"], parity=s["parity"], dept=s["programme"], level_term=s["level_term"], section=st_sec)
+                        sched_lines.append(f"\n📌 **পরবর্তী ক্লাস ডে ({temporal['next_class_bn']} / {temporal['next_class_en']})-এর ক্লাসের সময়সূচি (রোল: `{s['roll']}`, সেকশন: {st_sec}, গ্রুপ: {s['parity']}):**")
                         for it in next_items:
                             if it.get("parity") == "ALL" or it.get("parity") == s["parity"]:
                                 sched_lines.append(f"* `{it['time']}`: **{it['code']}** ({it['title']}) — রুম/ল্যাব: `{it['room']}`, শিক্ষক: {it['teacher']}")
@@ -885,7 +839,7 @@ def resolve_student_or_routine_query(question: str, history: list = None) -> Opt
                             elif s["parity"] == "EVEN" and it.get("note_even"):
                                 sched_lines.append(f"* `{it['time']}`: *{it['note_even']}*")
                     else:
-                        sched_lines.append(f"📌 **{target_day_bn} ({target_day})-এর ক্লাসের সময়সূচি (রোল: `{s['roll']}`, গ্রুপ: {s['parity']}):**")
+                        sched_lines.append(f"📌 **{target_day_bn} ({target_day})-এর ক্লাসের সময়সূচি (রোল: `{s['roll']}`, সেকশন: {st_sec}, গ্রুপ: {s['parity']}):**")
                         for it in sched_items:
                             if it.get("parity") == "ALL" or it.get("parity") == s["parity"]:
                                 sched_lines.append(f"* `{it['time']}`: **{it['code']}** ({it['title']}) — রুম/ল্যাব: `{it['room']}`, শিক্ষক: {it['teacher']}")
@@ -902,7 +856,7 @@ def resolve_student_or_routine_query(question: str, history: list = None) -> Opt
                         f"* Student Name: {s['name']}\n"
                         f"* Student ID / Roll: {s['roll']} (Roll Parity / Group: {s['parity']})\n"
                         f"* Programme / Department: {s['programme']}\n"
-                        f"* Academic Level & Term: {s['level']} (Level-Term Code: {s['level_term']}, Section: A)\n\n"
+                        f"* Academic Level & Term: {s['level']} (Level-Term Code: {s['level_term']}, Section: {st_sec})\n\n"
                         f"TEMPORAL CONTEXT (BANGLADESH TIME - UTC+6):\n"
                         f"* Current Date: {temporal['date_str']} | Current Time: {temporal['time_str']}\n"
                         f"* Today: {temporal['today_en']} ({temporal['today_bn']}) {weekend_today_note}\n"
@@ -910,7 +864,7 @@ def resolve_student_or_routine_query(question: str, history: list = None) -> Opt
                         f"* Next Regular Academic Class Day: {temporal['next_class_en']} ({temporal['next_class_bn']})\n\n"
                         f"VERIFIED AUTHORITATIVE DAILY SCHEDULE FOR STUDENT:\n"
                         f"{schedule_block}\n\n"
-                        f"OFFICIAL BATCH CLASS & LAB ROUTINE (Department: {s['programme']}, {s['level']}, Section: A):\n"
+                        f"OFFICIAL BATCH CLASS & LAB ROUTINE (Department: {s['programme']}, {s['level']}, Section: {st_sec}):\n"
                         f"{routine_text}\n\n"
                         f"STUDENT EXAMINATION SEATPLAN ALLOCATION (REFERENCE ONLY - DO NOT OVERRIDE ROUTINE):\n"
                         f"* Examination Slot: {s['slot']} ({s['time']})\n"
@@ -928,10 +882,8 @@ def resolve_student_or_routine_query(question: str, history: list = None) -> Opt
                         f"* Note: The official class routine for {s['level']} is currently not published/uploaded in the knowledge base. Only CSE Level- 3 Term- II class routine is currently available in the system.\n"
                     )
             else:
-                # If roll came only from history and query didn't ask for seat/room/exam, do not assume seat query!
                 if roll_from_history and not any(k in q_low for k in ["seat", "room", "exam", "slot", "সিট", "রুম", "কক্ষ", "পরীক্ষা"]):
                     return None
-                # User asked about seat/room/exam or entered only ID
                 single_doc = (
                     f"--- Document: Single Student Match (Source: {s['source']} | Status: CURRENT & AUTHORITATIVE) ---\n"
                     f"* Student Name: {s['name']}\n"
@@ -945,25 +897,62 @@ def resolve_student_or_routine_query(question: str, history: list = None) -> Opt
                 )
                 return single_doc
 
-    # Case B: No roll found, but user asks for Class Routine (e.g. "CSE 3-II class routine" or "routine")
+    # Case B: No roll found, but user asks for Batch / Section Class Routine
+    # e.g. "cse 3 II section B er kalke ki ki class ache", "section A routine", "routine"
     if is_routine:
         lt_match = re.search(r'\b(3[-–]?[iI]{2}|3[-–]?2|level\s*[-–]?\s*3\s*term\s*[-–]?\s*(?:2|ii))\b', q_low)
         dept_match = any(re.search(pat, q_low) for pat in DEPT_PATTERNS.get("cse", []))
-        if lt_match or dept_match or "routine" in q_low or "class" in q_low:
+        if lt_match or dept_match or "routine" in q_low or "class" in q_low or query_section:
             temporal = get_bangladesh_temporal_context()
-            routine_text = get_class_routine_content("CSE", "3-II")
+            target_sec = query_section or "A"
+            routine_text = get_class_routine_content("CSE", "3-II", section=target_sec)
             if routine_text:
                 weekend_today_note = "[সাপ্তাহিক ছুটি / WEEKEND - আজ কোনো ক্লাস নেই]" if temporal['is_today_weekend'] else "[ক্লাস ডে / REGULAR CLASS DAY]"
                 weekend_tmrw_note = "[সাপ্তাহিক ছুটি / WEEKEND - আগামীকাল কোনো ক্লাস নেই]" if temporal['is_tomorrow_weekend'] else "[ক্লাস ডে / REGULAR CLASS DAY]"
 
+                is_kalke = any(w in q_low for w in ["kalke", "kal", "tomorrow", "কালকে", "কাল", "আগামীকাল"])
+                is_ajke = any(w in q_low for w in ["ajke", "aj", "today", "আজকে", "আজ"])
+                if is_kalke:
+                    target_day = temporal["tomorrow_en"]
+                    target_day_bn = temporal["tomorrow_bn"]
+                elif is_ajke:
+                    target_day = temporal["today_en"]
+                    target_day_bn = temporal["today_bn"]
+                else:
+                    target_day = temporal["next_class_en"]
+                    target_day_bn = temporal["next_class_bn"]
+
+                sched_items = get_student_daily_classes(target_day, parity="ALL", section=target_sec)
+                sched_lines = []
+                if target_day in ["Friday", "Saturday"]:
+                    sched_lines.append(f"📅 **সাপ্তাহিক ছুটি:** আজ {target_day_bn} বিশ্ববিদ্যালয় বন্ধ রয়েছে। কোনো অ্যাকাডেমিক ক্লাস নেই।")
+                    next_items = get_student_daily_classes(temporal["next_class_en"], parity="ALL", section=target_sec)
+                    sched_lines.append(f"\n📌 **পরবর্তী ক্লাস ডে ({temporal['next_class_bn']} / {temporal['next_class_en']})-এর ক্লাসের সময়সূচি (CSE 3-II, সেকশন: {target_sec}):**")
+                    for it in next_items:
+                        parity_tag = f" [শুধুমাত্র {it['parity']} রোলধারীদের জন্য]" if it.get("parity") in ["ODD", "EVEN"] else ""
+                        sched_lines.append(f"* `{it['time']}`: **{it['code']}** ({it['title']}) — রুম/ল্যাব: `{it['room']}`, শিক্ষক: {it['teacher']}{parity_tag}")
+                else:
+                    sched_lines.append(f"📌 **{target_day_bn} ({target_day})-এর ক্লাসের সময়সূচি (CSE 3-II, সেকশন: {target_sec}):**")
+                    for it in sched_items:
+                        parity_tag = f" [শুধুমাত্র {it['parity']} রোলধারীদের জন্য]" if it.get("parity") in ["ODD", "EVEN"] else ""
+                        sched_lines.append(f"* `{it['time']}`: **{it['code']}** ({it['title']}) — রুম/ল্যাব: `{it['room']}`, শিক্ষক: {it['teacher']}{parity_tag}")
+
+                schedule_block = "\n".join(sched_lines)
+
                 return (
                     f"--- Document: Official Class & Lab Routine (Authoritative Source: class_and_lab_routine.txt) ---\n"
+                    f"BATCH SPECIFICATION:\n"
+                    f"* Department: Computer Science and Engineering (CSE)\n"
+                    f"* Academic Level & Term: Level- 3 Term- II\n"
+                    f"* Section: {target_sec}\n\n"
                     f"TEMPORAL CONTEXT (BANGLADESH TIME - UTC+6):\n"
                     f"* Current Date: {temporal['date_str']} | Current Time: {temporal['time_str']}\n"
                     f"* Today: {temporal['today_en']} ({temporal['today_bn']}) {weekend_today_note}\n"
                     f"* Tomorrow: {temporal['tomorrow_en']} ({temporal['tomorrow_bn']}) {weekend_tmrw_note}\n"
                     f"* Next Regular Academic Class Day: {temporal['next_class_en']} ({temporal['next_class_bn']})\n\n"
-                    f"OFFICIAL BATCH CLASS & LAB ROUTINE:\n"
+                    f"VERIFIED AUTHORITATIVE DAILY SCHEDULE FOR BATCH:\n"
+                    f"{schedule_block}\n\n"
+                    f"OFFICIAL BATCH CLASS & LAB ROUTINE (Section: {target_sec}):\n"
                     f"{routine_text}\n"
                 )
 
@@ -1572,88 +1561,11 @@ def search_information(question: str, top_k: int = 4, history: list = None) -> s
                     expanded_search_terms.append(f['name'])
                     break
 
-    # 3. Match Student Roll (Direct or from History)
-    target_roll = None
-    rm = re.search(r'\b(08\d{6,14})\b', clean_q)
-    if rm:
-        target_roll = rm.group(1)
-    elif is_followup and active_roll and not active_person:
-        target_roll = active_roll
-
-    if target_roll and target_roll in students:
-        s = students[target_roll]
-        is_routine_req = any(w in q_low for w in ["routine", "class", "kalke", "ajke", "schedule", "period", "রুটিন", "ক্লাস", "আজকে", "কালকে"])
-        if is_routine_req:
-            temporal = get_bangladesh_temporal_context()
-            routine_text = get_class_routine_content(s["programme"], s["level_term"])
-            weekend_today = "[সাপ্তাহিক ছুটি / WEEKEND - আজ কোনো ক্লাস নেই]" if temporal['is_today_weekend'] else "[ক্লাস ডে / REGULAR CLASS DAY]"
-            weekend_tmrw = "[সাপ্তাহিক ছুটি / WEEKEND - আগামীকাল কোনো ক্লাস নেই]" if temporal['is_tomorrow_weekend'] else "[ক্লাস ডে / REGULAR CLASS DAY]"
-
-            # Determine target day
-            is_kalke = any(w in q_low for w in ["kalke", "kal", "tomorrow", "কালকে", "কাল", "আগামীকাল"])
-            is_ajke = any(w in q_low for w in ["ajke", "aj", "today", "আজকে", "আজ"])
-            if is_kalke:
-                target_day = temporal["tomorrow_en"]
-                target_day_bn = temporal["tomorrow_bn"]
-            elif is_ajke:
-                target_day = temporal["today_en"]
-                target_day_bn = temporal["today_bn"]
-            else:
-                target_day = temporal["next_class_en"]
-                target_day_bn = temporal["next_class_bn"]
-
-            sched_items = get_student_daily_classes(target_day, parity=s["parity"], dept=s["programme"], level_term=s["level_term"])
-            sched_lines = []
-            if target_day in ["Friday", "Saturday"]:
-                sched_lines.append(f"📅 **সাপ্তাহিক ছুটি:** আজ {target_day_bn} বিশ্ববিদ্যালয় বন্ধ রয়েছে। কোনো অ্যাকাডেমিক ক্লাস নেই।")
-                next_items = get_student_daily_classes(temporal["next_class_en"], parity=s["parity"], dept=s["programme"], level_term=s["level_term"])
-                sched_lines.append(f"\n📌 **পরবর্তী ক্লাস ডে ({temporal['next_class_bn']} / {temporal['next_class_en']})-এর ক্লাসের সময়সূচি (রোল: `{s['roll']}`, গ্রুপ: {s['parity']}):**")
-                for it in next_items:
-                    if it.get("parity") == "ALL" or it.get("parity") == s["parity"]:
-                        sched_lines.append(f"* `{it['time']}`: **{it['code']}** ({it['title']}) — রুম/ল্যাব: `{it['room']}`, শিক্ষক: {it['teacher']}")
-                    elif s["parity"] == "ODD" and it.get("note_odd"):
-                        sched_lines.append(f"* `{it['time']}`: *{it['note_odd']}*")
-                    elif s["parity"] == "EVEN" and it.get("note_even"):
-                        sched_lines.append(f"* `{it['time']}`: *{it['note_even']}*")
-            else:
-                sched_lines.append(f"📌 **{target_day_bn} ({target_day})-এর ক্লাসের সময়সূচি (রোল: `{s['roll']}`, গ্রুপ: {s['parity']}):**")
-                for it in sched_items:
-                    if it.get("parity") == "ALL" or it.get("parity") == s["parity"]:
-                        sched_lines.append(f"* `{it['time']}`: **{it['code']}** ({it['title']}) — রুম/ল্যাব: `{it['room']}`, শিক্ষক: {it['teacher']}")
-                    elif s["parity"] == "ODD" and it.get("note_odd"):
-                        sched_lines.append(f"* `{it['time']}`: *{it['note_odd']}*")
-                    elif s["parity"] == "EVEN" and it.get("note_even"):
-                        sched_lines.append(f"* `{it['time']}`: *{it['note_even']}*")
-
-            schedule_block = "\n".join(sched_lines)
-
-            entity_blocks.append(
-                f"--- Student Profile & Official Class & Lab Routine ---\n"
-                f"* Student Name: {s['name']}\n"
-                f"* Student ID / Roll: {s['roll']} (Roll Parity / Group: {s['parity']})\n"
-                f"* Programme / Department: {s['programme']}\n"
-                f"* Academic Level & Term: {s['level']} (Level-Term Code: {s['level_term']}, Section: A)\n\n"
-                f"TEMPORAL CONTEXT (BANGLADESH TIME - UTC+6):\n"
-                f"* Current Date: {temporal['date_str']} | Current Time: {temporal['time_str']}\n"
-                f"* Today: {temporal['today_en']} ({temporal['today_bn']}) {weekend_today}\n"
-                f"* Tomorrow: {temporal['tomorrow_en']} ({temporal['tomorrow_bn']}) {weekend_tmrw}\n"
-                f"* Next Regular Academic Class Day: {temporal['next_class_en']} ({temporal['next_class_bn']})\n\n"
-                f"VERIFIED AUTHORITATIVE DAILY SCHEDULE FOR STUDENT:\n"
-                f"{schedule_block}\n\n"
-                f"OFFICIAL BATCH CLASS & LAB ROUTINE:\n{routine_text}\n"
-            )
-        else:
-            entity_blocks.append(
-                f"--- Student Exam Seatplan Allocation ---\n"
-                f"* Student Name: {s['name']}\n"
-                f"* Student ID / Roll: {s['roll']}\n"
-                f"* Programme: {s['programme']}\n"
-                f"* Level & Term: {s['level']}\n"
-                f"* Examination Slot: {s['slot']} ({s['time']})\n"
-                f"* Allocated Exam Room: {s['room']}\n"
-                f"* Allocated Seat Number: {s['seat']}\n"
-            )
-    elif not target_roll and not matched_abbr and not entity_blocks:
+    # 3. Match Student Routine, Exam Seatplan, or Batch / Section Routine
+    routine_or_student_doc = resolve_student_or_routine_query(clean_q, history=history)
+    if routine_or_student_doc:
+        entity_blocks.append(routine_or_student_doc)
+    elif not matched_abbr and not entity_blocks:
         # Check student name disambiguation if user searched by a student's partial name
         name_matches, disambiguation_doc = find_student_matches_by_name(clean_q)
         if disambiguation_doc:

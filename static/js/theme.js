@@ -18,10 +18,15 @@
 (function () {
   'use strict';
 
+  // Purge legacy shared key to prevent cross-portal theme bleed
+  try {
+    localStorage.removeItem('baust_theme');
+  } catch (e) {}
+
   /**
-   * Resolve storage key based on active site scope.
+   * Resolve storage key strictly based on active site scope.
    * Student site: 'baust_student_theme'
-   * Admin site: 'baust_admin_theme'
+   * Admin site:   'baust_admin_theme'
    */
   function getStorageKey() {
     try {
@@ -35,24 +40,21 @@
     return 'baust_student_theme';
   }
 
+  const STORAGE_KEY = getStorageKey();
+
   /**
    * Retrieves the current effective theme.
-   * Priority: scoped localStorage -> legacy baust_theme fallback -> OS preference -> 'light' default
+   * Scoped strictly to the active portal (baust_student_theme vs baust_admin_theme).
+   * Default: 'dark' (Night Mode)
    */
   function getPreferredTheme() {
-    const key = getStorageKey();
     try {
-      const stored = localStorage.getItem(key);
+      const stored = localStorage.getItem(STORAGE_KEY);
       if (stored === 'dark' || stored === 'light') return stored;
-
-      // Fallback for first load if legacy unified key existed
-      const legacy = localStorage.getItem('baust_theme');
-      if (legacy === 'dark' || legacy === 'light') return legacy;
     } catch (e) {
       console.warn('localStorage access failed:', e);
     }
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    return prefersDark ? 'dark' : 'light';
+    return 'dark';
   }
 
   /**
@@ -63,7 +65,7 @@
     document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
 
     try {
-      localStorage.setItem(getStorageKey(), isDark ? 'dark' : 'light');
+      localStorage.setItem(STORAGE_KEY, isDark ? 'dark' : 'light');
     } catch (e) {}
 
     // Update UI Elements if present on the page
@@ -101,23 +103,13 @@
   // Immediately apply preferred theme
   applyTheme(getPreferredTheme());
 
-  // Attach event listener once DOM is ready (eliminates inline onclick)
+  // Attach event listener once DOM is ready
   document.addEventListener('DOMContentLoaded', function () {
-    // Re-sync UI in case elements weren't in DOM during immediate execution
     applyTheme(document.documentElement.getAttribute('data-theme') || getPreferredTheme());
 
     const toggleBtn = document.getElementById('themeToggleBtn');
     if (toggleBtn) {
-      toggleBtn.addEventListener('click', toggleTheme);
-    }
-
-    // Listen for OS system theme changes if user hasn't explicitly set a preference
-    if (window.matchMedia) {
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
-        if (!localStorage.getItem(getStorageKey())) {
-          applyTheme(e.matches ? 'dark' : 'light');
-        }
-      });
+      toggleBtn.onclick = toggleTheme;
     }
   });
 })();

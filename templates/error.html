@@ -15,9 +15,9 @@
       try {
         var isAdmin = window.location.pathname.indexOf('/admin') !== -1;
         var key = isAdmin ? "baust_admin_theme" : "baust_student_theme";
-        var saved = localStorage.getItem(key) || localStorage.getItem("baust_theme");
-        var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-        document.documentElement.setAttribute("data-theme", saved || (prefersDark ? "dark" : "light"));
+        var saved = localStorage.getItem(key);
+        var theme = (saved === "light" || saved === "dark") ? saved : "dark";
+        document.documentElement.setAttribute("data-theme", theme);
       } catch (e) {}
     })();
   </script>
@@ -66,7 +66,7 @@
   </div>
 
   <!-- Modular JavaScript Engine -->
-  <script src="{{ url_for('static', filename='js/theme.js') }}?v=3.0"></script>
+  <script src="{{ url_for('static', filename='js/theme.js') }}?v=4.0_isolate"></script>
 </body>
 </html>
 

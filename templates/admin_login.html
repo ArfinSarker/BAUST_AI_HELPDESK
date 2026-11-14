@@ -13,13 +13,9 @@
   <script>
     (function() {
       try {
-        var saved = localStorage.getItem("baust_admin_theme") || localStorage.getItem("baust_theme");
-        var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-        if (saved === "dark" || (!saved && prefersDark)) {
-          document.documentElement.setAttribute("data-theme", "dark");
-        } else {
-          document.documentElement.setAttribute("data-theme", "light");
-        }
+        var saved = localStorage.getItem("baust_admin_theme");
+        var theme = (saved === "light" || saved === "dark") ? saved : "dark";
+        document.documentElement.setAttribute("data-theme", theme);
       } catch (e) {}
     })();
   </script>
@@ -142,7 +138,7 @@
   </div>
 
     <!-- Modular JavaScript Engine (CSP Compliant) -->
-  <script src="{{ url_for('static', filename='js/theme.js') }}?v=3.0"></script>
+  <script src="{{ url_for('static', filename='js/theme.js') }}?v=4.0_isolate"></script>
   <script src="{{ url_for('static', filename='js/admin_auth.js') }}"></script>
 
 </body>

@@ -18,16 +18,36 @@
 (function () {
   'use strict';
 
-  const STORAGE_KEY = 'baust_theme';
+  /**
+   * Resolve storage key based on active site scope.
+   * Student site: 'baust_student_theme'
+   * Admin site: 'baust_admin_theme'
+   */
+  function getStorageKey() {
+    try {
+      const explicitScope = document.documentElement.getAttribute('data-theme-scope');
+      if (explicitScope === 'admin') return 'baust_admin_theme';
+      if (explicitScope === 'student') return 'baust_student_theme';
+
+      const path = (window.location && window.location.pathname) ? window.location.pathname : '';
+      if (path.indexOf('/admin') !== -1) return 'baust_admin_theme';
+    } catch (e) {}
+    return 'baust_student_theme';
+  }
 
   /**
    * Retrieves the current effective theme.
-   * Priority: localStorage -> OS preference -> 'light' default
+   * Priority: scoped localStorage -> legacy baust_theme fallback -> OS preference -> 'light' default
    */
   function getPreferredTheme() {
+    const key = getStorageKey();
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
+      const stored = localStorage.getItem(key);
       if (stored === 'dark' || stored === 'light') return stored;
+
+      // Fallback for first load if legacy unified key existed
+      const legacy = localStorage.getItem('baust_theme');
+      if (legacy === 'dark' || legacy === 'light') return legacy;
     } catch (e) {
       console.warn('localStorage access failed:', e);
     }
@@ -43,7 +63,7 @@
     document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
 
     try {
-      localStorage.setItem(STORAGE_KEY, isDark ? 'dark' : 'light');
+      localStorage.setItem(getStorageKey(), isDark ? 'dark' : 'light');
     } catch (e) {}
 
     // Update UI Elements if present on the page
@@ -94,7 +114,7 @@
     // Listen for OS system theme changes if user hasn't explicitly set a preference
     if (window.matchMedia) {
       window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
-        if (!localStorage.getItem(STORAGE_KEY)) {
+        if (!localStorage.getItem(getStorageKey())) {
           applyTheme(e.matches ? 'dark' : 'light');
         }
       });

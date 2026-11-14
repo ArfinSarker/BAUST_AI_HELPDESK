@@ -17,12 +17,12 @@ function syncThemeUI(theme) {
     document.documentElement.setAttribute("data-theme", "dark");
     if (themeIcon) themeIcon.textContent = "☀️";
     if (themeLabel) themeLabel.textContent = "Day";
-    localStorage.setItem("baust_theme", "dark");
+    localStorage.setItem("baust_admin_theme", "dark");
   } else {
     document.documentElement.setAttribute("data-theme", "light");
     if (themeIcon) themeIcon.textContent = "🌙";
     if (themeLabel) themeLabel.textContent = "Night";
-    localStorage.setItem("baust_theme", "light");
+    localStorage.setItem("baust_admin_theme", "light");
   }
 }
 

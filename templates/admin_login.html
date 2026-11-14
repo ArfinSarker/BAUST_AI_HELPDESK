@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme-scope="admin">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -13,7 +13,7 @@
   <script>
     (function() {
       try {
-        var saved = localStorage.getItem("baust_theme");
+        var saved = localStorage.getItem("baust_admin_theme") || localStorage.getItem("baust_theme");
         var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
         if (saved === "dark" || (!saved && prefersDark)) {
           document.documentElement.setAttribute("data-theme", "dark");
@@ -142,7 +142,7 @@
   </div>
 
     <!-- Modular JavaScript Engine (CSP Compliant) -->
-  <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/theme.js') }}?v=3.0"></script>
   <script src="{{ url_for('static', filename='js/admin_auth.js') }}"></script>
 
 </body>

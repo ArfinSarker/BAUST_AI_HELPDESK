@@ -242,6 +242,9 @@ def clean_llm_response(text: str) -> str:
     # Fix Saidpur spelling error: সাইদপুর / সায়েদপুর -> সৈয়দপুর
     text = text.replace("সাইদপুর", "সৈয়দপুর").replace("সায়েদপুর", "সৈয়দপুর")
 
+    # Sanitize emails, phones, and degrees format
+    text = sanitize_contact_markdown(text)
+
     return text.strip()
 
 

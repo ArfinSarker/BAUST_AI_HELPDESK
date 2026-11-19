@@ -98,6 +98,14 @@
     });
   }
 
+  // SVG Icon Templates for Modern Button Styling (No OS Emojis)
+  const ICONS = {
+    thumbsUp: '<svg class="btn-svg-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>',
+    thumbsDown: '<svg class="btn-svg-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"></path></svg>',
+    copy: '<svg class="btn-svg-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>',
+    check: '<svg class="btn-svg-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>'
+  };
+
   // ==========================================================================
   // XSS-SAFE RICH CONTENT RENDERER (DOMPurify + Marked + KaTeX + Highlight.js)
   // ==========================================================================
@@ -143,9 +151,9 @@
     res = res.replace(/\bডিইউ\b/g, 'ঢাকা বিশ্ববিদ্যালয় (DU)');
     res = res.replace(/\bসিইউ\b/g, 'চট্টগ্রাম বিশ্ববিদ্যালয় (CU)');
     res = res.replace(/\bআরইউ\b/g, 'রাজশাহী বিশ্ববিদ্যালয় (RU)');
-    res = res.replace(/বি[\.\s]*এসসি\s*\(\s*(?:বি[\.\s]*এসসি[\.\s]*)?ইন\s*([^\)]+)\)/gi, 'বিএসসি ইন $1');
-    res = res.replace(/এম[\.\s]*এসসি\s*\(\s*(?:এম[\.\s]*এসসি[\.\s]*)?ইন\s*([^\)]+)\)/gi, 'এমএসসি ইন $1');
-    res = res.replace(/(বি[\.\s]*এসসি|এম[\.\s]*এসসি)\s*\(\s*\1\s*[,;]?\s*([^\)]*)\)/gi, '$1 ($2)');
+    res = res.replace(/বি[\.\s]*এসসি\s*\(\s*(?:বি[\.\s]*এসসি[\.\s]*)?ইন\s*([^\)]+)\)/gi, (m, g1) => 'বিএসসি ইন ' + g1);
+    res = res.replace(/এম[\.\s]*এসসি\s*\(\s*(?:এম[\.\s]*এসসি[\.\s]*)?ইন\s*([^\)]+)\)/gi, (m, g1) => 'এমএসসি ইন ' + g1);
+    res = res.replace(/(বি[\.\s]*এসসি|এম[\.\s]*এসসি)\s*\(\s*\1\s*[,;]?\s*([^\)]*)\)/gi, (m, g1, g2) => g1 + ' (' + g2 + ')');
 
     return res;
   }
@@ -184,11 +192,11 @@
           const copyBtn = document.createElement('button');
           copyBtn.className = 'code-copy-btn';
           copyBtn.type = 'button';
-          copyBtn.innerHTML = '📋 Copy';
+          copyBtn.innerHTML = `${ICONS.copy}<span>Copy</span>`;
           copyBtn.addEventListener('click', function () {
             navigator.clipboard.writeText(block.innerText).then(() => {
-              copyBtn.innerHTML = '✅ Copied!';
-              setTimeout(() => { copyBtn.innerHTML = '📋 Copy'; }, 2000);
+              copyBtn.innerHTML = `${ICONS.check}<span>Copied!</span>`;
+              setTimeout(() => { copyBtn.innerHTML = `${ICONS.copy}<span>Copy</span>`; }, 2000);
             });
           });
           parent.style.position = 'relative';
@@ -231,7 +239,7 @@
       typingIndicator.style.display = 'flex';
     }
     if (questionInput) {
-      questionInput.placeholder = 'AI উত্তর তৈরি করছে... থামাতে ⏹ চাপুন';
+      questionInput.placeholder = 'AI উত্তর তৈরি করছে... থামাতে Stop চাপুন';
     }
   }
 
@@ -261,7 +269,7 @@
     }
     isGenerating = false;
     resetInputUI();
-    showToast('⏹️ উত্তর জেনারেশন থামানো হয়েছে');
+    showToast('উত্তর জেনারেশন থামানো হয়েছে');
   }
 
   // ==========================================================================
@@ -293,7 +301,11 @@
 
     const textToCopy = clone.innerText.trim();
     navigator.clipboard.writeText(textToCopy).then(() => {
-      showToast('✅ উত্তর কপি করা হয়েছে!');
+      button.innerHTML = `${ICONS.check}<span>Copied!</span>`;
+      setTimeout(() => {
+        button.innerHTML = `${ICONS.copy}<span>Copy</span>`;
+      }, 2000);
+      showToast('উত্তর কপি করা হয়েছে!');
     });
   }
 
@@ -338,11 +350,11 @@
     if (type === 'like') {
       if (likeBtn) likeBtn.classList.add('active-good');
       if (dislikeBtn) dislikeBtn.classList.remove('active-bad');
-      showToast('👍 মতামতের জন্য ধন্যবাদ! (Liked)');
+      showToast('মতামতের জন্য ধন্যবাদ! (Liked)');
     } else {
       if (dislikeBtn) dislikeBtn.classList.add('active-bad');
       if (likeBtn) likeBtn.classList.remove('active-good');
-      showToast('👎 আপনার ফিডব্যাক রেকর্ড করা হয়েছে।');
+      showToast('আপনার ফিডব্যাক রেকর্ড করা হয়েছে।');
     }
 
     try {
@@ -400,9 +412,9 @@
       <div class="bubble ai">
         <div class="stream-content"></div>
         <div class="bubble-actions" style="display: none;">
-          <button type="button" class="action-icon-btn feedback-btn like-btn" title="পছন্দ হয়েছে (Helpful)">👍 Like</button>
-          <button type="button" class="action-icon-btn feedback-btn dislike-btn" title="অপছন্দ হয়েছে (Not helpful)">👎 Dislike</button>
-          <button type="button" class="action-icon-btn copy-btn" title="উত্তর কপি করুন">📋 Copy</button>
+          <button type="button" class="action-icon-btn feedback-btn like-btn" title="পছন্দ হয়েছে (Helpful)">${ICONS.thumbsUp}<span>Like</span></button>
+          <button type="button" class="action-icon-btn feedback-btn dislike-btn" title="অপছন্দ হয়েছে (Not helpful)">${ICONS.thumbsDown}<span>Dislike</span></button>
+          <button type="button" class="action-icon-btn copy-btn" title="উত্তর কপি করুন">${ICONS.copy}<span>Copy</span></button>
         </div>
       </div>
     `;

@@ -59,7 +59,7 @@
     <div class="nav-actions">
       <!-- Dark / Light Mode Toggle -->
       <button id="themeToggleBtn" class="theme-toggle-btn" type="button" title="Toggle Dark/Light Mode">
-        <span id="themeIcon">🌙</span>
+        <span id="themeIcon"></span>
         <span id="themeLabel">Night</span>
       </button>
 
@@ -69,7 +69,8 @@
       </div>
 
       <a href="/admin-login" class="admin-link-btn" title="Admin Portal">
-        🔒 <span id="adminText">Admin</span>
+        <svg class="btn-svg-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        <span id="adminText">Admin</span>
       </a>
     </div>
   </header>
@@ -84,7 +85,9 @@
         <!-- Welcome Hero -->
         <div class="welcome-hero" id="welcomeHero">
           <div class="welcome-header">
-            <span class="welcome-icon">🎓</span>
+            <span class="welcome-icon">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+            </span>
             <h2>স্বাগতম! BAUST AI সহায়িকায় আপনাকে স্বাগতম</h2>
           </div>
           <p>
@@ -103,9 +106,9 @@
           <div class="bubble ai">
             {{ answer | safe }}
             <div class="bubble-actions">
-              <button type="button" class="action-icon-btn feedback-btn like-btn" title="পছন্দ হয়েছে (Helpful)">👍 Like</button>
-              <button type="button" class="action-icon-btn feedback-btn dislike-btn" title="অপছন্দ হয়েছে (Not helpful)">👎 Dislike</button>
-              <button type="button" class="action-icon-btn copy-btn" title="উত্তর কপি করুন">📋 Copy</button>
+              <button type="button" class="action-icon-btn feedback-btn like-btn" title="পছন্দ হয়েছে (Helpful)"><svg class="btn-svg-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg><span>Like</span></button>
+              <button type="button" class="action-icon-btn feedback-btn dislike-btn" title="অপছন্দ হয়েছে (Not helpful)"><svg class="btn-svg-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"></path></svg><span>Dislike</span></button>
+              <button type="button" class="action-icon-btn copy-btn" title="উত্তর কপি করুন"><svg class="btn-svg-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy</span></button>
             </div>
           </div>
         </div>
@@ -137,22 +140,25 @@
           >
           <!-- Send Button (Visible when idle) -->
           <button type="submit" id="sendBtn" class="send-btn" title="Send message">
-            ➤
+            <svg class="btn-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
           </button>
           <!-- Dedicated Stop Button (Visible when generating) -->
           <button type="button" id="stopBtn" class="send-btn stop-state" title="থামুন" style="display: none;">
-            ⏹
+            <svg class="btn-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"></rect></svg>
           </button>
         </form>
         <div class="footer-tools">
           <span class="univ-name">BAUST • Saidpur Cantonment</span>
-          <button type="button" id="clearChatBtn" class="clear-chat-btn">🗑️ Clear Chat</button>
+          <button type="button" id="clearChatBtn" class="clear-chat-btn">
+            <svg class="btn-svg-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            <span>Clear Chat</span>
+          </button>
         </div>
       </footer>
 
       <!-- Floating Scroll to Bottom Button -->
       <button id="scrollBottomBtn" class="scroll-bottom-btn" type="button" title="Scroll to bottom">
-        ↓
+        <svg class="btn-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
       </button>
 
     </div>

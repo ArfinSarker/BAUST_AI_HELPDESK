@@ -854,13 +854,13 @@ input:-webkit-autofill:active {
     .dashboard-container {
       position: relative;
       z-index: 10;
-      max-width: 1200px;
-      width: 100%;
-      margin: 24px auto;
-      padding: 0 20px;
+      max-width: 1400px;
+      width: calc(100% - 32px);
+      margin: 20px auto;
+      padding: 0;
       display: flex;
       flex-direction: column;
-      gap: 24px;
+      gap: 20px;
     }
 
     /* Flash Alerts */
@@ -1581,7 +1581,14 @@ input:-webkit-autofill:active {
 
     .table-header h2 { font-family: 'Outfit', sans-serif; font-size: 17px; color: var(--card-title); }
     .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    #kb-files .table-wrapper, #knowledgeGapsWrapper { min-height: 480px; }
+    #kb-files .table-wrapper, #knowledgeGapsWrapper { 
+      min-height: 480px; 
+    }
+    @media (min-width: 992px) {
+      #kb-files .table-wrapper, #knowledgeGapsWrapper {
+        overflow-x: hidden; /* Strict elimination of horizontal scroll on laptop & desktop */
+      }
+    }
 
     /* Modern Filter Tabs for Tables */
     .filter-tabs {
@@ -1642,9 +1649,10 @@ input:-webkit-autofill:active {
       border-color: rgba(16, 185, 129, 0.25);
     }
 
-    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
-    th { background: var(--input-bg); padding: 12px 18px; color: var(--text-muted); font-weight: 600; border-bottom: 1px solid var(--border); white-space: nowrap; }
-    td { padding: 12px 18px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: middle; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12.5px; }
+    #knowledgeGapsTable, #kbDocsTable { width: 100%; table-layout: auto; }
+    th { background: var(--input-bg); padding: 10px 14px; color: var(--text-muted); font-weight: 600; font-size: 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: middle; }
     tr:last-child td { border-bottom: none; }
     tr:hover td { background: rgba(56, 189, 248, 0.04); }
     [data-theme="dark"] tr:hover td { background: #141F36; }

@@ -21,7 +21,7 @@
   </script>
 
     <!-- External Unified Stylesheet -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=4.5">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=4.6">
 </head>
 <body class="admin-page">
 
@@ -546,47 +546,47 @@
         <table id="knowledgeGapsTable">
           <thead>
             <tr>
-              <th style="width: 44%;">Student Question & AI Response</th>
-              <th>Frequency</th>
-              <th>Last Asked</th>
-              <th>Status</th>
-              <th style="text-align: right;">Action</th>
+              <th>Student Question & AI Response</th>
+              <th style="text-align: center; width: 85px;">Frequency</th>
+              <th style="width: 155px;">Last Asked</th>
+              <th style="width: 110px;">Status</th>
+              <th style="text-align: right; width: 175px;">Action</th>
             </tr>
           </thead>
           <tbody>
             {% for gap in knowledge_gaps %}
             <tr data-status="{% if gap.resolved %}resolved{% else %}unresolved{% endif %}" {% if not gap.resolved %}style="background: rgba(239, 68, 68, 0.03);"{% endif %}>
-              <td>
-                <div style="display: flex; align-items: flex-start; gap: 9px;">
+              <td style="vertical-align: middle;">
+                <div style="display: flex; align-items: flex-start; gap: 8px;">
                   <span class="gap-icon" style="color: {% if gap.resolved %}#10B981{% else %}#EF4444{% endif %}; margin-top: 2px; flex-shrink: 0;">
                     {% if gap.resolved %}
-                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                     {% else %}
-                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
                     {% endif %}
                   </span>
-                  <div>
-                    <strong style="color: var(--card-title); font-size: 13px; display: block; line-height: 1.4;">{{ gap.question }}</strong>
+                  <div style="min-width: 0; flex: 1;">
+                    <strong style="color: var(--card-title); font-size: 13px; display: block; line-height: 1.4; word-break: break-word;">{{ gap.question }}</strong>
                     {% if gap.last_answer %}
-                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px; max-width: 500px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3;">
-                      <span style="opacity: 0.8; font-weight: 600;">Bot:</span> {{ gap.last_answer }}
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; word-break: break-word;" title="{{ gap.last_answer }}">
+                      <span style="opacity: 0.85; font-weight: 600;">Bot:</span> {{ gap.last_answer }}
                     </div>
                     {% endif %}
                   </div>
                 </div>
               </td>
-              <td>
-                <span class="frequency-badge" style="font-weight: 600; padding: 3px 8px; border-radius: 10px; font-size: 11px;">
+              <td style="text-align: center; white-space: nowrap;">
+                <span class="frequency-badge" style="font-weight: 600; padding: 2px 8px; border-radius: 10px; font-size: 11px;">
                   {{ gap.frequency }} {% if gap.frequency == 1 %}time{% else %}times{% endif %}
                 </span>
               </td>
               <td style="font-size: 11.5px; color: var(--text-muted); white-space: nowrap;">
-                <div style="display: inline-flex; align-items: center; gap: 5px;">
+                <div style="display: inline-flex; align-items: center; gap: 4px;">
                   <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                   <span>{{ gap.last_asked }}</span>
                 </div>
               </td>
-              <td>
+              <td style="white-space: nowrap;">
                 {% if gap.resolved %}
                 <span class="badge-status active">
                   <span class="status-indicator-dot active"></span>
@@ -599,19 +599,19 @@
                 </span>
                 {% endif %}
               </td>
-              <td style="text-align: right;">
-                <div style="display: inline-flex; gap: 6px; align-items: center;">
-                  <button type="button" class="btn-submit btn-resolve-gap" style="padding: 6px 12px; font-size: 11px;" 
+              <td style="text-align: right; white-space: nowrap;">
+                <div style="display: inline-flex; gap: 5px; align-items: center; justify-content: flex-end;">
+                  <button type="button" class="btn-submit btn-resolve-gap" style="padding: 5px 10px; font-size: 11px;" 
                           data-question="{{ gap.question|escape }}" 
                           data-gap-id="{{ gap.id }}">
-                    <svg class="btn-svg-icon" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    <svg class="btn-svg-icon" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                     <span>Add Knowledge</span>
                   </button>
                   {% if not gap.resolved %}
-                  <button type="button" class="btn-cancel btn-resolve-ajax" style="padding: 6px 10px; font-size: 11px;" 
+                  <button type="button" class="btn-cancel btn-resolve-ajax" style="padding: 5px 8px; font-size: 11px;" 
                           title="Mark as resolved" 
                           data-gap-id="{{ gap.id }}">
-                    <svg class="btn-svg-icon" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <svg class="btn-svg-icon" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
                     <span>Done</span>
                   </button>
                   {% endif %}
@@ -831,7 +831,7 @@
                 {% if doc.status == 'active' %}
                 <span class="badge-status active">
                   <span class="status-indicator-dot active"></span>
-                  <span>Active (Authoritative)</span>
+                  <span>Active</span>
                 </span>
                 {% elif doc.status == 'superseded' %}
                 <span class="badge-status superseded">
@@ -1033,7 +1033,7 @@
   </div>
 
   <!-- Modular JavaScript Engine -->
-  <script src="{{ url_for('static', filename='js/theme.js') }}?v=4.5"></script>
-  <script src="{{ url_for('static', filename='js/admin.js') }}?v=4.5"></script>
+  <script src="{{ url_for('static', filename='js/theme.js') }}?v=4.6"></script>
+  <script src="{{ url_for('static', filename='js/admin.js') }}?v=4.6"></script>
 </body>
 </html>

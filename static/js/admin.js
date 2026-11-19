@@ -186,9 +186,9 @@
 
   async function markGapResolvedAjax(btn, gapId) {
     if (!gapId) return;
-    const originalText = btn.textContent;
+    const originalHtml = btn.innerHTML;
     btn.disabled = true;
-    btn.textContent = '⏳...';
+    btn.innerHTML = `<span style="display:inline-block; width:11px; height:11px; border:2px solid currentColor; border-right-color:transparent; border-radius:50%; animation: spin 0.6s linear infinite; vertical-align:middle; margin-right:3px;"></span> Saving...`;
     try {
       const res = await fetch('/admin/resolve-gap/' + gapId, {
         method: 'POST'
@@ -196,28 +196,52 @@
       if (res.ok) {
         const row = btn.closest('tr');
         if (row) {
+          row.dataset.status = 'resolved';
           row.style.background = 'transparent';
+          const iconSpan = row.querySelector('.gap-icon');
+          if (iconSpan) {
+            iconSpan.style.color = '#10B981';
+            iconSpan.innerHTML = `<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+          }
           const statusCell = row.children[3];
           if (statusCell) {
             statusCell.innerHTML = `
-              <span style="color: #10B981; font-size: 11px; font-weight: 600; background: rgba(16, 185, 129, 0.15); padding: 3px 8px; border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.3); display: inline-flex; align-items: center; gap: 4px;">
-                <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span class="badge-status active">
+                <span class="status-indicator-dot active"></span>
                 <span>Resolved</span>
               </span>
             `;
           }
         }
         btn.remove();
+
+        // Update tab badge counters dynamically
+        const unresolvedBadge = document.querySelector('#gapsFilterTabs [data-filter="unresolved"] .tab-badge');
+        if (unresolvedBadge) {
+          let count = parseInt(unresolvedBadge.textContent, 10);
+          if (!isNaN(count) && count > 0) unresolvedBadge.textContent = count - 1;
+        }
+        const resolvedBadge = document.querySelector('#gapsFilterTabs [data-filter="resolved"] .tab-badge');
+        if (resolvedBadge) {
+          let count = parseInt(resolvedBadge.textContent, 10);
+          if (!isNaN(count)) resolvedBadge.textContent = count + 1;
+        }
+
+        // Re-filter gaps table if active
+        if (window.gapsPaginator) {
+          window.gapsPaginator.filter();
+        }
+
         showToast('Knowledge gap marked as resolved!', 'success');
       } else {
         btn.disabled = false;
-        btn.textContent = originalText;
+        btn.innerHTML = originalHtml;
         showToast('Failed to mark gap resolved.', 'error');
       }
     } catch (err) {
       console.error('Failed to mark resolved:', err);
       btn.disabled = false;
-      btn.textContent = originalText;
+      btn.innerHTML = originalHtml;
       showToast('Network error.', 'error');
     }
   }
@@ -709,6 +733,7 @@
       this.filteredRows = [...this.rows];
       this.currentPage = 1;
       this.rowsPerPage = parseInt(config.defaultRows || 25, 10);
+      this.currentFilter = 'all';
 
       this.bindEvents();
       this.render(false);
@@ -753,14 +778,17 @@
 
     filter() {
       const query = (this.searchInput ? this.searchInput.value : '').toLowerCase().trim();
-      if (!query) {
-        this.filteredRows = [...this.rows];
-      } else {
-        this.filteredRows = this.rows.filter(row => {
-          const text = row.innerText.toLowerCase();
-          return text.includes(query);
-        });
-      }
+      this.filteredRows = this.rows.filter(row => {
+        if (this.currentFilter && this.currentFilter !== 'all') {
+          const status = row.dataset.status;
+          if (status && status !== this.currentFilter) {
+            return false;
+          }
+        }
+        if (!query) return true;
+        const text = row.innerText.toLowerCase();
+        return text.includes(query);
+      });
       this.currentPage = 1;
       this.render(false);
     }
@@ -1172,6 +1200,28 @@
       paginationInfoId: 'logsPaginationInfo',
       defaultRows: 15
     });
+
+    window.gapsPaginator = new TablePaginator({
+      tableId: 'knowledgeGapsTable',
+      searchInputId: 'gapsSearchInput',
+      clearBtnId: 'clearGapsSearch',
+      rowsSelectId: 'gapsRowsPerPage',
+      paginationNavId: 'gapsPaginationNav',
+      paginationInfoId: 'gapsPaginationInfo',
+      defaultRows: 10
+    });
+
+    const gapsFilterTabs = document.getElementById('gapsFilterTabs');
+    if (gapsFilterTabs && window.gapsPaginator) {
+      gapsFilterTabs.addEventListener('click', (e) => {
+        const tab = e.target.closest('.btn-filter-tab');
+        if (!tab) return;
+        gapsFilterTabs.querySelectorAll('.btn-filter-tab').forEach(b => b.classList.remove('active'));
+        tab.classList.add('active');
+        window.gapsPaginator.currentFilter = tab.dataset.filter || 'all';
+        window.gapsPaginator.filter();
+      });
+    }
 
     // 9. Bulk Checkbox Handlers
     const selectAll = document.getElementById('selectAllDocs');

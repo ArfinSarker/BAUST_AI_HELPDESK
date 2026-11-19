@@ -1581,7 +1581,66 @@ input:-webkit-autofill:active {
 
     .table-header h2 { font-family: 'Outfit', sans-serif; font-size: 17px; color: var(--card-title); }
     .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    #kb-files .table-wrapper { min-height: 480px; }
+    #kb-files .table-wrapper, #knowledgeGapsWrapper { min-height: 480px; }
+
+    /* Modern Filter Tabs for Tables */
+    .filter-tabs {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .btn-filter-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .btn-filter-tab:hover {
+      border-color: var(--primary);
+      color: var(--text);
+      background: rgba(37, 99, 235, 0.06);
+    }
+    .btn-filter-tab.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+    }
+    .btn-filter-tab .tab-badge {
+      display: inline-block;
+      padding: 1px 6px;
+      border-radius: 10px;
+      font-size: 10.5px;
+      font-weight: 700;
+    }
+    .btn-filter-tab.active .tab-badge {
+      background: rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+    }
+    .btn-filter-tab:not(.active) .tab-badge {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-filter-tab:not(.active) .tab-badge.danger {
+      color: #EF4444;
+      background: rgba(239, 68, 68, 0.12);
+      border-color: rgba(239, 68, 68, 0.25);
+    }
+    .btn-filter-tab:not(.active) .tab-badge.success {
+      color: #10B981;
+      background: rgba(16, 185, 129, 0.12);
+      border-color: rgba(16, 185, 129, 0.25);
+    }
 
     table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
     th { background: var(--input-bg); padding: 12px 18px; color: var(--text-muted); font-weight: 600; border-bottom: 1px solid var(--border); white-space: nowrap; }

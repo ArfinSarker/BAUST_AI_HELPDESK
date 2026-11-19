@@ -21,7 +21,7 @@
   </script>
 
     <!-- External Unified Stylesheet -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=4.4">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=4.5">
 </head>
 <body class="admin-page">
 
@@ -489,24 +489,64 @@
       </div>
       {% endif %}
 
-      <!-- Knowledge Gaps Table -->
-      <div style="padding: 16px 20px 8px; font-weight: 600; font-size: 14px; color: var(--card-title); display: flex; align-items: center; justify-content: space-between;">
-        <span style="display: flex; align-items: center; gap: 7px;">
-          <span style="display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 6px; background: rgba(239, 68, 68, 0.12); color: #EF4444;">
-            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-          </span>
-          <span>Identified Knowledge Gaps ({{ knowledge_gaps|length }})</span>
-        </span>
-        <span style="font-size: 12px; font-weight: normal; color: var(--text-muted);">
-          Questions where the AI found no records in BAUST database
-        </span>
+      <!-- Knowledge Gaps Section Header & Filter Tabs -->
+      <div class="table-header" style="border-top: 1px solid var(--border); padding: 18px 22px; background: var(--table-stripe);">
+        <div>
+          <h2 style="font-size: 16px; margin: 0; display: flex; align-items: center; gap: 8px;">
+            <span class="heading-icon" style="color: #EF4444; background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.25);">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            </span>
+            <span>Identified Knowledge Gaps ({{ knowledge_gaps|length }})</span>
+          </h2>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+            Questions where the AI found no records in BAUST database. Resolve or add official knowledge to train your assistant.
+          </p>
+        </div>
+
+        <!-- Filter Tabs: All / Unresolved / Resolved -->
+        <div class="filter-tabs" id="gapsFilterTabs">
+          <button type="button" class="btn-filter-tab active" data-filter="all">
+            <span>All Gaps</span>
+            <span class="tab-badge">{{ knowledge_gaps|length }}</span>
+          </button>
+          <button type="button" class="btn-filter-tab" data-filter="unresolved">
+            <span style="color: #EF4444;">●</span>
+            <span>Unresolved</span>
+            <span class="tab-badge danger">{{ analytics_stats.unresolved_gaps_count }}</span>
+          </button>
+          <button type="button" class="btn-filter-tab" data-filter="resolved">
+            <span style="color: #10B981;">●</span>
+            <span>Resolved</span>
+            <span class="tab-badge success">{{ (knowledge_gaps|length) - (analytics_stats.unresolved_gaps_count|default(0)) }}</span>
+          </button>
+        </div>
       </div>
 
-      <div class="table-wrapper">
-        <table>
+      <!-- Table Search & Rows Toolbar for Knowledge Gaps -->
+      <div class="table-toolbar">
+        <div class="search-input-wrapper">
+          <span class="search-icon">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </span>
+          <input type="text" id="gapsSearchInput" class="table-search-input" placeholder="Search gaps by question, answer, frequency, status...">
+          <button type="button" id="clearGapsSearch" class="btn-clear-search" style="display: none;">&times;</button>
+        </div>
+        <div class="pagination-rows-select">
+          <label for="gapsRowsPerPage">Show:</label>
+          <select id="gapsRowsPerPage">
+            <option value="10" selected>10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="all">All</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-wrapper" id="knowledgeGapsWrapper">
+        <table id="knowledgeGapsTable">
           <thead>
             <tr>
-              <th style="width: 42%;">Student Question</th>
+              <th style="width: 44%;">Student Question & AI Response</th>
               <th>Frequency</th>
               <th>Last Asked</th>
               <th>Status</th>
@@ -515,28 +555,46 @@
           </thead>
           <tbody>
             {% for gap in knowledge_gaps %}
-            <tr {% if not gap.resolved %}style="background: rgba(239, 68, 68, 0.04);"{% endif %}>
+            <tr data-status="{% if gap.resolved %}resolved{% else %}unresolved{% endif %}" {% if not gap.resolved %}style="background: rgba(239, 68, 68, 0.03);"{% endif %}>
               <td>
-                <strong style="color: var(--text); font-size: 13px;">{{ gap.question }}</strong>
-                {% if gap.last_answer %}
-                <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px; max-width: 480px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                  Bot: {{ gap.last_answer }}
+                <div style="display: flex; align-items: flex-start; gap: 9px;">
+                  <span class="gap-icon" style="color: {% if gap.resolved %}#10B981{% else %}#EF4444{% endif %}; margin-top: 2px; flex-shrink: 0;">
+                    {% if gap.resolved %}
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    {% else %}
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    {% endif %}
+                  </span>
+                  <div>
+                    <strong style="color: var(--card-title); font-size: 13px; display: block; line-height: 1.4;">{{ gap.question }}</strong>
+                    {% if gap.last_answer %}
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px; max-width: 500px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3;">
+                      <span style="opacity: 0.8; font-weight: 600;">Bot:</span> {{ gap.last_answer }}
+                    </div>
+                    {% endif %}
+                  </div>
                 </div>
-                {% endif %}
               </td>
               <td>
-                <span class="frequency-badge">{{ gap.frequency }} times</span>
+                <span class="frequency-badge" style="font-weight: 600; padding: 3px 8px; border-radius: 10px; font-size: 11px;">
+                  {{ gap.frequency }} {% if gap.frequency == 1 %}time{% else %}times{% endif %}
+                </span>
               </td>
-              <td style="font-size: 12px;">{{ gap.last_asked }}</td>
+              <td style="font-size: 11.5px; color: var(--text-muted); white-space: nowrap;">
+                <div style="display: inline-flex; align-items: center; gap: 5px;">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  <span>{{ gap.last_asked }}</span>
+                </div>
+              </td>
               <td>
                 {% if gap.resolved %}
-                <span style="color: #10B981; font-size: 11px; font-weight: 600; background: rgba(16, 185, 129, 0.15); padding: 3px 8px; border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.3); display: inline-flex; align-items: center; gap: 4px;">
-                  <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span class="badge-status active">
+                  <span class="status-indicator-dot active"></span>
                   <span>Resolved</span>
                 </span>
                 {% else %}
-                <span style="color: #EF4444; font-size: 11px; font-weight: 600; background: rgba(239, 68, 68, 0.15); padding: 3px 8px; border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.3); display: inline-flex; align-items: center; gap: 4px;">
-                  <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <span class="badge-status superseded">
+                  <span class="status-indicator-dot superseded"></span>
                   <span>Unresolved</span>
                 </span>
                 {% endif %}
@@ -562,7 +620,7 @@
             </tr>
             {% else %}
             <tr>
-              <td colspan="5" style="text-align: center; padding: 25px; color: var(--text-muted);">
+              <td colspan="5" style="text-align: center; padding: 30px; color: var(--text-muted);">
                 <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
                   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                   <span>No knowledge gaps detected! All student queries matched university records.</span>
@@ -572,6 +630,12 @@
             {% endfor %}
           </tbody>
         </table>
+      </div>
+
+      <!-- Pagination for Knowledge Gaps -->
+      <div class="pagination-footer">
+        <div id="gapsPaginationInfo">Showing entries</div>
+        <div id="gapsPaginationNav" class="pagination-nav"></div>
       </div>
 
       <!-- Recent Student Conversations / Activity Log -->
@@ -969,7 +1033,7 @@
   </div>
 
   <!-- Modular JavaScript Engine -->
-  <script src="{{ url_for('static', filename='js/theme.js') }}?v=4.4"></script>
-  <script src="{{ url_for('static', filename='js/admin.js') }}?v=4.4"></script>
+  <script src="{{ url_for('static', filename='js/theme.js') }}?v=4.5"></script>
+  <script src="{{ url_for('static', filename='js/admin.js') }}?v=4.5"></script>
 </body>
 </html>

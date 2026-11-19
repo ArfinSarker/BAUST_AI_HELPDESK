@@ -21,7 +21,7 @@
   </script>
 
     <!-- External Unified Stylesheet -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=4.2">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=4.3">
 </head>
 <body class="login-page">
 
@@ -48,7 +48,7 @@
     <!-- Handles standard error parameter & Flask flash messages -->
     {% if error %}
     <div class="alert-box">
-      <span>⚠️</span>
+      <svg class="btn-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
       <span>{{ error }}</span>
     </div>
     {% endif %}
@@ -57,7 +57,11 @@
       {% if messages %}
         {% for category, message in messages %}
           <div class="alert-box {{ 'success' if category == 'success' else '' }}">
-            <span>{{ '✅' if category == 'success' else '⚠️' }}</span>
+            {% if category == 'success' %}
+            <svg class="btn-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            {% else %}
+            <svg class="btn-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            {% endif %}
             <span>{{ message }}</span>
           </div>
         {% endfor %}
@@ -141,7 +145,7 @@
   </div>
 
     <!-- Modular JavaScript Engine (CSP Compliant) -->
-  <script src="{{ url_for('static', filename='js/theme.js') }}?v=4.2"></script>
+  <script src="{{ url_for('static', filename='js/theme.js') }}?v=4.3"></script>
   <script src="{{ url_for('static', filename='js/admin_auth.js') }}"></script>
 
 </body>

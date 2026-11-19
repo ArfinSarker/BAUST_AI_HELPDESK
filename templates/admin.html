@@ -21,7 +21,7 @@
   </script>
 
     <!-- External Unified Stylesheet -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=4.2">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=4.3">
 </head>
 <body class="admin-page">
 
@@ -155,7 +155,17 @@
       <div class="stat-card green">
         <span class="stat-label">Student Satisfaction</span>
         <span class="stat-value">{{ analytics_stats.satisfaction_rate }}%</span>
-        <span class="stat-sub">👍 {{ analytics_stats.likes_count }} Likes &bull; 👎 {{ analytics_stats.dislikes_count }} Dislikes</span>
+        <span class="stat-sub" style="display: flex; align-items: center; gap: 6px;">
+          <span style="display: inline-flex; align-items: center; gap: 3px; color: #10B981;">
+            <svg class="btn-svg-icon" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
+            {{ analytics_stats.likes_count }} Likes
+          </span>
+          <span>&bull;</span>
+          <span style="display: inline-flex; align-items: center; gap: 3px; color: #EF4444;">
+            <svg class="btn-svg-icon" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"></path></svg>
+            {{ analytics_stats.dislikes_count }} Dislikes
+          </span>
+        </span>
       </div>
     </section>
 
@@ -165,7 +175,12 @@
       <!-- Panel 1: Document Upload (Improved Day & Night UI) -->
       <div class="panel-card" id="uploadPanelCard">
         <div class="panel-header">
-          <h2>📄 Upload University Document</h2>
+          <h2>
+            <span class="heading-icon">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            </span>
+            <span>Upload University Document</span>
+          </h2>
           <p>Supports <strong>PDF</strong>, <strong>Plain Text (.txt)</strong>, and <strong>Images (PNG/JPG)</strong>. Automatic text extraction and vector sync.</p>
         </div>
 
@@ -188,8 +203,9 @@
 
           <!-- Metadata Attributes (Authoritative Versioning) -->
           <div style="margin-bottom: 12px; padding: 12px; background: var(--table-stripe); border: 1px solid var(--border); border-radius: var(--radius-md);">
-            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 8px;">
-              🏷️ Document Metadata & Versioning (Optional / Auto-Detected)
+            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+              <span>Document Metadata & Versioning (Optional / Auto-Detected)</span>
             </div>
             <div class="meta-grid">
               <div class="form-group">
@@ -199,7 +215,7 @@
                   {% for code, label in doc_types %}
                   <option value="{{ code }}">{{ label }}</option>
                   {% endfor %}
-                  <option value="__custom__">➕ New / Custom Type...</option>
+                  <option value="__custom__">+ New / Custom Type...</option>
                 </select>
                 <input type="text" name="custom_doc_type" placeholder="e.g. Canteen Guidelines" style="display:none; margin-top:5px; padding: 5px 8px; font-size: 11.5px;" class="text-input">
               </div>
@@ -221,7 +237,7 @@
                   {% for auth in authorities %}
                   <option value="{{ auth }}">{{ auth }}</option>
                   {% endfor %}
-                  <option value="__custom__">➕ New / Custom Authority...</option>
+                  <option value="__custom__">+ New / Custom Authority...</option>
                 </select>
                 <input type="text" name="custom_issuing_authority" placeholder="e.g. Transport Committee" style="display:none; margin-top:5px; padding: 5px 8px; font-size: 11.5px;" class="text-input">
               </div>
@@ -248,7 +264,9 @@
 
               <!-- State 1: Empty Dropzone Prompt -->
               <div id="dropzoneEmptyPrompt" class="dropzone-empty-prompt">
-                <div class="dropzone-icon" id="dropzoneIcon">📂</div>
+                <div class="dropzone-icon" id="dropzoneIcon">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                </div>
                 <div class="dropzone-text" id="dropzoneTitle">Click or Drag & Drop file(s) here</div>
                 <div class="dropzone-subtext" id="dropzoneSubtext">PDFs, TXT, PNG, JPG (Multiple files supported)</div>
               </div>
@@ -289,7 +307,12 @@
       <!-- Panel 2: Direct Text Notice Composer -->
       <div class="panel-card" id="noticePanelCard">
         <div class="panel-header">
-          <h2>✍️ Publish Direct Notice / Policy</h2>
+          <h2>
+            <span class="heading-icon">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+            </span>
+            <span>Publish Direct Notice / Policy</span>
+          </h2>
           <p>Quickly paste or type an urgent announcement, policy, date change, or fee update without needing a file.</p>
         </div>
 
@@ -306,8 +329,9 @@
 
           <!-- Metadata Attributes (Authoritative Versioning) -->
           <div style="margin-top: 10px; padding: 12px; background: var(--table-stripe); border: 1px solid var(--border); border-radius: var(--radius-md);">
-            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 8px;">
-              🏷️ Metadata & Authority (Optional)
+            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+              <span>Metadata & Authority (Optional)</span>
             </div>
             <div class="meta-grid">
               <div class="form-group">
@@ -317,7 +341,7 @@
                   {% for code, label in doc_types %}
                   <option value="{{ code }}">{{ label }}</option>
                   {% endfor %}
-                  <option value="__custom__">➕ New / Custom Type...</option>
+                  <option value="__custom__">+ New / Custom Type...</option>
                 </select>
                 <input type="text" name="custom_doc_type" placeholder="e.g. Canteen Guidelines" style="display:none; margin-top:5px; padding: 5px 8px; font-size: 11.5px;" class="text-input">
               </div>
@@ -328,7 +352,7 @@
                   {% for auth in authorities %}
                   <option value="{{ auth }}">{{ auth }}</option>
                   {% endfor %}
-                  <option value="__custom__">➕ New / Custom Authority...</option>
+                  <option value="__custom__">+ New / Custom Authority...</option>
                 </select>
                 <input type="text" name="custom_issuing_authority" placeholder="e.g. Transport Committee" style="display:none; margin-top:5px; padding: 5px 8px; font-size: 11.5px;" class="text-input">
               </div>
@@ -360,7 +384,12 @@
     <section class="panel-card" id="routingSummarySection" style="margin-bottom: 24px;">
       <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center;">
         <div>
-          <h2>⚡ Knowledge Ingestion & Categorization Results</h2>
+          <h2>
+            <span class="heading-icon">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            </span>
+            <span>Knowledge Ingestion & Categorization Results</span>
+          </h2>
           <p>The system automatically analyzed, differentiated, and synchronized the following categories:</p>
         </div>
         <button type="button" class="alert-dismiss-btn btn-cancel" style="padding: 5px 12px; font-size: 11px;">✕ Dismiss</button>
@@ -378,14 +407,20 @@
           </div>
           {% for old_f in item.superseded_files %}
           <div class="flash-alert warning" style="background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.35); color: #FBBF24;">
-            <span>⚠️ Previous version '{{ old_f }}' has been automatically archived &amp; marked as SUPERSEDED.</span>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              <span>Previous version '{{ old_f }}' has been automatically archived &amp; marked as SUPERSEDED.</span>
+            </div>
             <button type="button" class="alert-dismiss-btn" style="background:none;border:none;cursor:pointer;color:inherit;font-weight:bold;font-size:16px;">&times;</button>
           </div>
           {% endfor %}
         {% endfor %}
 
         <div class="flash-alert info" style="font-weight: 600;">
-          <span>🚀 {{ routing_summary.summary_text }}</span>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+            <span>{{ routing_summary.summary_text }}</span>
+          </div>
           <button type="button" class="alert-dismiss-btn" style="background:none;border:none;cursor:pointer;color:inherit;font-weight:bold;font-size:16px;">&times;</button>
         </div>
       </div>
@@ -396,7 +431,12 @@
     {% if text %}
     <section class="panel-card">
       <div class="panel-header">
-        <h2>🔍 Latest Text Extraction Preview</h2>
+        <h2>
+          <span class="heading-icon">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><circle cx="11.5" cy="14.5" r="2.5"></circle><path d="M13.3 16.3l2.2 2.2"></path></svg>
+          </span>
+          <span>Latest Text Extraction Preview</span>
+        </h2>
         <p>Text successfully extracted from your uploaded file and committed to memory:</p>
       </div>
       <div class="preview-card">{{ text }}</div>
@@ -407,7 +447,12 @@
     <section id="analytics-section" class="table-card">
       <div class="table-header">
         <div>
-          <h2>🔍 Student Analytics & Knowledge Gap Tracker</h2>
+          <h2>
+            <span class="heading-icon">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            </span>
+            <span>Student Analytics & Knowledge Gap Tracker</span>
+          </h2>
           <p style="font-size: 12px; color: var(--text-muted); margin-top: 3px;">
             Identifies questions where university records were missing. Add missing info to keep your AI accurate.
           </p>
@@ -427,16 +472,17 @@
       <!-- Top Trending Student Questions -->
       {% if top_questions %}
       <div style="padding: 16px 20px; border-bottom: 1px solid var(--border); background: var(--table-stripe);">
-        <span style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 8px;">
-          🔥 Top Asked Topics by Students:
+        <span style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg>
+          <span>Top Asked Topics by Students:</span>
         </span>
         <div style="display: flex; flex-wrap: wrap; gap: 8px;">
           {% for tq in top_questions %}
           <span class="topic-pill {% if tq.unresolved_gap %}has-gap{% elif tq.resolved_gap %}is-resolved{% endif %}" data-question="{{ tq.question | escape }}" title="{% if tq.unresolved_gap %}Unresolved Knowledge Gap — Click to solve{% elif tq.resolved_gap %}Resolved Knowledge Gap — Solved{% else %}Popular Question{% endif %}">
             {{ tq.question }} 
             <span class="topic-count">{{ tq.count }}x</span>
-            {% if tq.unresolved_gap %}<span style="color: #EF4444; font-weight: bold; margin-left: 2px;">⚠️</span>
-            {% elif tq.resolved_gap %}<span style="color: #10B981; font-weight: bold; margin-left: 2px;">✅</span>{% endif %}
+            {% if tq.unresolved_gap %}<span style="color: #EF4444; display: inline-flex; align-items: center; margin-left: 3px;" title="Unresolved Knowledge Gap"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></span>
+            {% elif tq.resolved_gap %}<span style="color: #10B981; display: inline-flex; align-items: center; margin-left: 3px;" title="Resolved"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>{% endif %}
           </span>
           {% endfor %}
         </div>
@@ -445,7 +491,12 @@
 
       <!-- Knowledge Gaps Table -->
       <div style="padding: 16px 20px 8px; font-weight: 600; font-size: 14px; color: var(--card-title); display: flex; align-items: center; justify-content: space-between;">
-        <span>⚠️ Identified Knowledge Gaps ({{ knowledge_gaps|length }})</span>
+        <span style="display: flex; align-items: center; gap: 7px;">
+          <span style="display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 6px; background: rgba(239, 68, 68, 0.12); color: #EF4444;">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          </span>
+          <span>Identified Knowledge Gaps ({{ knowledge_gaps|length }})</span>
+        </span>
         <span style="font-size: 12px; font-weight: normal; color: var(--text-muted);">
           Questions where the AI found no records in BAUST database
         </span>
@@ -479,12 +530,14 @@
               <td style="font-size: 12px;">{{ gap.last_asked }}</td>
               <td>
                 {% if gap.resolved %}
-                <span style="color: #10B981; font-size: 11px; font-weight: 600; background: rgba(16, 185, 129, 0.15); padding: 3px 8px; border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.3);">
-                  ✅ Resolved
+                <span style="color: #10B981; font-size: 11px; font-weight: 600; background: rgba(16, 185, 129, 0.15); padding: 3px 8px; border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.3); display: inline-flex; align-items: center; gap: 4px;">
+                  <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Resolved</span>
                 </span>
                 {% else %}
-                <span style="color: #EF4444; font-size: 11px; font-weight: 600; background: rgba(239, 68, 68, 0.15); padding: 3px 8px; border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.3);">
-                  ⚠️ Unresolved
+                <span style="color: #EF4444; font-size: 11px; font-weight: 600; background: rgba(239, 68, 68, 0.15); padding: 3px 8px; border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.3); display: inline-flex; align-items: center; gap: 4px;">
+                  <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                  <span>Unresolved</span>
                 </span>
                 {% endif %}
               </td>
@@ -510,7 +563,10 @@
             {% else %}
             <tr>
               <td colspan="5" style="text-align: center; padding: 25px; color: var(--text-muted);">
-                🎉 No knowledge gaps detected! All student queries matched university records.
+                <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                  <span>No knowledge gaps detected! All student queries matched university records.</span>
+                </div>
               </td>
             </tr>
             {% endfor %}
@@ -521,13 +577,18 @@
       <!-- Recent Student Conversations / Activity Log -->
       <details style="margin: 16px 20px 20px; border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden;">
         <summary style="padding: 12px 16px; font-weight: 600; font-size: 13px; cursor: pointer; background: var(--table-stripe); color: var(--card-title); display: flex; align-items: center; justify-content: space-between;">
-          <span>📋 Recent Student Inquiries Log ({{ recent_logs|length }})</span>
+          <span style="display: flex; align-items: center; gap: 7px;">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+            <span>Recent Student Inquiries Log ({{ recent_logs|length }})</span>
+          </span>
           <span style="font-size: 11px; color: var(--text-muted);">Click to expand / collapse</span>
         </summary>
         <!-- Table Search Toolbar for Recent Logs -->
         <div class="table-toolbar">
           <div class="search-input-wrapper">
-            <span class="search-icon">🔍</span>
+            <span class="search-icon">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </span>
             <input type="text" id="logsSearchInput" class="table-search-input" placeholder="Search inquiries, questions, answers...">
             <button type="button" id="clearLogsSearch" class="btn-clear-search" style="display: none;">&times;</button>
           </div>
@@ -571,9 +632,9 @@
                 </td>
                 <td>
                   {% if log.feedback == 'like' %}
-                  <span>👍</span>
+                  <span style="color: #10B981; display: inline-flex; align-items: center;" title="Helpful"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg></span>
                   {% elif log.feedback == 'dislike' %}
-                  <span>👎</span>
+                  <span style="color: #EF4444; display: inline-flex; align-items: center;" title="Not helpful"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"></path></svg></span>
                   {% else %}
                   <span style="color: var(--text-muted); font-size: 11px;">-</span>
                   {% endif %}
@@ -602,7 +663,12 @@
     <section id="kb-files" class="table-card">
       <div class="table-header">
         <div>
-          <h2>📚 Managed Knowledge Base Files ({{ documents|length }})</h2>
+          <h2>
+            <span class="heading-icon">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            </span>
+            <span>Managed Knowledge Base Files ({{ documents|length }})</span>
+          </h2>
           <p style="font-size: 12px; color: var(--text-muted); margin-top: 3px;">
             Identifies active authoritative records and historical/superseded document versions.
           </p>
@@ -640,7 +706,9 @@
       <!-- Table Search & Rows Toolbar -->
       <div class="table-toolbar">
         <div class="search-input-wrapper">
-          <span class="search-icon">🔍</span>
+          <span class="search-icon">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </span>
           <input type="text" id="docSearchInput" class="table-search-input" placeholder="Search by title, filename, authority, type, or version...">
           <button type="button" id="clearDocSearch" class="btn-clear-search" style="display: none;">&times;</button>
         </div>
@@ -678,7 +746,10 @@
               </td>
               <td>
                 <strong style="font-size: 13px; color: var(--card-title); display: block;">{{ doc.title }}</strong>
-                <span class="file-badge" style="font-size: 11px; color: var(--text-muted);">📄 {{ doc.name }}</span>
+                <span class="file-badge" style="font-size: 11px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px;">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                  <span>{{ doc.name }}</span>
+                </span>
               </td>
               <td>
                 <span class="badge-doctype">{{ doc.doc_type|replace('_', ' ')|title }}</span>
@@ -695,11 +766,13 @@
               <td>
                 {% if doc.status == 'active' %}
                 <span class="badge-status active">
-                  🟢 Active (Authoritative)
+                  <span class="status-indicator-dot active"></span>
+                  <span>Active (Authoritative)</span>
                 </span>
                 {% elif doc.status == 'superseded' %}
                 <span class="badge-status superseded">
-                  🔴 Superseded
+                  <span class="status-indicator-dot superseded"></span>
+                  <span>Superseded</span>
                 </span>
                 {% if doc.superseded_by %}
                 <div style="font-size: 10px; color: var(--text-muted); margin-top: 3px;">
@@ -708,7 +781,8 @@
                 {% endif %}
                 {% else %}
                 <span class="badge-status archived">
-                  🟡 Archived
+                  <span class="status-indicator-dot archived"></span>
+                  <span>Archived</span>
                 </span>
                 {% endif %}
               </td>
@@ -769,7 +843,10 @@
     <div class="loading-card" style="max-width: 620px; width: 92%; text-align: left; padding: 26px;">
       <div style="margin-bottom: 14px;">
         <h3 style="font-family: 'Outfit', sans-serif; font-size: 18px; color: var(--card-title); margin: 0; display: flex; align-items: center; gap: 8px;">
-          ⚡ Add University Knowledge
+          <span class="heading-icon">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+          </span>
+          <span>Add University Knowledge</span>
         </h3>
       </div>
       <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.4;">
@@ -807,7 +884,10 @@
     <div class="loading-card" style="max-width: 650px; width: 92%; text-align: left; padding: 26px;">
       <div style="margin-bottom: 14px;">
         <h3 style="font-family: 'Outfit', sans-serif; font-size: 18px; color: var(--card-title); margin: 0; display: flex; align-items: center; gap: 8px;">
-          🏷️ Edit Document Metadata & Lifecycle
+          <span class="heading-icon">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+          </span>
+          <span>Edit Document Metadata & Lifecycle</span>
         </h3>
       </div>
       <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.4;">
@@ -829,16 +909,16 @@
               {% for code, label in doc_types %}
               <option value="{{ code }}">{{ label }}</option>
               {% endfor %}
-              <option value="__custom__">➕ New / Custom Type...</option>
+              <option value="__custom__">+ New / Custom Type...</option>
             </select>
             <input type="text" id="editMetaCustomType" name="custom_doc_type" placeholder="e.g. Canteen Guidelines" style="display:none; margin-top:5px;" class="text-input">
           </div>
           <div class="form-group">
             <label style="font-size: 12px; font-weight: 600; color: var(--text);">Lifecycle Status</label>
             <select id="editMetaStatus" name="status" class="text-input">
-              <option value="active">🟢 Active (Authoritative)</option>
-              <option value="superseded">🔴 Superseded</option>
-              <option value="archived">🟡 Archived</option>
+              <option value="active">Active (Authoritative)</option>
+              <option value="superseded">Superseded</option>
+              <option value="archived">Archived</option>
             </select>
           </div>
         </div>
@@ -864,7 +944,7 @@
             {% for auth in authorities %}
             <option value="{{ auth }}">{{ auth }}</option>
             {% endfor %}
-            <option value="__custom__">➕ New / Custom Authority...</option>
+            <option value="__custom__">+ New / Custom Authority...</option>
           </select>
           <input type="text" id="editMetaCustomAuth" name="custom_issuing_authority" placeholder="e.g. Transport Committee" style="display:none; margin-top:5px;" class="text-input">
         </div>
@@ -889,7 +969,7 @@
   </div>
 
   <!-- Modular JavaScript Engine -->
-  <script src="{{ url_for('static', filename='js/theme.js') }}?v=4.2"></script>
-  <script src="{{ url_for('static', filename='js/admin.js') }}?v=2.6"></script>
+  <script src="{{ url_for('static', filename='js/theme.js') }}?v=4.3"></script>
+  <script src="{{ url_for('static', filename='js/admin.js') }}?v=4.3"></script>
 </body>
 </html>

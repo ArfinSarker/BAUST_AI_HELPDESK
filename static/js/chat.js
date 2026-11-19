@@ -146,11 +146,11 @@
     res = res.replace(/সি[\.\s]+এসই/g, 'সিএসই');
     res = res.replace(/ই[\.\s]+ই[\.\s]+ই/g, 'ইইই');
     res = res.replace(/আই[\.\s]+পি[\.\s]+ই/g, 'আইপিই');
-    res = res.replace(/\bকেইউ\b/g, 'খুলনা বিশ্ববিদ্যালয় (KU)');
-    res = res.replace(/\bজেইউ\b/g, 'জাহাঙ্গীরনগর বিশ্ববিদ্যালয় (JU)');
-    res = res.replace(/\bডিইউ\b/g, 'ঢাকা বিশ্ববিদ্যালয় (DU)');
-    res = res.replace(/\bসিইউ\b/g, 'চট্টগ্রাম বিশ্ববিদ্যালয় (CU)');
-    res = res.replace(/\bআরইউ\b/g, 'রাজশাহী বিশ্ববিদ্যালয় (RU)');
+    res = res.replace(/(?<![\u0980-\u09FF\w])কেইউ(?![\u0980-\u09FF\w])/gu, 'খুলনা বিশ্ববিদ্যালয় (KU)');
+    res = res.replace(/(?<![\u0980-\u09FF\w])জেইউ(?![\u0980-\u09FF\w])/gu, 'জাহাঙ্গীরনগর বিশ্ববিদ্যালয় (JU)');
+    res = res.replace(/(?<![\u0980-\u09FF\w])ডিইউ(?![\u0980-\u09FF\w])/gu, 'ঢাকা বিশ্ববিদ্যালয় (DU)');
+    res = res.replace(/(?<![\u0980-\u09FF\w])সিইউ(?![\u0980-\u09FF\w])/gu, 'চট্টগ্রাম বিশ্ববিদ্যালয় (CU)');
+    res = res.replace(/(?<![\u0980-\u09FF\w])আরইউ(?![\u0980-\u09FF\w])/gu, 'রাজশাহী বিশ্ববিদ্যালয় (RU)');
     res = res.replace(/বি[\.\s]*এসসি\s*\(\s*(?:বি[\.\s]*এসসি[\.\s]*)?ইন\s*([^\)]+)\)/gi, (m, g1) => 'বিএসসি ইন ' + g1);
     res = res.replace(/এম[\.\s]*এসসি\s*\(\s*(?:এম[\.\s]*এসসি[\.\s]*)?ইন\s*([^\)]+)\)/gi, (m, g1) => 'এমএসসি ইন ' + g1);
     res = res.replace(/(বি[\.\s]*এসসি|এম[\.\s]*এসসি)\s*\(\s*\1\s*[,;]?\s*([^\)]*)\)/gi, (m, g1, g2) => g1 + ' (' + g2 + ')');
@@ -477,11 +477,11 @@
                   row.dataset.logId = parsed.log_id;
                 }
               } else if (parsed.type === 'error') {
-                accumulatedText = `⚠️ ${parsed.message || 'Error'}`;
+                accumulatedText = parsed.message || 'Error occurred';
                 const safeErr = (window.DOMPurify && typeof window.DOMPurify.sanitize === 'function')
                   ? window.DOMPurify.sanitize(accumulatedText)
                   : accumulatedText;
-                streamContentDiv.innerHTML = `<p style="color: #EF4444;">${safeErr}</p>`;
+                streamContentDiv.innerHTML = `<p style="color: #EF4444; display: flex; align-items: center; gap: 6px;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>${safeErr}</span></p>`;
               }
             } catch (e) {}
           }
@@ -512,7 +512,7 @@
       } else {
         console.error('Chat error:', err);
         if (typingIndicator) typingIndicator.style.display = 'none';
-        streamContentDiv.innerHTML = `<p style="color: #EF4444;">⚠️ সার্ভারের সাথে সংযোগ স্থাপন করা সম্ভব হয়নি। অনুগ্রহ করে আবার চেষ্টা করুন।</p>`;
+        streamContentDiv.innerHTML = `<p style="color: #EF4444; display: flex; align-items: center; gap: 6px;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>সার্ভারের সাথে সংযোগ স্থাপন করা সম্ভব হয়নি। অনুগ্রহ করে আবার চেষ্টা করুন।</span></p>`;
       }
     } finally {
       resetInputUI();

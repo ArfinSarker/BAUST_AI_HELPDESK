@@ -23,7 +23,7 @@
   </script>
 
   <!-- External Unified Stylesheet -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=4.2">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=4.3">
 </head>
 <body class="login-page">
 
@@ -42,7 +42,15 @@
         <span class="security-dot" style="background: var(--danger);"></span>
         <span>HTTP Status {{ error_code }}</span>
       </div>
-      <div class="brand-icon" style="margin: 16px auto 12px; font-size: 26px;">{{ '⚠️' if error_code == 429 else ('🔍' if error_code == 404 else '⚡') }}</div>
+      <div class="brand-icon" style="margin: 16px auto 12px; display: flex; align-items: center; justify-content: center; width: 48px; height: 48px;">
+        {% if error_code == 429 %}
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        {% elif error_code == 404 %}
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        {% else %}
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+        {% endif %}
+      </div>
       <h1 style="font-size: 24px; margin-bottom: 8px;">{{ error_title }}</h1>
       <p style="font-size: 13.5px; line-height: 1.6; color: var(--text-muted); margin-bottom: 20px;">
         {{ error_message }}
@@ -68,7 +76,7 @@
   </div>
 
   <!-- Modular JavaScript Engine -->
-  <script src="{{ url_for('static', filename='js/theme.js') }}?v=4.2"></script>
+  <script src="{{ url_for('static', filename='js/theme.js') }}?v=4.3"></script>
 </body>
 </html>
 

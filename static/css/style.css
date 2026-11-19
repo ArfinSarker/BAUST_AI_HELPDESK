@@ -994,12 +994,31 @@ input:-webkit-autofill:active {
     .badge-status {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
       font-size: 11px;
       font-weight: 700;
       padding: 3px 9px;
       border-radius: 12px;
       white-space: nowrap;
+    }
+    .status-indicator-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .status-indicator-dot.active {
+      background: #10B981;
+      box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
+    }
+    .status-indicator-dot.superseded {
+      background: #EF4444;
+      box-shadow: 0 0 6px rgba(239, 68, 68, 0.4);
+    }
+    .status-indicator-dot.archived {
+      background: #F59E0B;
+      box-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
     }
     .badge-status.active {
       background: rgba(16, 185, 129, 0.15);
@@ -1017,6 +1036,25 @@ input:-webkit-autofill:active {
       color: #D97706;
     }
     [data-theme="dark"] .badge-status.archived { color: #FBBF24; }
+
+    /* Modern Professional Heading Icons */
+    .heading-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      color: var(--primary);
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+    .heading-icon svg {
+      width: 15px;
+      height: 15px;
+    }
 
     .badge-doctype {
       display: inline-block;
@@ -1192,13 +1230,29 @@ input:-webkit-autofill:active {
     }
 
     .dropzone-icon {
-      font-size: 32px;
-      margin-bottom: 6px;
-      transition: transform 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      margin: 0 auto 8px;
+      border-radius: 12px;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      color: var(--primary);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .dropzone-icon svg {
+      width: 22px;
+      height: 22px;
     }
 
     .file-dropzone:hover .dropzone-icon {
       transform: translateY(-3px);
+      border-color: var(--primary);
+      background: rgba(37, 99, 235, 0.08);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
     }
 
     .dropzone-text {

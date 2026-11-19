@@ -33,8 +33,17 @@
 
     const toast = document.createElement('div');
     toast.className = `admin-toast ${type}`;
-    const icon = type === 'success' ? '✅' : (type === 'error' ? '❌' : (type === 'warning' ? '⚠️' : 'ℹ️'));
-    toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
+    let iconSvg = '';
+    if (type === 'success') {
+      iconSvg = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+    } else if (type === 'error') {
+      iconSvg = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#EF4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
+    } else if (type === 'warning') {
+      iconSvg = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#F59E0B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>';
+    } else {
+      iconSvg = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#3B82F6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>';
+    }
+    toast.innerHTML = `<span style="display:inline-flex;align-items:center;">${iconSvg}</span> <span>${message}</span>`;
     container.appendChild(toast);
 
     setTimeout(() => {
@@ -94,7 +103,7 @@
       if (docType && !hasTypeOption && docType !== '__custom__') {
         const opt = document.createElement('option');
         opt.value = docType;
-        opt.textContent = '📄 ' + docType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        opt.textContent = docType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
         typeInput.insertBefore(opt, typeInput.lastElementChild);
       }
       typeInput.value = docType || 'general_notice';
@@ -191,8 +200,9 @@
           const statusCell = row.children[3];
           if (statusCell) {
             statusCell.innerHTML = `
-              <span style="color: #10B981; font-size: 11px; font-weight: 600; background: rgba(16, 185, 129, 0.15); padding: 3px 8px; border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.3);">
-                ✅ Resolved
+              <span style="color: #10B981; font-size: 11px; font-weight: 600; background: rgba(16, 185, 129, 0.15); padding: 3px 8px; border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.3); display: inline-flex; align-items: center; gap: 4px;">
+                <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Resolved</span>
               </span>
             `;
           }
@@ -237,11 +247,21 @@
     return (bytes / 1024).toFixed(1) + ' KB';
   }
 
+  const CLOUD_UPLOAD_ICON = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>';
+  const FILE_SINGLE_ICON = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>';
+  const FILE_STACK_ICON = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>';
+
   function getFileIcon(ext) {
-    if (['jpg', 'jpeg', 'png', 'webp'].includes(ext)) return '🖼️';
-    if (ext === 'pdf') return '📑';
-    if (ext === 'txt') return '📝';
-    return '📄';
+    if (['jpg', 'jpeg', 'png', 'webp'].includes(ext)) {
+      return '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>';
+    }
+    if (ext === 'pdf') {
+      return '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><path d="M10 12h4"></path><path d="M10 16h4"></path></svg>';
+    }
+    if (ext === 'txt') {
+      return '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>';
+    }
+    return FILE_SINGLE_ICON;
   }
 
   function renderFilePreviewGallery() {
@@ -260,7 +280,7 @@
 
     if (!stagedFiles || stagedFiles.length === 0) {
       if (dropzone) dropzone.classList.remove('has-file');
-      if (icon) icon.textContent = '📂';
+      if (icon) icon.innerHTML = CLOUD_UPLOAD_ICON;
       if (title) title.textContent = 'Click or Drag & Drop file(s) here';
       if (subtext) subtext.textContent = 'PDFs, TXT, PNG, JPG (Multiple files supported)';
       if (previewContainer) previewContainer.style.display = 'none';
@@ -273,7 +293,7 @@
     const totalBytes = stagedFiles.reduce((acc, f) => acc + f.size, 0);
     const totalSizeStr = formatFileSize(totalBytes);
 
-    if (icon) icon.textContent = stagedFiles.length === 1 ? '📄' : '📚';
+    if (icon) icon.innerHTML = stagedFiles.length === 1 ? FILE_SINGLE_ICON : FILE_STACK_ICON;
     if (title) {
       title.innerHTML = `<span class="selected-filename">${stagedFiles.length} File${stagedFiles.length > 1 ? 's' : ''} Staged for AI Sync</span>`;
     }
@@ -283,7 +303,7 @@
 
     if (previewContainer) previewContainer.style.display = 'flex';
     if (previewCount) {
-      previewCount.innerHTML = `📚 Selected Files (${stagedFiles.length}) <span style="font-size: 11px; font-weight: 500; color: var(--text-muted);">— ${totalSizeStr}</span>`;
+      previewCount.innerHTML = `<span style="display: inline-flex; align-items: center; gap: 6px;"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg> Selected Files (${stagedFiles.length})</span> <span style="font-size: 11px; font-weight: 500; color: var(--text-muted);">— ${totalSizeStr}</span>`;
     }
 
     if (previewGrid) {
@@ -375,7 +395,7 @@
     let addedCount = 0;
     Array.from(fileList).forEach(file => {
       if (file.size > MAX_UPLOAD_SIZE) {
-        showToast(`⚠️ "${file.name}" exceeds the 25MB limit. Skipped.`, 'error');
+        showToast(`"${file.name}" exceeds the 25MB limit. Skipped.`, 'error');
         return;
       }
 
@@ -517,7 +537,7 @@
 
     for (let f of stagedFiles) {
       if (f.size > MAX_UPLOAD_SIZE) {
-        showToast(`⚠️ File "${f.name}" exceeds the 25MB limit. Please upload files under 25MB.`, 'error');
+        showToast(`File "${f.name}" exceeds the 25MB limit. Please upload files under 25MB.`, 'error');
         return false;
       }
     }

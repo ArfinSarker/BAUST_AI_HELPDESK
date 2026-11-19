@@ -74,18 +74,18 @@
     // Update UI Elements if present on the page
     const themeIcon = document.getElementById('themeIcon');
     if (themeIcon) {
-      themeIcon.innerHTML = isDark ? SUN_SVG : MOON_SVG;
+      themeIcon.innerHTML = isDark ? MOON_SVG : SUN_SVG;
     }
 
     const themeLabel = document.getElementById('themeLabel');
     if (themeLabel) {
-      themeLabel.textContent = isDark ? 'Day' : 'Night';
+      themeLabel.textContent = isDark ? 'Night' : 'Day';
     }
 
     const toggleBtn = document.getElementById('themeToggleBtn');
     if (toggleBtn) {
-      toggleBtn.setAttribute('aria-label', isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode');
-      toggleBtn.setAttribute('title', isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode');
+      toggleBtn.setAttribute('aria-label', isDark ? 'Switch to Day Mode' : 'Switch to Night Mode');
+      toggleBtn.setAttribute('title', isDark ? 'Switch to Day Mode' : 'Switch to Night Mode');
     }
   }
 

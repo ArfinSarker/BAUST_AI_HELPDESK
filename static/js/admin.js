@@ -711,7 +711,15 @@
       this.rowsPerPage = parseInt(config.defaultRows || 25, 10);
 
       this.bindEvents();
-      this.render();
+      this.render(false);
+    }
+
+    scrollToTable() {
+      const target = this.table.closest('details') || this.table.closest('.table-card') || this.table;
+      if (target) {
+        const topY = target.getBoundingClientRect().top + window.pageYOffset - 75;
+        window.scrollTo({ top: Math.max(0, topY), behavior: 'smooth' });
+      }
     }
 
     bindEvents() {
@@ -738,7 +746,7 @@
           const val = this.rowsSelect.value;
           this.rowsPerPage = val === 'all' ? 999999 : parseInt(val, 10);
           this.currentPage = 1;
-          this.render();
+          this.render(false);
         });
       }
     }
@@ -754,10 +762,10 @@
         });
       }
       this.currentPage = 1;
-      this.render();
+      this.render(false);
     }
 
-    render() {
+    render(shouldScroll = false) {
       const total = this.filteredRows.length;
       const totalPages = Math.max(1, Math.ceil(total / this.rowsPerPage));
       if (this.currentPage > totalPages) this.currentPage = totalPages;
@@ -765,10 +773,13 @@
       const startIdx = (this.currentPage - 1) * this.rowsPerPage;
       const endIdx = startIdx + this.rowsPerPage;
 
-      this.rows.forEach(r => r.style.display = 'none');
-      this.filteredRows.forEach((r, idx) => {
-        if (idx >= startIdx && idx < endIdx) {
-          r.style.display = '';
+      // In-place visibility update to strictly prevent table height from collapsing to 0
+      const activeSet = new Set(this.filteredRows.slice(startIdx, endIdx));
+      this.rows.forEach(r => {
+        const isVisible = activeSet.has(r);
+        const targetDisplay = isVisible ? '' : 'none';
+        if (r.style.display !== targetDisplay) {
+          r.style.display = targetDisplay;
         }
       });
 
@@ -791,12 +802,14 @@
         prevBtn.className = 'btn-page';
         prevBtn.textContent = '« Prev';
         prevBtn.disabled = this.currentPage === 1;
-        prevBtn.onclick = () => {
+        prevBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
           if (this.currentPage > 1) {
             this.currentPage--;
-            this.render();
+            this.render(true);
           }
-        };
+        });
         this.paginationNav.appendChild(prevBtn);
 
         let startP = Math.max(1, this.currentPage - 2);
@@ -808,10 +821,14 @@
           pageBtn.type = 'button';
           pageBtn.className = `btn-page ${p === this.currentPage ? 'active' : ''}`;
           pageBtn.textContent = p;
-          pageBtn.onclick = () => {
-            this.currentPage = p;
-            this.render();
-          };
+          pageBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (this.currentPage !== p) {
+              this.currentPage = p;
+              this.render(true);
+            }
+          });
           this.paginationNav.appendChild(pageBtn);
         }
 
@@ -820,13 +837,19 @@
         nextBtn.className = 'btn-page';
         nextBtn.textContent = 'Next »';
         nextBtn.disabled = this.currentPage === totalPages;
-        nextBtn.onclick = () => {
+        nextBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
           if (this.currentPage < totalPages) {
             this.currentPage++;
-            this.render();
+            this.render(true);
           }
-        };
+        });
         this.paginationNav.appendChild(nextBtn);
+      }
+
+      if (shouldScroll) {
+        this.scrollToTable();
       }
     }
   }

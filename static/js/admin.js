@@ -184,6 +184,53 @@
     }
   }
 
+  // ==========================================================================
+  // STUDENT INTERACTION LOG DETAIL MODAL
+  // ==========================================================================
+  function openLogModal(time, question, answer, matched, feedback) {
+    const modal = document.getElementById('logDetailModal');
+    if (!modal) return;
+
+    const timeEl = document.getElementById('modalLogTime');
+    const qEl = document.getElementById('modalLogQuestion');
+    const aEl = document.getElementById('modalLogAnswer');
+    const matchEl = document.getElementById('modalLogMatchBadge');
+    const fbEl = document.getElementById('modalLogFeedbackBadge');
+
+    if (timeEl) timeEl.textContent = time || '';
+    if (qEl) qEl.textContent = question || '';
+    if (aEl) aEl.textContent = answer || '';
+
+    if (matchEl) {
+      if (matched === 'true' || matched === true) {
+        matchEl.innerHTML = `<span class="badge-status active"><span class="status-indicator-dot active"></span><span>Matched with KB</span></span>`;
+      } else {
+        matchEl.innerHTML = `<span class="badge-status superseded"><span class="status-indicator-dot superseded"></span><span>Gap Detected</span></span>`;
+      }
+    }
+
+    if (fbEl) {
+      if (feedback === 'like') {
+        fbEl.innerHTML = `<span style="color: #10B981; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg> Helpful (Liked)</span>`;
+      } else if (feedback === 'dislike') {
+        fbEl.innerHTML = `<span style="color: #EF4444; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"></path></svg> Not Helpful (Disliked)</span>`;
+      } else {
+        fbEl.innerHTML = `<span style="color: var(--text-muted); font-size: 12px;">No student rating given</span>`;
+      }
+    }
+
+    modal.classList.add('active');
+    modal.style.display = 'flex';
+  }
+
+  function closeLogModal() {
+    const modal = document.getElementById('logDetailModal');
+    if (modal) {
+      modal.classList.remove('active');
+      modal.style.display = 'none';
+    }
+  }
+
   async function markGapResolvedAjax(btn, gapId) {
     if (!gapId) return;
     const originalHtml = btn.innerHTML;
@@ -1167,6 +1214,58 @@
         openResolveModal(topicPill.dataset.question || '', '');
         return;
       }
+
+      // View Log Modal Trigger
+      const viewLogBtn = e.target.closest('.btn-view-log');
+      if (viewLogBtn) {
+        openLogModal(
+          viewLogBtn.dataset.time || '',
+          viewLogBtn.dataset.question || '',
+          viewLogBtn.dataset.answer || '',
+          viewLogBtn.dataset.matched || '',
+          viewLogBtn.dataset.feedback || ''
+        );
+        return;
+      }
+
+      // Inline Answer Expand / Collapse
+      const toggleBtn = e.target.closest('.btn-toggle-expand');
+      if (toggleBtn) {
+        const wrapper = toggleBtn.closest('.answer-wrapper');
+        if (wrapper) {
+          const prevEl = wrapper.querySelector('.answer-preview');
+          if (prevEl) {
+            const isExp = prevEl.classList.toggle('is-expanded');
+            const txt = toggleBtn.querySelector('.btn-toggle-text');
+            const arr = toggleBtn.querySelector('.expand-arrow');
+            if (txt) txt.textContent = isExp ? 'Show less' : 'Show full answer';
+            if (arr) arr.style.transform = isExp ? 'rotate(180deg)' : 'rotate(0deg)';
+          }
+        }
+        return;
+      }
+
+      const answerPreview = e.target.closest('.answer-preview');
+      if (answerPreview && !e.target.closest('.btn-toggle-expand')) {
+        const isExp = answerPreview.classList.toggle('is-expanded');
+        const wrapper = answerPreview.closest('.answer-wrapper');
+        if (wrapper) {
+          const btn = wrapper.querySelector('.btn-toggle-expand');
+          if (btn) {
+            const txt = btn.querySelector('.btn-toggle-text');
+            const arr = btn.querySelector('.expand-arrow');
+            if (txt) txt.textContent = isExp ? 'Show less' : 'Show full answer';
+            if (arr) arr.style.transform = isExp ? 'rotate(180deg)' : 'rotate(0deg)';
+          }
+        }
+        return;
+      }
+
+      // Close Log Detail Modal button
+      if (e.target.closest('#closeLogModalBtn') || e.target.id === 'logDetailModal') {
+        closeLogModal();
+        return;
+      }
     });
 
     // 7. Delete Document Form Submission Delegation
@@ -1223,6 +1322,35 @@
       });
     }
 
+    // Global Expand All / Collapse All in Recent Logs Toolbar
+    const expandAllBtn = document.getElementById('toggleExpandAllLogs');
+    if (expandAllBtn) {
+      expandAllBtn.addEventListener('click', function () {
+        const previews = document.querySelectorAll('#recentLogsTable .answer-preview');
+        const buttons = document.querySelectorAll('#recentLogsTable .btn-toggle-expand');
+        const textSpan = document.getElementById('expandAllText');
+        const isAllExpanded = expandAllBtn.dataset.expanded === 'true';
+
+        previews.forEach(p => {
+          if (isAllExpanded) {
+            p.classList.remove('is-expanded');
+          } else {
+            p.classList.add('is-expanded');
+          }
+        });
+
+        buttons.forEach(b => {
+          const ts = b.querySelector('.btn-toggle-text');
+          const arr = b.querySelector('.expand-arrow');
+          if (ts) ts.textContent = isAllExpanded ? 'Show full answer' : 'Show less';
+          if (arr) arr.style.transform = isAllExpanded ? 'rotate(0deg)' : 'rotate(180deg)';
+        });
+
+        expandAllBtn.dataset.expanded = isAllExpanded ? 'false' : 'true';
+        if (textSpan) textSpan.textContent = isAllExpanded ? 'Expand All' : 'Collapse All';
+      });
+    }
+
     // 9. Bulk Checkbox Handlers
     const selectAll = document.getElementById('selectAllDocs');
     if (selectAll) {
@@ -1254,6 +1382,8 @@
   window.closeMetaModal = closeMetaModal;
   window.openResolveModal = openResolveModal;
   window.closeResolveModal = closeResolveModal;
+  window.openLogModal = openLogModal;
+  window.closeLogModal = closeLogModal;
   window.showToast = showToast;
   window.showLoadingOverlay = showLoadingOverlay;
   window.hideLoadingOverlay = hideLoadingOverlay;

@@ -1,6 +1,9 @@
 {
-  "ভিসি": ["vc", "vice chancellor", "vice-chancellor", "executive head", "chancellor", "humayun kabir"],
-  "উপাচার্য": ["vc", "vice chancellor", "vice-chancellor", "humayun kabir"],
+  "ভিসি": ["vc", "vice chancellor", "vice-chancellor", "executive head", "mobarak hossain", "mohammad mobarak hossain majumder"],
+  "উপাচার্য": ["vc", "vice chancellor", "vice-chancellor", "mobarak hossain", "mohammad mobarak hossain majumder"],
+  "vc": ["vice chancellor", "vice-chancellor", "ভিসি", "উপাচার্য", "mobarak hossain", "mohammad mobarak hossain majumder"],
+  "vice chancellor": ["vc", "vice-chancellor", "ভিসি", "উপাচার্য", "mobarak hossain", "mohammad mobarak hossain majumder"],
+  "vice-chancellor": ["vc", "vice chancellor", "ভিসি", "উপাচার্য", "mobarak hossain", "mohammad mobarak hossain majumder"],
   "প্রেসিডেন্ট": ["president", "bot", "board of trustees", "chief of army staff"],
   "আর্মি": ["army", "bangladesh army", "saidpur cantonment"],
   "শিক্ষক": ["faculty", "teacher", "professor", "lecturer", "assistant professor", "associate professor"],

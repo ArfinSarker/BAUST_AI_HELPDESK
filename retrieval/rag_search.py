@@ -114,8 +114,11 @@ _synonym_map = {}
 _synonym_mtime = 0.0
 
 DEFAULT_FALLBACK_SYNONYMS = {
-    "ভিসি": ["vc", "vice chancellor", "vice-chancellor", "executive head", "humayun kabir"],
-    "উপাচার্য": ["vc", "vice chancellor", "vice-chancellor", "humayun kabir"],
+    "ভিসি": ["vc", "vice chancellor", "vice-chancellor", "executive head", "mobarak hossain", "mohammad mobarak hossain majumder"],
+    "উপাচার্য": ["vc", "vice chancellor", "vice-chancellor", "mobarak hossain", "mohammad mobarak hossain majumder"],
+    "vc": ["vice chancellor", "vice-chancellor", "ভিসি", "উপাচার্য", "mobarak hossain", "mohammad mobarak hossain majumder"],
+    "vice chancellor": ["vc", "vice-chancellor", "ভিসি", "উপাচার্য", "mobarak hossain", "mohammad mobarak hossain majumder"],
+    "vice-chancellor": ["vc", "vice chancellor", "ভিসি", "উপাচার্য", "mobarak hossain", "mohammad mobarak hossain majumder"],
     "ডিপার্টমেন্ট": ["department", "cse", "eee", "me", "ce", "ipe", "bba", "english", "ict"],
     "সিএসই": ["cse", "computer science", "nakib hayat"],
     "ভর্তি": ["admission", "apply", "eligibility", "winter", "summer"],
@@ -1148,9 +1151,9 @@ def get_unified_entity_graph():
         for l in lines:
             l = l.strip()
             hm = re.match(r"^###\s+(?:Prof\w*\.?|Dr\w*\.?|Engr\w*\.?|Mr\w*\.?|Ms\w*\.?|Mst\w*\.?|Mrs\w*\.?)?\s*(.*)", l, re.I)
-            if hm and not any(k in l.lower() for k in ["introduction", "overview", "specialization", "laboratory", "facilities", "programs", "members"]):
+            if hm and not any(k in l.lower() for k in ["introduction", "overview", "specialization", "laboratory", "facilities", "programs", "members", "alumni", "directory", "committee", "office", "history", "contact"]):
                 raw_name = hm.group(1).strip()
-                if len(raw_name) > 3 and not raw_name.startswith("Level"):
+                if len(raw_name) > 3 and not raw_name.startswith("Level") and not any(k in raw_name.lower() for k in ["alumni", "directory", "committee"]):
                     current_prof = {
                         "name": l.replace("###", "").strip(),
                         "designation": "",
@@ -1533,15 +1536,43 @@ def search_information(question: str, top_k: int = 4, history: list = None) -> s
         entity_blocks.append("\n".join(entity_lines) + "\n")
         expanded_search_terms.append(matched_abbr['name'])
 
-    # 2. Match Faculty by Direct Name or Follow-up Person from History
+    # 2. Check for Vice Chancellor / Executive Leadership queries
+    vc_triggers = ["vc", "vice chancellor", "vice-chancellor", "vice_chancellor", "উপাচার্য", "ভিসি"]
+    is_vc_query = any(re.search(r'\b' + re.escape(trig) + r'\b', q_low) for trig in vc_triggers) or "উপাচার্য" in q_low or "ভিসি" in q_low
+    if is_vc_query:
+        vc_lines = [
+            "--- Leadership & Governance: Office of the Vice Chancellor ---",
+            "* **উপাচার্যের নাম (Full Name):** ব্রিগেডিয়ার জেনারেল মোহাম্মদ মোবারক হোসেন মজুমদার, পিএসসি (Brig Gen Mohammad Mobarak Hossain Majumder, psc)",
+            "* **পদবি (Designation):** উপাচার্য (Vice Chancellor) ও চেয়ারম্যান, একাডেমিক কাউন্সিল",
+            "* **বিভাগ/প্রতিষ্ঠান:** বাংলাদেশ আর্মি ইউনিভার্সিটি অব সায়েন্স অ্যান্ড টেকনোলজি (BAUST), সৈয়দপুর।",
+            "* **মোবাইল / ফোন (Phone):** [+8801769675550](tel:+8801769675550)",
+            "* **ইমেইল (Email):** [vc@baust.edu.bd](mailto:vc@baust.edu.bd)",
+            "* **শিক্ষাগত যোগ্যতা (Qualifications):** বিএসসি ও এমএসসি ইন মেকানিক্যাল ইঞ্জিনিয়ারিং (ME), বুয়েট (BUET)"
+        ]
+        entity_blocks.append("\n".join(vc_lines) + "\n")
+        expanded_search_terms.extend(["Mobarak Hossain", "Vice Chancellor", "উপাচার্য"])
+
+    # 3. Match Faculty by Direct Name or Follow-up Person from History
     target_person_query = active_person if (is_followup and active_person) else clean_q
-    if not matched_abbr:
-        person_tokens = [w for w in re.findall(r"[a-zA-Z\u0980-\u09FF]{3,}", target_person_query.lower()) if w not in followup_terms and w not in ["sir", "teacher", "faculty", "ke", "kake", "er", "who", "is", "কে", "কার", "স্যার", "ম্যাডাম", "শিক্ষক"]]
+    if not matched_abbr and not is_vc_query:
+        INSTITUTIONAL_STOPWORDS = {
+            "baust", "university", "varsity", "campus", "cantonment", "saidpur",
+            "department", "dept", "faculty", "teacher", "sir", "madam", "student", "students",
+            "alumni", "directory", "office", "section", "wing", "center", "centre", "hall", "hostel",
+            "routine", "schedule", "exam", "admission", "notice", "result", "grade", "syllabus", "course",
+            "fee", "fees", "cost", "waiver", "rules", "policy", "information", "info", "helpdesk", "assistant",
+            "ke", "kake", "er", "who", "is", "the", "what", "where", "how", "when", "which", "tell", "me", "about",
+            "vc", "dean", "head", "provost", "proctor", "registrar", "treasurer",
+            "কে", "কার", "স্যার", "ম্যাডাম", "শিক্ষক", "শিক্ষিকা", "বায়েস্ট", "বিশ্ববিদ্যালয়", "ক্যান্টনমেন্ট", "সৈয়দপুর", "সৈয়দপুর", "বিভাগ", "অনুষদ", "অফিস", "ভিসি", "উপাচার্য"
+        }
+        person_tokens = [w for w in re.findall(r"[a-zA-Z\u0980-\u09FF]{3,}", target_person_query.lower()) if w not in followup_terms and w not in INSTITUTIONAL_STOPWORDS]
         if "al amin" in target_person_query.lower() or "alamin" in target_person_query.lower():
             person_tokens = ["al", "amin"]
         if person_tokens:
             for f in faculty_list:
                 f_name_low = f["name"].lower()
+                if any(bad in f_name_low for bad in ["alumni", "directory", "committee"]):
+                    continue
                 if all(tok in f_name_low for tok in person_tokens):
                     entity_lines = [
                         f"--- Faculty / Staff Profile (Direct Match: {f['name']}) ---",

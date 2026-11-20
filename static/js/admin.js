@@ -299,10 +299,12 @@
         if (row) {
           row.dataset.status = 'resolved';
           row.style.background = 'transparent';
+          row.classList.remove('gap-row-unresolved');
           const iconSpan = row.querySelector('.gap-icon');
           if (iconSpan) {
-            iconSpan.style.color = '#10B981';
-            iconSpan.innerHTML = `<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+            iconSpan.classList.remove('gap-unresolved');
+            iconSpan.classList.add('gap-resolved');
+            iconSpan.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
           }
           const statusCell = row.children[3];
           if (statusCell) {

@@ -25,7 +25,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
 
   <!-- External Unified Stylesheet -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=5.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=5.1">
 </head>
 <body class="admin-page">
 
@@ -549,10 +549,10 @@
           </thead>
           <tbody>
             {% for gap in knowledge_gaps %}
-            <tr data-status="{% if gap.resolved %}resolved{% else %}unresolved{% endif %}" {% if not gap.resolved %}style="background: rgba(239, 68, 68, 0.03);"{% endif %}>
+            <tr data-status="{% if gap.resolved %}resolved{% else %}unresolved{% endif %}" class="{% if not gap.resolved %}gap-row-unresolved{% endif %}">
               <td style="vertical-align: middle;">
                 <div style="display: flex; align-items: flex-start; gap: 8px;">
-                  <span class="gap-icon" style="color: {% if gap.resolved %}#10B981{% else %}#EF4444{% endif %}; margin-top: 2px; flex-shrink: 0;">
+                  <span class="gap-icon {% if gap.resolved %}gap-resolved{% else %}gap-unresolved{% endif %}">
                     {% if gap.resolved %}
                     <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                     {% else %}
@@ -878,7 +878,7 @@
           </thead>
           <tbody>
             {% for doc in documents %}
-            <tr {% if doc.status == 'superseded' %}style="opacity: 0.65; background: rgba(239, 68, 68, 0.03);"{% elif doc.status == 'archived' %}style="opacity: 0.75;"{% endif %}>
+            <tr class="{% if doc.status == 'superseded' %}doc-row-superseded{% elif doc.status == 'archived' %}doc-row-archived{% endif %}">
               <td style="text-align: center;">
                 <input type="checkbox" class="doc-checkbox" value="{{ doc.name }}" style="cursor: pointer; width: 16px; height: 16px;">
               </td>
@@ -1181,7 +1181,7 @@
   </div>
 
   <!-- Modular JavaScript Engine -->
-  <script src="{{ url_for('static', filename='js/theme.js') }}?v=5.0"></script>
-  <script src="{{ url_for('static', filename='js/admin.js') }}?v=5.0"></script>
+  <script src="{{ url_for('static', filename='js/theme.js') }}?v=5.1"></script>
+  <script src="{{ url_for('static', filename='js/admin.js') }}?v=5.1"></script>
 </body>
 </html>

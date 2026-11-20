@@ -20,8 +20,12 @@
     })();
   </script>
 
-    <!-- External Unified Stylesheet -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=4.8">
+    <!-- Marked.js & DOMPurify for Markdown formatting in modals and previews -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+
+  <!-- External Unified Stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=4.9">
 </head>
 <body class="admin-page">
 
@@ -1097,55 +1101,82 @@
     </div>
   </div>
 
-  <!-- Modal for Full Student Interaction View -->
+  <!-- Modal for Full Student Interaction View (Modern SaaS Audit Inspector) -->
   <div id="logDetailModal" class="modal-dialog-overlay" style="display: none; z-index: 99999;">
-    <div class="loading-card" style="max-width: 720px; width: 92%; text-align: left; padding: 24px;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
-        <h3 style="font-family: 'Outfit', sans-serif; font-size: 17px; color: var(--card-title); margin: 0; display: flex; align-items: center; gap: 8px;">
-          <span class="heading-icon" style="color: #8B5CF6; background: rgba(139, 92, 246, 0.1); border-color: rgba(139, 92, 246, 0.25);">
-            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-          </span>
-          <span>Student Interaction Detail</span>
-        </h3>
-        <span id="modalLogTime" style="font-size: 12px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px;"></span>
-      </div>
-
-      <!-- Question Card -->
-      <div style="margin-bottom: 14px;">
-        <label style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); display: block; margin-bottom: 6px;">
-          Student Question
-        </label>
-        <div id="modalLogQuestion" style="padding: 12px 16px; background: var(--input-bg); border: 1px solid var(--border); border-radius: var(--radius-md); font-size: 13.5px; font-weight: 600; color: var(--card-title); word-break: break-word; line-height: 1.5;"></div>
-      </div>
-
-      <!-- Full Answer Card -->
-      <div style="margin-bottom: 16px;">
-        <label style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); display: block; margin-bottom: 6px;">
-          AI Assistant Full Response
-        </label>
-        <div id="modalLogAnswer" style="padding: 14px 16px; background: var(--table-stripe); border: 1px solid var(--border); border-radius: var(--radius-md); font-size: 13px; color: var(--text); word-break: break-word; line-height: 1.6; max-height: 340px; overflow-y: auto; white-space: pre-wrap;"></div>
-      </div>
-
-      <!-- Meta Badges (Context Match & Feedback) -->
-      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; padding: 10px 14px; background: var(--input-bg); border: 1px solid var(--border); border-radius: var(--radius-md);">
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <span style="font-size: 12px; font-weight: 600; color: var(--text-muted);">Context Match:</span>
-          <span id="modalLogMatchBadge"></span>
+    <div class="modal-card">
+      <!-- Header -->
+      <div class="modal-header-modern">
+        <div class="modal-header-left">
+          <div class="modal-header-badge">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          </div>
+          <div>
+            <h3 class="modal-title-modern">Student Interaction Details</h3>
+            <p class="modal-subtitle-modern">Real-time log inspection of student query and AI knowledge generation</p>
+          </div>
         </div>
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <span style="font-size: 12px; font-weight: 600; color: var(--text-muted);">Student Rating:</span>
-          <span id="modalLogFeedbackBadge"></span>
+        <div class="modal-header-right">
+          <div id="modalLogTime" class="modal-time-pill">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span class="modal-time-text"></span>
+          </div>
+          <button type="button" class="modal-close-icon-btn" id="modalTopCloseBtn" title="Close dialog">&times;</button>
         </div>
       </div>
 
-      <div style="display: flex; justify-content: flex-end;">
-        <button type="button" id="closeLogModalBtn" class="btn-cancel" style="padding: 8px 18px; font-size: 12.5px;">Close</button>
+      <!-- Student Prompt Flow -->
+      <div class="transcript-section">
+        <div class="transcript-speaker">
+          <div class="speaker-avatar student-avatar">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          </div>
+          <span class="speaker-name">Student Question</span>
+        </div>
+        <div class="transcript-bubble student-bubble" id="modalLogQuestion"></div>
+      </div>
+
+      <!-- AI Response Flow -->
+      <div class="transcript-section">
+        <div class="transcript-speaker-row">
+          <div class="transcript-speaker">
+            <div class="speaker-avatar bot-avatar">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM4 11a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7z"></path><circle cx="9" cy="15" r="1.5"></circle><circle cx="15" cy="15" r="1.5"></circle></svg>
+            </div>
+            <span class="speaker-name">BAUST AI Assistant</span>
+            <span class="model-tag">Google GenAI Active</span>
+          </div>
+          <button type="button" class="btn-copy-response" id="copyModalAnswerBtn" title="Copy response to clipboard">
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <span id="copyModalBtnText">Copy Response</span>
+          </button>
+        </div>
+        <div class="transcript-bubble bot-bubble" id="modalLogAnswer"></div>
+      </div>
+
+      <!-- Telemetry & Metadata Bar -->
+      <div class="transcript-meta-bar">
+        <div class="meta-item">
+          <span class="meta-label">Retrieval Status:</span>
+          <div id="modalLogMatchBadge"></div>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Student Rating:</span>
+          <div id="modalLogFeedbackBadge"></div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer-modern">
+        <div class="modal-footer-info">
+          <span>BAUST AI Help Desk &bull; Official Student Services Portal</span>
+        </div>
+        <button type="button" id="closeLogModalBtn" class="btn-submit" style="padding: 8px 22px; font-size: 13px;">Done</button>
       </div>
     </div>
   </div>
 
   <!-- Modular JavaScript Engine -->
-  <script src="{{ url_for('static', filename='js/theme.js') }}?v=4.8"></script>
-  <script src="{{ url_for('static', filename='js/admin.js') }}?v=4.8"></script>
+  <script src="{{ url_for('static', filename='js/theme.js') }}?v=4.9"></script>
+  <script src="{{ url_for('static', filename='js/admin.js') }}?v=4.9"></script>
 </body>
 </html>

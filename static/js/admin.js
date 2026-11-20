@@ -187,35 +187,89 @@
   // ==========================================================================
   // STUDENT INTERACTION LOG DETAIL MODAL
   // ==========================================================================
+  function formatMarkdownToHtml(text) {
+    if (!text) return '';
+    if (window.marked && typeof window.marked.parse === 'function') {
+      try {
+        const rawHtml = window.marked.parse(text);
+        return window.DOMPurify ? window.DOMPurify.sanitize(rawHtml) : rawHtml;
+      } catch (e) {
+        console.warn('Marked parse error, using fallback:', e);
+      }
+    }
+    // Clean fallback markdown converter
+    let html = text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+    const lines = html.split('\n');
+    let inList = false;
+    let formatted = [];
+
+    lines.forEach(line => {
+      const trimmed = line.trim();
+      if (trimmed.startsWith('* ') || trimmed.startsWith('• ') || trimmed.startsWith('- ')) {
+        if (!inList) {
+          formatted.push('<ul style="margin: 6px 0 10px 20px; padding: 0;">');
+          inList = true;
+        }
+        formatted.push(`<li style="margin-bottom: 4px;">${trimmed.replace(/^[\*\•\-]\s*/, '')}</li>`);
+      } else {
+        if (inList) {
+          formatted.push('</ul>');
+          inList = false;
+        }
+        if (trimmed) {
+          formatted.push(`<p style="margin: 0 0 8px 0;">${line}</p>`);
+        } else {
+          formatted.push('<br/>');
+        }
+      }
+    });
+    if (inList) formatted.push('</ul>');
+
+    return formatted.join('');
+  }
+
+  let currentModalRawAnswer = '';
+
   function openLogModal(time, question, answer, matched, feedback) {
     const modal = document.getElementById('logDetailModal');
     if (!modal) return;
 
-    const timeEl = document.getElementById('modalLogTime');
+    currentModalRawAnswer = answer || '';
+
+    const timeEl = modal.querySelector('.modal-time-text');
     const qEl = document.getElementById('modalLogQuestion');
     const aEl = document.getElementById('modalLogAnswer');
     const matchEl = document.getElementById('modalLogMatchBadge');
     const fbEl = document.getElementById('modalLogFeedbackBadge');
+    const copyBtnText = document.getElementById('copyModalBtnText');
 
-    if (timeEl) timeEl.textContent = time || '';
+    if (timeEl) timeEl.textContent = time || 'Recent';
     if (qEl) qEl.textContent = question || '';
-    if (aEl) aEl.textContent = answer || '';
+    if (aEl) aEl.innerHTML = formatMarkdownToHtml(answer || '');
+    if (copyBtnText) copyBtnText.textContent = 'Copy Response';
 
     if (matchEl) {
       if (matched === 'true' || matched === true) {
-        matchEl.innerHTML = `<span class="badge-status active"><span class="status-indicator-dot active"></span><span>Matched with KB</span></span>`;
+        matchEl.innerHTML = `<span class="badge-status active"><span class="status-indicator-dot active"></span><span>Authoritative Record Found</span></span>`;
       } else {
-        matchEl.innerHTML = `<span class="badge-status superseded"><span class="status-indicator-dot superseded"></span><span>Gap Detected</span></span>`;
+        matchEl.innerHTML = `<span class="badge-status superseded"><span class="status-indicator-dot superseded"></span><span>Knowledge Gap Detected</span></span>`;
       }
     }
 
     if (fbEl) {
       if (feedback === 'like') {
-        fbEl.innerHTML = `<span style="color: #10B981; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg> Helpful (Liked)</span>`;
+        fbEl.innerHTML = `<span style="color: #10B981; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg> Marked Helpful by Student</span>`;
       } else if (feedback === 'dislike') {
-        fbEl.innerHTML = `<span style="color: #EF4444; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"></path></svg> Not Helpful (Disliked)</span>`;
+        fbEl.innerHTML = `<span style="color: #EF4444; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"></path></svg> Marked Unhelpful by Student</span>`;
       } else {
-        fbEl.innerHTML = `<span style="color: var(--text-muted); font-size: 12px;">No student rating given</span>`;
+        fbEl.innerHTML = `<span style="color: var(--text-muted); font-size: 11.5px;">No student rating given</span>`;
       }
     }
 
@@ -1261,8 +1315,26 @@
         return;
       }
 
+      // Copy Modal Answer
+      const copyBtn = e.target.closest('#copyModalAnswerBtn');
+      if (copyBtn) {
+        if (currentModalRawAnswer) {
+          navigator.clipboard.writeText(currentModalRawAnswer).then(() => {
+            const btnText = document.getElementById('copyModalBtnText');
+            if (btnText) btnText.textContent = 'Copied!';
+            showToast('Response copied to clipboard', 'success');
+            setTimeout(() => {
+              if (btnText) btnText.textContent = 'Copy Response';
+            }, 2000);
+          }).catch(() => {
+            showToast('Unable to copy text', 'error');
+          });
+        }
+        return;
+      }
+
       // Close Log Detail Modal button
-      if (e.target.closest('#closeLogModalBtn') || e.target.id === 'logDetailModal') {
+      if (e.target.closest('#closeLogModalBtn') || e.target.closest('#modalTopCloseBtn') || e.target.id === 'logDetailModal') {
         closeLogModal();
         return;
       }

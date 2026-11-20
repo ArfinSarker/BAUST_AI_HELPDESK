@@ -25,7 +25,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
 
   <!-- External Unified Stylesheet -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=5.1">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=5.2">
 </head>
 <body class="admin-page">
 
@@ -89,7 +89,7 @@
         <svg class="btn-svg-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
         <span>Analytics & Gaps</span>
         {% if analytics_stats.unresolved_gaps_count > 0 %}
-        <span style="background: #EF4444; color: white; border-radius: 10px; font-size: 10px; padding: 1px 6px; font-weight: bold; margin-left: 2px;">{{ analytics_stats.unresolved_gaps_count }}</span>
+        <span id="navUnresolvedBadge" style="background: #EF4444; color: white; border-radius: 10px; font-size: 10px; padding: 1px 6px; font-weight: bold; margin-left: 2px;">{{ analytics_stats.unresolved_gaps_count }}</span>
         {% endif %}
       </a>
 
@@ -490,7 +490,7 @@
             <span class="heading-icon" style="color: #EF4444; background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.25);">
               <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
             </span>
-            <span>Identified Knowledge Gaps ({{ knowledge_gaps|length }})</span>
+            <span>Identified Knowledge Gaps ({{ analytics_stats.knowledge_gaps_count }})</span>
           </h2>
           <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
             Questions where the AI found no records in BAUST database. Resolve or add official knowledge to train your assistant.
@@ -501,7 +501,7 @@
         <div class="filter-tabs" id="gapsFilterTabs">
           <button type="button" class="btn-filter-tab active" data-filter="all">
             <span>All Gaps</span>
-            <span class="tab-badge">{{ knowledge_gaps|length }}</span>
+            <span class="tab-badge">{{ analytics_stats.knowledge_gaps_count }}</span>
           </button>
           <button type="button" class="btn-filter-tab" data-filter="unresolved">
             <span style="color: #EF4444;">●</span>
@@ -511,7 +511,7 @@
           <button type="button" class="btn-filter-tab" data-filter="resolved">
             <span style="color: #10B981;">●</span>
             <span>Resolved</span>
-            <span class="tab-badge success">{{ (knowledge_gaps|length) - (analytics_stats.unresolved_gaps_count|default(0)) }}</span>
+            <span class="tab-badge success">{{ analytics_stats.resolved_gaps_count }}</span>
           </button>
         </div>
       </div>
@@ -1181,7 +1181,7 @@
   </div>
 
   <!-- Modular JavaScript Engine -->
-  <script src="{{ url_for('static', filename='js/theme.js') }}?v=5.1"></script>
-  <script src="{{ url_for('static', filename='js/admin.js') }}?v=5.1"></script>
+  <script src="{{ url_for('static', filename='js/theme.js') }}?v=5.2"></script>
+  <script src="{{ url_for('static', filename='js/admin.js') }}?v=5.2"></script>
 </body>
 </html>

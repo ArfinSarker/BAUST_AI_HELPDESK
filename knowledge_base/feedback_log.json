@@ -95,5 +95,12 @@
     "question": "What is BAUST?",
     "answer": "BAUST is a university.",
     "feedback": "like"
+  },
+  {
+    "timestamp": "2026-11-20 16:33:15",
+    "log_id": 281,
+    "question": "TEST_LOCATION_QUERY",
+    "answer": "Saidpur Cantonment",
+    "feedback": "like"
   }
 ]

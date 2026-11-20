@@ -338,13 +338,24 @@ def get_analytics_stats() -> dict:
         cursor.execute("SELECT COUNT(*) FROM chat_logs;")
         stats["total_queries"] = cursor.fetchone()[0] or 0
 
-        cursor.execute("SELECT COUNT(*) FROM chat_logs WHERE knowledge_gap = 1;")
-        stats["knowledge_gaps_count"] = cursor.fetchone()[0] or 0
-
-        cursor.execute("SELECT COUNT(*) FROM chat_logs WHERE knowledge_gap = 1 AND resolved = 1;")
-        stats["resolved_gaps_count"] = cursor.fetchone()[0] or 0
-
-        stats["unresolved_gaps_count"] = stats["knowledge_gaps_count"] - stats["resolved_gaps_count"]
+        # Calculate distinct knowledge gap statistics to match the gaps table
+        cursor.execute("""
+            SELECT 
+                COUNT(*) AS total_gaps,
+                SUM(CASE WHEN max_resolved = 1 THEN 1 ELSE 0 END) AS resolved_gaps,
+                SUM(CASE WHEN max_resolved = 0 OR max_resolved IS NULL THEN 1 ELSE 0 END) AS unresolved_gaps
+            FROM (
+                SELECT LOWER(TRIM(question)) AS q, MAX(resolved) AS max_resolved
+                FROM chat_logs
+                WHERE knowledge_gap = 1
+                GROUP BY LOWER(TRIM(question))
+            );
+        """)
+        gap_row = cursor.fetchone()
+        if gap_row:
+            stats["knowledge_gaps_count"] = gap_row[0] or 0
+            stats["resolved_gaps_count"] = gap_row[1] or 0
+            stats["unresolved_gaps_count"] = gap_row[2] or 0
 
         cursor.execute("SELECT COUNT(*) FROM chat_logs WHERE feedback = 'like';")
         stats["likes_count"] = cursor.fetchone()[0] or 0

@@ -340,6 +340,26 @@
           if (!isNaN(count)) resolvedBadge.textContent = count + 1;
         }
 
+        // Update navbar notification badge
+        const navBadge = document.getElementById('navUnresolvedBadge');
+        if (navBadge) {
+          let count = parseInt(navBadge.textContent, 10);
+          if (!isNaN(count)) {
+            if (count <= 1) {
+              navBadge.style.display = 'none';
+            } else {
+              navBadge.textContent = count - 1;
+            }
+          }
+        }
+
+        // Update active gaps KPI card
+        const statActive = document.querySelector('.stat-card.amber .stat-value');
+        if (statActive) {
+          let count = parseInt(statActive.textContent, 10);
+          if (!isNaN(count) && count > 0) statActive.textContent = count - 1;
+        }
+
         // Re-filter gaps table if active
         if (window.gapsPaginator) {
           window.gapsPaginator.filter();

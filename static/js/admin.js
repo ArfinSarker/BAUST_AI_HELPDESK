@@ -313,8 +313,18 @@
               </span>
             `;
           }
+          const actionCell = row.children[4];
+          if (actionCell) {
+            actionCell.innerHTML = `
+              <div style="display: inline-flex; gap: 5px; align-items: center; justify-content: flex-end;">
+                <span style="color: #10B981; font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 8px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25);">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Resolved</span>
+                </span>
+              </div>
+            `;
+          }
         }
-        btn.remove();
 
         // Update tab badge counters dynamically
         const unresolvedBadge = document.querySelector('#gapsFilterTabs [data-filter="unresolved"] .tab-badge');

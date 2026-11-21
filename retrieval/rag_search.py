@@ -717,13 +717,14 @@ def parse_class_routine_tables() -> dict:
                             merged_items.append(curr_item)
                         days_map[day_key] = merged_items
 
-            sections_data[sec] = {
-                'level_term': lt,
-                'courses': courses,
-                'teachers': teachers,
-                'schedule': days_map,
-                'raw_block': b.strip()
-            }
+            if days_map or sec not in sections_data:
+                sections_data[sec] = {
+                    'level_term': lt,
+                    'courses': courses,
+                    'teachers': teachers,
+                    'schedule': days_map,
+                    'raw_block': b.strip()
+                }
 
     _ROUTINE_CACHE = sections_data
     _ROUTINE_CACHE_MTIME = max_mtime

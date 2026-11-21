@@ -766,8 +766,14 @@ ROUTINE_KEYWORDS = [
     "routine", "class", "classes", "lab", "kalke", "ajke", "schedule", "period",
     "somoy", "shomoy", "kobe", "kokhon", "timetable", "time table", "ক্লাস",
     "রুটিন", "ল্যাব", "সময়সূচি", "সময়সূচি", "কি কি ক্লাস", "কখন ক্লাস", "পড়াশোনা",
-    "আজকে", "কালকে", "আগামীকাল", "পরশু", "sunday", "monday", "tuesday", "wednesday",
-    "thursday", "রবিবার", "সোমবার", "মঙ্গলবার", "বুধবার", "বৃহস্পতিবার"
+    "আজকে", "কালকে", "আগামীকাল", "পরশু",
+    "sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday",
+    "robibar", "robi", "shombar", "sombar", "shom", "som", "mongolbar", "mongol",
+    "budhbar", "budbar", "budh", "bud", "brihoshpotibar", "brihospotibar", "brihaspatibar",
+    "shukrobar", "sukrobar", "shonibar", "sonibar",
+    "রবিবার", "সোমবার", "মঙ্গলবার", "বুধবার", "বৃহস্পতিবার", "শুক্রবার", "শনিবার",
+    "রবি", "সোম", "মঙ্গল", "বুধ", "বৃহস্পতি", "শুক্র", "শনি",
+    "কি কি আছে", "কি আছে", "ki ki ache", "ki ache"
 ]
 
 
@@ -800,18 +806,21 @@ def resolve_student_or_routine_query(question: str, history: list = None) -> Opt
     has_personal_pronoun = any(re.search(r'\b' + re.escape(w) + r'\b', q_low) for w in ["amar", "amr", "my", "tar", "আমার", "আমারটি", "তার"])
 
     # 1. Extract student roll:
-    # An explicit roll must be in question, OR history is consulted ONLY when user asks with a personal pronoun and without a specific section override!
+    # Explicit roll in question, OR lookup from history whenever routine or exam is asked
     roll_match = re.search(r'\b(08\d{6,14})\b', clean_q)
     roll_from_history = False
-    if not roll_match and history and has_personal_pronoun and not query_section:
+    if not roll_match and history and not query_section:
         student_followup_terms = [
             "seat", "room", "slot", "exam", "routine", "class", "kalke", "ajke", "schedule", "period",
-            "সিট", "রুম", "কক্ষ", "পরীক্ষা", "রুটিন", "ক্লাস", "আজকে", "কালকে", "আমার", "amar", "tar", "amr"
+            "সিট", "রুম", "কক্ষ", "পরীক্ষা", "রুটিন", "ক্লাস", "আজকে", "কালকে", "আমার", "amar", "tar", "amr",
+            "robibar", "robi", "shombar", "sombar", "mongolbar", "budhbar", "brihoshpotibar",
+            "sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday",
+            "রবিবার", "সোমবার", "মঙ্গলবার", "বুধবার", "বৃহস্পতিবার", "কি আছে", "ki ache"
         ]
-        is_student_q = any(re.search(r'\b' + re.escape(term) + r'\b', q_low) for term in student_followup_terms)
+        is_student_q = any(re.search(r'\b' + re.escape(term) + r'\b', q_low) or (len(term) >= 4 and term in q_low) for term in student_followup_terms)
         is_faculty_q = any(k in q_low for k in ["sir", "teacher", "faculty", "madam", "maam", "prof", "head", "hod", "gr", "ftz", "akz", "rifat", "zohra", "কে", "কার", "শিক্ষক", "স্যার"])
-        if is_student_q and not is_faculty_q:
-            for msg in reversed(history[-4:]):
+        if (is_student_q or is_routine or has_personal_pronoun) and not is_faculty_q:
+            for msg in reversed(history[-6:]):
                 if isinstance(msg, dict):
                     m = re.search(r'\b(08\d{6,14})\b', str(msg.get("content", "")))
                     if m:
@@ -841,10 +850,35 @@ def resolve_student_or_routine_query(question: str, history: list = None) -> Opt
                     weekend_today_note = "[সাপ্তাহিক ছুটি / WEEKEND - আজ কোনো ক্লাস নেই]" if temporal['is_today_weekend'] else "[ক্লাস ডে / REGULAR CLASS DAY]"
                     weekend_tmrw_note = "[সাপ্তাহিক ছুটি / WEEKEND - আগামীকাল কোনো ক্লাস নেই]" if temporal['is_tomorrow_weekend'] else "[ক্লাস ডে / REGULAR CLASS DAY]"
 
-                    # Determine target day
+                    # Check for explicit day mentions in query:
+                    day_explicit_map = {
+                        "Sunday": ["sunday", "sun", "robibar", "robi", "রবিবার", "রবি"],
+                        "Monday": ["monday", "mon", "shombar", "sombar", "shom", "som", "সোমবার", "সোম"],
+                        "Tuesday": ["tuesday", "tue", "mongolbar", "mongol", "মঙ্গলবার", "মঙ্গল"],
+                        "Wednesday": ["wednesday", "wed", "budhbar", "budbar", "budh", "bud", "বুধবার", "বুধ"],
+                        "Thursday": ["thursday", "thu", "brihoshpotibar", "brihospotibar", "brihaspatibar", "brihospoti", "বৃহস্পতিবার", "বৃহস্পতি"],
+                        "Friday": ["friday", "fri", "shukrobar", "sukrobar", "shukro", "sukro", "শুক্রবার", "শুক্র"],
+                        "Saturday": ["saturday", "sat", "shonibar", "sonibar", "shoni", "soni", "শনিবার", "শনি"],
+                    }
+                    explicit_day = None
+                    explicit_day_bn = None
+                    bn_names = {
+                        "Sunday": "রবিবার", "Monday": "সোমবার", "Tuesday": "মঙ্গলবার",
+                        "Wednesday": "বুধবার", "Thursday": "বৃহস্পতিবার", "Friday": "শুক্রবার", "Saturday": "শনিবার"
+                    }
+                    for day_name, kws in day_explicit_map.items():
+                        if any(re.search(r'\b' + re.escape(w) + r'\b', q_low) or (len(w) >= 4 and w in q_low) for w in kws):
+                            explicit_day = day_name
+                            explicit_day_bn = bn_names[day_name]
+                            break
+
                     is_kalke = any(w in q_low for w in ["kalke", "kal", "tomorrow", "কালকে", "কাল", "আগামীকাল"])
                     is_ajke = any(w in q_low for w in ["ajke", "aj", "today", "আজকে", "আজ"])
-                    if is_kalke:
+
+                    if explicit_day:
+                        target_day = explicit_day
+                        target_day_bn = explicit_day_bn
+                    elif is_kalke:
                         target_day = temporal["tomorrow_en"]
                         target_day_bn = temporal["tomorrow_bn"]
                     elif is_ajke:
@@ -934,9 +968,34 @@ def resolve_student_or_routine_query(question: str, history: list = None) -> Opt
                 weekend_today_note = "[সাপ্তাহিক ছুটি / WEEKEND - আজ কোনো ক্লাস নেই]" if temporal['is_today_weekend'] else "[ক্লাস ডে / REGULAR CLASS DAY]"
                 weekend_tmrw_note = "[সাপ্তাহিক ছুটি / WEEKEND - আগামীকাল কোনো ক্লাস নেই]" if temporal['is_tomorrow_weekend'] else "[ক্লাস ডে / REGULAR CLASS DAY]"
 
+                day_explicit_map = {
+                    "Sunday": ["sunday", "sun", "robibar", "robi", "রবিবার", "রবি"],
+                    "Monday": ["monday", "mon", "shombar", "sombar", "shom", "som", "সোমবার", "সোম"],
+                    "Tuesday": ["tuesday", "tue", "mongolbar", "mongol", "মঙ্গলবার", "মঙ্গল"],
+                    "Wednesday": ["wednesday", "wed", "budhbar", "budbar", "budh", "bud", "বুধবার", "বুধ"],
+                    "Thursday": ["thursday", "thu", "brihoshpotibar", "brihospotibar", "brihaspatibar", "brihospoti", "বৃহস্পতিবার", "বৃহস্পতি"],
+                    "Friday": ["friday", "fri", "shukrobar", "sukrobar", "shukro", "sukro", "শুক্রবার", "শুক্র"],
+                    "Saturday": ["saturday", "sat", "shonibar", "sonibar", "shoni", "soni", "শনিবার", "শনি"],
+                }
+                explicit_day = None
+                explicit_day_bn = None
+                bn_names = {
+                    "Sunday": "রবিবার", "Monday": "সোমবার", "Tuesday": "মঙ্গলবার",
+                    "Wednesday": "বুধবার", "Thursday": "বৃহস্পতিবার", "Friday": "শুক্রবার", "Saturday": "শনিবার"
+                }
+                for day_name, kws in day_explicit_map.items():
+                    if any(re.search(r'\b' + re.escape(w) + r'\b', q_low) or (len(w) >= 4 and w in q_low) for w in kws):
+                        explicit_day = day_name
+                        explicit_day_bn = bn_names[day_name]
+                        break
+
                 is_kalke = any(w in q_low for w in ["kalke", "kal", "tomorrow", "কালকে", "কাল", "আগামীকাল"])
                 is_ajke = any(w in q_low for w in ["ajke", "aj", "today", "আজকে", "আজ"])
-                if is_kalke:
+
+                if explicit_day:
+                    target_day = explicit_day
+                    target_day_bn = explicit_day_bn
+                elif is_kalke:
                     target_day = temporal["tomorrow_en"]
                     target_day_bn = temporal["tomorrow_bn"]
                 elif is_ajke:

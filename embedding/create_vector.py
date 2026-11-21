@@ -615,6 +615,13 @@ def build_vector_store(
                 file_meta = data["metadata"]
                 file_embs = data.get("embeddings")
 
+                # Normalize metadata keys to guarantee backward compatibility
+                for m in file_meta:
+                    if isinstance(m, dict):
+                        prov = m.get("source") or m.get("filename") or file_name
+                        m["source"] = prov
+                        m["filename"] = prov
+
                 all_documents.extend(file_chunks)
                 all_metadata.extend(file_meta)
                 if file_embs is not None and len(file_embs) > 0:

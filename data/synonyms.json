@@ -1,68 +1,492 @@
 {
-  "ভিসি": ["vc", "vice chancellor", "vice-chancellor", "executive head", "mobarak hossain", "mohammad mobarak hossain majumder"],
-  "উপাচার্য": ["vc", "vice chancellor", "vice-chancellor", "mobarak hossain", "mohammad mobarak hossain majumder"],
-  "vc": ["vice chancellor", "vice-chancellor", "ভিসি", "উপাচার্য", "mobarak hossain", "mohammad mobarak hossain majumder"],
-  "vice chancellor": ["vc", "vice-chancellor", "ভিসি", "উপাচার্য", "mobarak hossain", "mohammad mobarak hossain majumder"],
-  "vice-chancellor": ["vc", "vice chancellor", "ভিসি", "উপাচার্য", "mobarak hossain", "mohammad mobarak hossain majumder"],
-  "প্রেসিডেন্ট": ["president", "bot", "board of trustees", "chief of army staff"],
-  "আর্মি": ["army", "bangladesh army", "saidpur cantonment"],
-  "শিক্ষক": ["faculty", "teacher", "professor", "lecturer", "assistant professor", "associate professor"],
-  "শিক্ষিকা": ["faculty", "teacher", "professor", "lecturer"],
-  "ডিপার্টমেন্ট": ["department", "cse", "eee", "me", "ce", "ipe", "bba", "english", "ict"],
-  "বিভাগ": ["department", "cse", "eee", "me", "ce", "ipe", "bba", "english", "ict"],
-  "সিএসই": ["cse", "computer science", "engineering", "nakib hayat"],
-  "কম্পিউটার": ["cse", "computer science"],
-  "মেকানিকাল": ["me", "mechanical"],
-  "সিভিল": ["ce", "civil"],
-  "ইইই": ["eee", "electrical", "rubina aktar"],
-  "আইসিটি": ["ict", "information and communication", "ece"],
-  "আইপিই": ["ipe", "industrial and production"],
-  "বিবিএ": ["bba", "business administration", "fbs"],
-  "ইংরেজি": ["english", "humanities"],
-  "ভর্তি": ["admission", "apply", "eligibility", "intake", "batch", "winter", "summer", "application", "hsc"],
-  "এডমিশন": ["admission", "apply", "eligibility", "form"],
-  "ফি": ["fee", "tuition", "cost", "taka", "bdt", "tk", "charge", "payment", "waiver"],
-  "খরচ": ["fee", "tuition", "cost", "taka", "bdt", "tk", "charge", "payment"],
-  "টাকা": ["fee", "tuition", "cost", "taka", "bdt", "tk", "payment"],
-  "স্কলারশিপ": ["scholarship", "waiver", "discount", "financial aid", "merit", "gpa 5"],
-  "ওয়েভার": ["waiver", "scholarship", "discount"],
-  "যোগাযোগ": ["contact", "phone", "email", "helpline", "hotline", "location"],
-  "ফোন": ["phone", "mobile", "contact", "call", "01769675588", "01769675589"],
-  "ঠিকানা": ["location", "saidpur", "cantonment", "address", "nilphamari"],
-  "কোথায়": ["location", "saidpur", "cantonment", "address"],
-  "ইতিহাস": ["history", "established", "background", "foundation", "parliament", "2015"],
-  "কবে": ["established", "date", "year", "founded", "history"],
-  "নকীব": ["nakib", "nakib hayat", "head of the department"],
-  "রুহুল": ["ruhul", "dr md ruhul amin"],
-  "রুফিজা": ["rufiza", "rufiza begum"],
-  "জাহাঙ্গীর": ["jahangir", "dr md jahangir alam", "dean"],
-  "হাসান": ["al-hasan", "hasan", "lecturer"],
-  "রেজিস্ট্রার": ["registrar", "office of the registrar", "administrative"],
-  "হোস্টেল": ["hostel", "hall", "dormitory", "accommodation", "residential", "seat"],
-  "হল": ["hall", "hostel", "dormitory", "residential", "provost", "seat", "capacity"],
-  "হলে": ["hall", "hostel", "dormitory", "residential", "provost"],
-  "হলের": ["hall", "hostel", "dormitory", "residential", "provost"],
-  "প্রভোস্ট": ["provost", "assistant provost", "hall"],
-  "সহকারী": ["assistant", "assistant provost", "assistant professor"],
-  "মেয়েদের": ["girls", "female", "women", "ladies", "taramon bibi"],
-  "মহিলা": ["girls", "female", "women", "ladies"],
-  "মেয়ে": ["girls", "female", "women", "ladies"],
-  "ছেলেদের": ["boys", "male", "men", "abbas uddin", "zikrul haque"],
-  "ছেলে": ["boys", "male", "men"],
-  "প্রক্টর": ["proctor", "assistant proctor", "proctorial"],
-  "ক্যাম্পাস": ["campus", "saidpur cantonment", "facilities", "labs", "wifi", "cafeteria"],
-  "লাইব্রেরি": ["library", "central library", "books", "reading room"],
-  "পরীক্ষা": ["examination", "grading", "cgpa", "gpa", "term", "promotion", "clearance"],
-  "গ্রেড": ["grade", "grading", "cgpa", "gpa", "marks", "scale"],
-  "হেড": ["head", "head of the department", "hod", "department head", "associate professor and head", "nakib hayat"],
-  "প্রধান": ["head", "dean", "chief", "hod", "head of the department"],
-  "ডিন": ["dean", "faculty dean", "s.m. jahangir alam"],
-  "চেয়ারম্যান": ["chairman", "head", "bot"],
-  "লুৎফর": ["lutfor", "md lutfor rahman", "vice chancellor", "vc"],
-  "হুমায়ুন": ["humayun", "humayun kabir", "vice chancellor", "vc"],
-  "লুৎফর রহমান": ["lutfor rahman", "vice chancellor", "vc"],
-  "নকিব হায়াত": ["nakib hayat", "nakib hayat chowdhury", "head of the department", "cse"],
-  "ডিপার্টমেন্টের": ["department", "cse", "eee", "me", "ce", "ipe", "bba", "english", "ict"],
-  "বিভাগের": ["department", "cse", "eee", "me", "ce", "ipe", "bba", "english", "ict"]
+  "ভিসি": [
+    "vc",
+    "vice chancellor",
+    "vice-chancellor",
+    "executive head",
+    "mobarak hossain",
+    "mohammad mobarak hossain majumder"
+  ],
+  "উপাচার্য": [
+    "vc",
+    "vice chancellor",
+    "vice-chancellor",
+    "mobarak hossain",
+    "mohammad mobarak hossain majumder"
+  ],
+  "vc": [
+    "vice chancellor",
+    "vice-chancellor",
+    "ভিসি",
+    "উপাচার্য",
+    "mobarak hossain",
+    "mohammad mobarak hossain majumder"
+  ],
+  "vice chancellor": [
+    "vc",
+    "vice-chancellor",
+    "ভিসি",
+    "উপাচার্য",
+    "mobarak hossain",
+    "mohammad mobarak hossain majumder"
+  ],
+  "vice-chancellor": [
+    "vc",
+    "vice chancellor",
+    "ভিসি",
+    "উপাচার্য",
+    "mobarak hossain",
+    "mohammad mobarak hossain majumder"
+  ],
+  "প্রেসিডেন্ট": [
+    "president",
+    "bot",
+    "board of trustees",
+    "chief of army staff"
+  ],
+  "আর্মি": [
+    "army",
+    "bangladesh army",
+    "saidpur cantonment"
+  ],
+  "শিক্ষক": [
+    "faculty",
+    "teacher",
+    "professor",
+    "lecturer",
+    "assistant professor",
+    "associate professor"
+  ],
+  "শিক্ষিকা": [
+    "faculty",
+    "teacher",
+    "professor",
+    "lecturer"
+  ],
+  "ডিপার্টমেন্ট": [
+    "department",
+    "cse",
+    "eee",
+    "me",
+    "ce",
+    "ipe",
+    "bba",
+    "english",
+    "ict"
+  ],
+  "বিভাগ": [
+    "department",
+    "cse",
+    "eee",
+    "me",
+    "ce",
+    "ipe",
+    "bba",
+    "english",
+    "ict"
+  ],
+  "সিএসই": [
+    "cse",
+    "computer science",
+    "engineering",
+    "nakib hayat"
+  ],
+  "কম্পিউটার": [
+    "cse",
+    "computer science"
+  ],
+  "মেকানিকাল": [
+    "me",
+    "mechanical"
+  ],
+  "সিভিল": [
+    "ce",
+    "civil"
+  ],
+  "ইইই": [
+    "eee",
+    "electrical",
+    "rubina aktar"
+  ],
+  "আইসিটি": [
+    "ict",
+    "information and communication",
+    "ece"
+  ],
+  "আইপিই": [
+    "ipe",
+    "industrial and production"
+  ],
+  "বিবিএ": [
+    "bba",
+    "business administration",
+    "fbs"
+  ],
+  "ইংরেজি": [
+    "english",
+    "humanities"
+  ],
+  "ভর্তি": [
+    "admission",
+    "apply",
+    "eligibility",
+    "intake",
+    "batch",
+    "winter",
+    "summer",
+    "application",
+    "hsc"
+  ],
+  "এডমিশন": [
+    "admission",
+    "apply",
+    "eligibility",
+    "form"
+  ],
+  "ফি": [
+    "fee",
+    "tuition",
+    "cost",
+    "taka",
+    "bdt",
+    "tk",
+    "charge",
+    "payment",
+    "waiver"
+  ],
+  "খরচ": [
+    "fee",
+    "tuition",
+    "cost",
+    "taka",
+    "bdt",
+    "tk",
+    "charge",
+    "payment"
+  ],
+  "টাকা": [
+    "fee",
+    "tuition",
+    "cost",
+    "taka",
+    "bdt",
+    "tk",
+    "payment"
+  ],
+  "স্কলারশিপ": [
+    "scholarship",
+    "waiver",
+    "discount",
+    "financial aid",
+    "merit",
+    "gpa 5"
+  ],
+  "ওয়েভার": [
+    "waiver",
+    "scholarship",
+    "discount"
+  ],
+  "যোগাযোগ": [
+    "contact",
+    "phone",
+    "email",
+    "helpline",
+    "hotline",
+    "location"
+  ],
+  "ফোন": [
+    "phone",
+    "mobile",
+    "contact",
+    "call",
+    "01769675588",
+    "01769675589"
+  ],
+  "ঠিকানা": [
+    "location",
+    "saidpur",
+    "cantonment",
+    "address",
+    "nilphamari"
+  ],
+  "কোথায়": [
+    "location",
+    "saidpur",
+    "cantonment",
+    "address"
+  ],
+  "ইতিহাস": [
+    "history",
+    "established",
+    "background",
+    "foundation",
+    "parliament",
+    "2015"
+  ],
+  "কবে": [
+    "established",
+    "date",
+    "year",
+    "founded",
+    "history"
+  ],
+  "নকীব": [
+    "nakib",
+    "nakib hayat",
+    "head of the department"
+  ],
+  "রুহুল": [
+    "ruhul",
+    "dr md ruhul amin"
+  ],
+  "রুফিজা": [
+    "rufiza",
+    "rufiza begum"
+  ],
+  "জাহাঙ্গীর": [
+    "jahangir",
+    "dr md jahangir alam",
+    "dean"
+  ],
+  "হাসান": [
+    "al-hasan",
+    "hasan",
+    "lecturer"
+  ],
+  "রেজিস্ট্রার": [
+    "registrar",
+    "office of the registrar",
+    "administrative"
+  ],
+  "হোস্টেল": [
+    "hostel",
+    "hall",
+    "dormitory",
+    "accommodation",
+    "residential",
+    "seat"
+  ],
+  "হল": [
+    "hall",
+    "hostel",
+    "dormitory",
+    "residential",
+    "provost",
+    "seat",
+    "capacity"
+  ],
+  "হলে": [
+    "hall",
+    "hostel",
+    "dormitory",
+    "residential",
+    "provost"
+  ],
+  "হলের": [
+    "hall",
+    "hostel",
+    "dormitory",
+    "residential",
+    "provost"
+  ],
+  "প্রভোস্ট": [
+    "provost",
+    "assistant provost",
+    "hall"
+  ],
+  "সহকারী": [
+    "assistant",
+    "assistant provost",
+    "assistant professor"
+  ],
+  "মেয়েদের": [
+    "girls",
+    "female",
+    "women",
+    "ladies",
+    "taramon bibi"
+  ],
+  "মহিলা": [
+    "girls",
+    "female",
+    "women",
+    "ladies"
+  ],
+  "মেয়ে": [
+    "girls",
+    "female",
+    "women",
+    "ladies"
+  ],
+  "ছেলেদের": [
+    "boys",
+    "male",
+    "men",
+    "abbas uddin",
+    "zikrul haque"
+  ],
+  "ছেলে": [
+    "boys",
+    "male",
+    "men"
+  ],
+  "প্রক্টর": [
+    "proctor",
+    "assistant proctor",
+    "proctorial"
+  ],
+  "ক্যাম্পাস": [
+    "campus",
+    "saidpur cantonment",
+    "facilities",
+    "labs",
+    "wifi",
+    "cafeteria"
+  ],
+  "লাইব্রেরি": [
+    "library",
+    "central library",
+    "books",
+    "reading room"
+  ],
+  "পরীক্ষা": [
+    "examination",
+    "grading",
+    "cgpa",
+    "gpa",
+    "term",
+    "promotion",
+    "clearance"
+  ],
+  "গ্রেড": [
+    "grade",
+    "grading",
+    "cgpa",
+    "gpa",
+    "marks",
+    "scale"
+  ],
+  "হেড": [
+    "head",
+    "head of the department",
+    "hod",
+    "department head",
+    "associate professor and head",
+    "nakib hayat"
+  ],
+  "প্রধান": [
+    "head",
+    "dean",
+    "chief",
+    "hod",
+    "head of the department"
+  ],
+  "ডিন": [
+    "dean",
+    "faculty dean",
+    "s.m. jahangir alam"
+  ],
+  "চেয়ারম্যান": [
+    "chairman",
+    "head",
+    "bot"
+  ],
+  "লুৎফর": [
+    "lutfor",
+    "md lutfor rahman",
+    "vice chancellor",
+    "vc"
+  ],
+  "হুমায়ুন": [
+    "humayun",
+    "humayun kabir",
+    "vice chancellor",
+    "vc"
+  ],
+  "লুৎফর রহমান": [
+    "lutfor rahman",
+    "vice chancellor",
+    "vc"
+  ],
+  "নকিব হায়াত": [
+    "nakib hayat",
+    "nakib hayat chowdhury",
+    "head of the department",
+    "cse"
+  ],
+  "ডিপার্টমেন্টের": [
+    "department",
+    "cse",
+    "eee",
+    "me",
+    "ce",
+    "ipe",
+    "bba",
+    "english",
+    "ict"
+  ],
+  "বিভাগের": [
+    "department",
+    "cse",
+    "eee",
+    "me",
+    "ce",
+    "ipe",
+    "bba",
+    "english",
+    "ict"
+  ],
+  "masters": [
+    "masters",
+    "mba",
+    "emba",
+    "postgraduate",
+    "graduate",
+    "মাস্টার্স",
+    "স্নাতকোত্তর",
+    "dba"
+  ],
+  "master": [
+    "masters",
+    "mba",
+    "emba",
+    "postgraduate",
+    "graduate",
+    "মাস্টার্স",
+    "স্নাতকোত্তর"
+  ],
+  "mba": [
+    "mba",
+    "emba",
+    "regular mba",
+    "executive mba",
+    "business administration",
+    "dba",
+    "masters",
+    "মাস্টার্স"
+  ],
+  "emba": [
+    "emba",
+    "executive mba",
+    "mba",
+    "executive",
+    "masters"
+  ],
+  "মাস্টার্স": [
+    "masters",
+    "mba",
+    "emba",
+    "postgraduate",
+    "স্নাতকোত্তর",
+    "dba",
+    "রেগুলার এমবিএ",
+    "এক্সিকিউটিভ এমবিএ"
+  ],
+  "স্নাতকোত্তর": [
+    "masters",
+    "postgraduate",
+    "mba",
+    "emba",
+    "মাস্টার্স"
+  ]
 }
-

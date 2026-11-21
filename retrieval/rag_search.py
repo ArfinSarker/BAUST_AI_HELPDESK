@@ -122,7 +122,10 @@ DEFAULT_FALLBACK_SYNONYMS = {
     "ডিপার্টমেন্ট": ["department", "cse", "eee", "me", "ce", "ipe", "bba", "english", "ict"],
     "সিএসই": ["cse", "computer science", "nakib hayat"],
     "ভর্তি": ["admission", "apply", "eligibility", "winter", "summer"],
-    "ফি": ["fee", "tuition", "cost", "taka", "bdt", "waiver"]
+    "ফি": ["fee", "tuition", "cost", "taka", "bdt", "waiver"],
+    "masters": ["masters", "mba", "emba", "postgraduate", "graduate", "মাস্টার্স", "স্নাতকোত্তর", "dba"],
+    "mba": ["mba", "emba", "regular mba", "executive mba", "business administration", "dba", "masters", "মাস্টার্স"],
+    "মাস্টার্স": ["masters", "mba", "emba", "postgraduate", "স্নাতকোত্তর", "dba"]
 }
 
 

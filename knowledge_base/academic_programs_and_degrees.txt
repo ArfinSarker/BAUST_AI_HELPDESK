@@ -1,8 +1,8 @@
 # Academic Programs at BAUST
 
-Bangladesh Army University of Science and Technology (BAUST) offers a comprehensive range of undergraduate and graduate programs designed to prepare students for the challenges of the modern world.
+Bangladesh Army University of Science and Technology (BAUST), Saidpur offers a comprehensive range of undergraduate and graduate (postgraduate / masters) programs designed to prepare students for the modern world.
 
-## Undergraduate Programs
+## Undergraduate Programs (B.Sc. Engineering, BBA, BA Hons)
 **Duration:** 4-Year Degree Programs (8 Semesters)
 
 | Sl. No. | Program Name | Total Credits |
@@ -17,18 +17,33 @@ Bangladesh Army University of Science and Technology (BAUST) offers a comprehens
 | 08 | BBA in Accounting & Information Systems (AIS) | 132 Credits |
 | 09 | B.A. (Hons) in English | 140 Credits |
 
-## Graduate Programs
-**Duration:** Postgraduate & Professional Degrees
+---
 
-*   **Executive MBA (EMBA)**
-    *   **Duration:** 1.5 Years (3 Semesters)
-    *   **Required Credits:** 48 Credits
-*   **MBA Regular (For BBA Graduates)**
-    *   **Duration:** 1 Year (2 Semesters)
-    *   **Required Credits:** 36 Credits
-*   **MBA (For Other Graduates)**
-    *   **Duration:** 2 Years (4 Semesters)
-    *   **Required Credits:** 60 Credits
-*   **MA in English (ELT)**
-    *   **Duration:** 1 Year (2 Semesters)
-    *   **Required Credits:** 36 Credits
+## Graduate Programs (Masters & MBA Programs at BAUST)
+**Overview:** BAUST offers Postgraduate Master's Degree programs through the Department of Business Administration (DBA) and the Department of English. Currently, Engineering departments (CSE, EEE, ME, IPE, CE) only offer 4-year undergraduate B.Sc. Engineering degrees; there is no M.Sc. in engineering offered at BAUST.
+
+### Master of Business Administration (MBA & EMBA)
+The Master of Business Administration (MBA) program is offered by the **Department of Business Administration (DBA)** under the **Faculty of Business Studies (FBS)** at BAUST, Saidpur.
+
+BAUST offers two primary MBA tracks:
+1. **Regular MBA:**
+   - **For BBA Graduates (Business Background):** 1-Year duration (2 Semesters), 36 Credits. Eligibility: BBA degree from any recognized university.
+   - **For Other Graduates (Non-Business Background):** 2-Year duration (4 Semesters), 60 Credits. Eligibility: Graduation in any discipline (B.Sc., B.A., B.S.S., etc.).
+2. **Executive MBA (EMBA):**
+   - Specifically designed for working professionals, corporate executives, and job holders.
+   - Duration: 1.5 Years (3 Semesters), 48 Credits.
+   - Flexible class schedule held on weekends (Friday/Saturday) and evening slots.
+   - Eligibility: Graduation in any discipline with professional work experience.
+
+**MBA Program Coordination & Contact Information:**
+* **MBA Program Coordinator:** Md. Zaber Hossain (Associate Professor, Department of Business Administration)
+* **Mobile / Phone:** +8801922626111
+* **Email:** hossain.zaber478@gmail.com
+* **Admission Office Hotlines for MBA / Masters:** 01769675580, 01769675588
+* **Head of Department (DBA):** +8801769675568 | headbba@baust.edu.bd
+
+### Master of Arts in English (MA in English - ELT)
+Offered by the **Department of English** under the **Faculty of Sciences & Humanities**.
+* **Duration:** 1 Year (2 Semesters), 36 Credits.
+* **Eligibility:** B.A. (Hons) in English or equivalent from a recognized university.
+* **Contact & Info:** 01769662701, 01769675588

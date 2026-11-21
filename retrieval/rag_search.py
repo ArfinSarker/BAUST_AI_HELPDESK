@@ -655,7 +655,8 @@ def parse_class_routine_tables() -> dict:
             m_tab = table_pattern.search(b)
             if m_tab:
                 lines = m_tab.group(1).strip().splitlines()
-                slots = [c.strip() for c in lines[0].split('|')[2:] if c.strip()]
+                # Normalize time slots (e.g. 08.00 AM -> 08:00 AM)
+                slots = [re.sub(r'(\d{1,2})\.(\d{2})', r'\1:\2', c.strip()) for c in lines[0].split('|')[2:] if c.strip()]
                 for row in lines[2:]:
                     cols = [c.strip() for c in row.split('|')]
                     if len(cols) > 2:
@@ -668,6 +669,20 @@ def parse_class_routine_tables() -> dict:
                                 continue
                             slot_time = slots[s_idx]
 
+                            slot_tag = ""
+                            if '#ODD#' in cell.upper():
+                                slot_tag = 'ODD'
+                            elif '#EVEN#' in cell.upper():
+                                slot_tag = 'EVEN'
+
+                            # User domain rule: EVEN = Section A class, ODD = Section B class (NOT roll parity)
+                            # If parsing Section A and class is marked #ODD#, it belongs to Section B
+                            if sec == 'A' and slot_tag == 'ODD':
+                                continue
+                            # If parsing Section B and class is marked #EVEN#, it belongs to Section A
+                            if sec == 'B' and slot_tag == 'EVEN':
+                                continue
+
                             code_m = re.search(r'([A-Z]{2,4}\s*\d{4})', cell)
                             code = code_m.group(1) if code_m else cell
                             title = courses.get(code, '')
@@ -679,11 +694,7 @@ def parse_class_routine_tables() -> dict:
                             t_initials = t_m.group(1).strip() if t_m else ''
                             t_full = ', '.join([teachers.get(ti.strip().upper(), ti.strip()) for ti in t_initials.split(',') if ti.strip()]) if t_initials else 'TBA'
 
-                            slot_tag = ""
-                            if '#ODD#' in cell.upper():
-                                slot_tag = 'ODD'
-                            elif '#EVEN#' in cell.upper():
-                                slot_tag = 'EVEN'
+                            clean_cell = re.sub(r'#(?:EVEN|ODD)#', '', cell, flags=re.I).strip()
 
                             days_map[day_key].append({
                                 'time': slot_time,
@@ -692,7 +703,7 @@ def parse_class_routine_tables() -> dict:
                                 'room': room,
                                 'teacher': f"{t_initials} ({t_full})" if t_initials and t_full != t_initials else t_full,
                                 'slot_tag': slot_tag,
-                                'raw': cell
+                                'raw': clean_cell
                             })
 
             sections_data[sec] = {

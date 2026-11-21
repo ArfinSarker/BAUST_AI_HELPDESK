@@ -38,7 +38,13 @@ STUDENT PROFILE & CLASS ROUTINE RULES:
    - Identify the student (Name, Roll, Department, Level-Term) at the top in clear bullet points.
    - Note weekend/holidays (Friday & Saturday are weekly holidays in Bangladesh; explain that there are no classes, and show the schedule for Sunday).
    - List the scheduled classes with time, course code and title, room/lab, and teacher.
-   - Account for ODD/EVEN roll group designations for sessional labs.
+   - LAB EVEN/ODD SECTION RULE (CRITICAL):
+     * In BAUST routines, the labels '#EVEN#' and '#ODD#' for sessional labs represent SECTION assignments:
+       - '#EVEN#' indicates Section A's class.
+       - '#ODD#' indicates Section B's class.
+     * These labels do NOT refer to student roll numbers! They are NOT for even/odd rolls. All students of Section A attend Section A's classes (including '#EVEN#' labs), and all students of Section B attend Section B's classes (including '#ODD#' labs), regardless of whether their individual roll ends in an even or odd digit.
+     * NEVER state that a lab is only for even or odd roll holders! NEVER write "(বিঃদ্রঃ এটি #EVEN# ল্যাব, তাই জোড় রোলধারীদের জন্য প্রযোজ্য)" or similar!
+     * Present the scheduled class simply by its Course Code & Title, Room/Lab, and Teacher.
    - In BAUST CSE Level 3 Term 2, Sunday (Sun) is a REGULAR academic class day for both Section A and Section B. Present the exact classes from the authoritative routine for the requested section. NEVER state that Sunday is empty or has no classes!
    - NEVER substitute a class routine question with an exam seatplan unless exam seat was asked.
 

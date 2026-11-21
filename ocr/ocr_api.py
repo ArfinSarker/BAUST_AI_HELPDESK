@@ -212,6 +212,9 @@ def extract_text_from_pdf(file_path: str) -> str:
     3. Secondary: pdfplumber for complex table layouts.
     4. Tertiary: pypdf robust digital stream parser.
     """
+    if not os.path.exists(file_path) or os.path.getsize(file_path) == 0:
+        return ""
+
     # 1. Primary Engine: PyMuPDF digital text + page-by-page OCR fallback
     try:
         import pymupdf
@@ -295,12 +298,8 @@ def extract_text_from_pdf(file_path: str) -> str:
 
 def image_to_text(file_path: str, is_pdf: bool = False) -> str:
     """Extract text from images or scanned PDFs using OCR.Space API as fallback."""
-    if not os.path.exists(file_path):
+    if not os.path.exists(file_path) or os.path.getsize(file_path) == 0:
         return ""
-
-    if is_pdf:
-        # Route to page-by-page extractor to bypass any file-size limits
-        return extract_text_from_pdf(file_path)
 
     file_size = os.path.getsize(file_path)
     # If image > 4MB, compress in memory using PIL before sending to OCR.Space
@@ -368,7 +367,7 @@ def image_to_text(file_path: str, is_pdf: bool = False) -> str:
 
 def extract_text_from_file(file_path: str) -> str:
     """Unified file text extractor handling PDF, TXT, and Image formats."""
-    if not os.path.exists(file_path):
+    if not os.path.exists(file_path) or os.path.getsize(file_path) == 0:
         return ""
 
     _, ext = os.path.splitext(file_path)

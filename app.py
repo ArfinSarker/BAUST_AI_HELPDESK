@@ -907,12 +907,17 @@ def admin():
                         uploaded_file.save(save_path)
                         logger.info(f"[Admin Upload]: Processing file {idx+1}/{len(uploaded_files)}: '{uploaded_file.filename}' saved to '{clean_raw_name}'")
 
+                        if os.path.exists(save_path) and os.path.getsize(save_path) == 0:
+                            logger.error(f"[Admin Upload]: Uploaded file '{uploaded_file.filename}' is empty (0 bytes).")
+                            flash(f"Upload failed: '{uploaded_file.filename}' is an empty file (0 bytes). Please upload a valid document.", "error")
+                            continue
+
                         # Extract text using multi-format extractor (PDF, Image, TXT)
                         extracted_text = extract_text_from_file(save_path)
 
                         if not extracted_text or extracted_text.startswith("Error"):
                             logger.error(f"[Admin Upload]: Extraction failed for '{uploaded_file.filename}': {extracted_text}")
-                            flash(f"Text extraction failed for '{uploaded_file.filename}': {extracted_text}", "error")
+                            flash(f"Text extraction failed for '{uploaded_file.filename}': {extracted_text or 'No text could be extracted'}", "error")
                             continue
 
                         logger.info(f"[Admin Upload]: Extracted {len(extracted_text)} chars from '{uploaded_file.filename}'. Structuring and routing...")

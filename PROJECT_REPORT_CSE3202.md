@@ -303,8 +303,11 @@ The system uses the modern `google-genai` SDK (`client = client.Client(api_key=.
    - *Challenge:* The retrieval reranker expected `meta.get("filename")`, whereas the vector store saved `meta.get("source")`, disabling department boosting.
    - *Solution:* Standardized key parity across `create_vector.py` and `rag_search.py` and validated with 12 unit tests.
 2. **False Lab Parity Exclusion Bug:**
-   - *Challenge:* Sessional lab routines tagged `#EVEN#` caused the system to mistakenly evaluate the student's roll number parity, incorrectly telling odd-roll students that they had no lab.
-   - *Solution:* Clarified university domain semantics: `#EVEN#` is the Section A lab slot, while `#ODD#` is the Section B slot. Stripped misleading parity tokens from markdown passed to the model and updated prompt rules.
+   - *Challenge:* Sessional lab routines tagged `#EVEN#` and `#ODD#` caused initial versions to mistakenly evaluate individual student roll parity (odd vs. even digit), misleading students that lab attendance was conditional on their roll number parity.
+   - *Solution:* Calibrated domain semantics with the official university routine structure: `#EVEN#` signifies Section A's assigned lab period while `#ODD#` designates Section B's lab period. The system eliminates raw parity tokens before generation and enforces that all students of a given section attend all scheduled section classes.
+3. **Sessional Lab 3-Hour Block Duration & Table Shift Resolution:**
+   - *Challenge:* At BAUST, all sessional laboratories (e.g. `CSE 3202`, `CSE 3204`, `CSE 3206`, `CSE 3210`, `CSE 3200`) span 3 continuous contact hours (Periods 1–3: 08:00 AM – 10:55 AM, Periods 4–6: 11:30 AM – 02:25 PM, or Periods 7–9: 02:30 PM – 05:25 PM). Unmerged table cells originally caused the parser to read only the first 55-minute slot (`08:00 AM - 08:55 AM`) and shifted theory classes into the morning slots.
+   - *Solution:* Realigned the markdown database with the official multi-slot routine PDF and implemented a dynamic consecutive-period merge algorithm in `rag_search.py`. Consecutive periods of the same course are automatically synthesized into a single continuous 3-hour session (`08:00 AM - 10:55 AM`), properly positioning theory classes after the 10:55 AM break.
 
 ---
 
@@ -320,13 +323,13 @@ The system uses the modern `google-genai` SDK (`client = client.Client(api_key=.
   * **বরাদ্দকৃত রুম:** Academic Building, 208  
   * **সিট নম্বর:** `C-208-44`
 
-* **Query 2 (Class Routine Query with Weekend Handling):**  
-  *User:* `kalke amar ki ki class ache?`  
-  *Agent:* Identifies Sunday (`22 Nov 2026`) as regular class day, displaying:  
-  - `08:00 AM - 08:55 AM`: `CSE 3202` (Artificial Intelligence Sessional) — Room `311 - Network Lab`, Faculty: MZH, MI  
-  - `09:00 AM - 09:55 AM`: `CSE 3207` (Mathematical Analysis) — Room `307 - Embedded System Lab`, Faculty: GR  
-  - `10:00 AM - 10:55 AM`: `CSE 3205` (Computer Networks) — Room `307 - Embedded System Lab`, Faculty: MI  
-  - `11:30 AM - 12:25 PM`: `CSE 3203` (Operating System) — Room `307 - Embedded System Lab`, Faculty: FTZ  
+* **Query 2 (Class Routine Query with Weekend & 3-Hour Lab Handling):**  
+  *User:* `kalke amar ki ki class ache?` (with student roll `0802410205101019` in context)  
+  *Agent:* Identifies Sunday (`22 Nov 2026`) as regular class day, displaying verified 3-hour sessional lab and theory periods:  
+  - `08:00 AM - 10:55 AM`: `CSE 3202` (Artificial Intelligence Sessional) — Room `311 - Network Lab`, Faculty: MZH, MI (3 Hours continuous)  
+  - `11:30 AM - 12:25 PM`: `CSE 3207` (Mathematical Analysis for Computer Science) — Room `307 - Embedded System Lab`, Faculty: GR  
+  - `12:30 PM - 01:25 PM`: `CSE 3205` (Computer Networks) — Room `307 - Embedded System Lab`, Faculty: MI  
+  - `01:30 PM - 02:25 PM`: `CSE 3203` (Operating System) — Room `307 - Embedded System Lab`, Faculty: FTZ  
 
 ### **7.2 Quantitative Benchmark Results**
 **Table 4: Evaluation Benchmark Summary**

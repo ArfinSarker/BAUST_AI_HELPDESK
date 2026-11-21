@@ -662,7 +662,7 @@ def parse_class_routine_tables() -> dict:
                     if len(cols) > 2:
                         day_raw = re.sub(r'[*_]', '', cols[1]).strip()
                         day_key = day_raw[:3].capitalize()
-                        days_map[day_key] = []
+                        raw_items = []
                         row_classes = cols[2:]
                         for s_idx, cell in enumerate(row_classes):
                             if not cell or cell == '-' or s_idx >= len(slots):
@@ -674,14 +674,6 @@ def parse_class_routine_tables() -> dict:
                                 slot_tag = 'ODD'
                             elif '#EVEN#' in cell.upper():
                                 slot_tag = 'EVEN'
-
-                            # User domain rule: EVEN = Section A class, ODD = Section B class (NOT roll parity)
-                            # If parsing Section A and class is marked #ODD#, it belongs to Section B
-                            if sec == 'A' and slot_tag == 'ODD':
-                                continue
-                            # If parsing Section B and class is marked #EVEN#, it belongs to Section A
-                            if sec == 'B' and slot_tag == 'EVEN':
-                                continue
 
                             code_m = re.search(r'([A-Z]{2,4}\s*\d{4})', cell)
                             code = code_m.group(1) if code_m else cell
@@ -696,7 +688,7 @@ def parse_class_routine_tables() -> dict:
 
                             clean_cell = re.sub(r'#(?:EVEN|ODD)#', '', cell, flags=re.I).strip()
 
-                            days_map[day_key].append({
+                            raw_items.append({
                                 'time': slot_time,
                                 'code': code,
                                 'title': title,
@@ -705,6 +697,22 @@ def parse_class_routine_tables() -> dict:
                                 'slot_tag': slot_tag,
                                 'raw': clean_cell
                             })
+
+                        # Merge consecutive periods of the same course (e.g. 3-hour sessional labs: Period 1-3, Period 4-6, Period 7-9)
+                        merged_items = []
+                        curr_item = None
+                        for item in raw_items:
+                            if curr_item and curr_item['code'] == item['code']:
+                                curr_start = curr_item['time'].split('-')[0].strip()
+                                new_end = item['time'].split('-')[-1].strip()
+                                curr_item['time'] = f"{curr_start} - {new_end}"
+                            else:
+                                if curr_item:
+                                    merged_items.append(curr_item)
+                                curr_item = dict(item)
+                        if curr_item:
+                            merged_items.append(curr_item)
+                        days_map[day_key] = merged_items
 
             sections_data[sec] = {
                 'level_term': lt,
@@ -874,7 +882,7 @@ def resolve_student_or_routine_query(question: str, history: list = None) -> Opt
                         f"{schedule_block}\n\n"
                         f"CRITICAL FORMATTING INSTRUCTIONS FOR AI ASSISTANT:\n"
                         f"1. You MUST list the student's daily classes EXACTLY as listed in 'VERIFIED AUTHORITATIVE DAILY SCHEDULE FOR STUDENT' above.\n"
-                        f"2. Present the exact time for each period (e.g. `08:00 AM - 08:55 AM`, `09:00 AM - 09:55 AM`, etc.).\n"
+                        f"2. Present the exact time for each period (e.g. `08:00 AM - 10:55 AM` for 3-hour sessional labs, `11:30 AM - 12:25 PM`, etc.). In BAUST, sessional labs span 3 consecutive periods (3 hours).\n"
                         f"3. NEVER add any note saying a lab is for even or odd roll holders (e.g. NEVER write '(#EVEN# রোলধারীদের জন্য প্রযোজ্য)' or '(জোড় রোলধারীদের জন্য প্রযোজ্য)'). In BAUST, lab schedules are determined by Section (Section A or B), NOT roll parity.\n"
                         f"4. For each class, show Course Code & Title, Room/Lab, and Faculty directly without adding any roll restriction notes.\n\n"
                         f"OFFICIAL BATCH CLASS & LAB ROUTINE (Department: {s['programme']}, {s['level']}, Section: {st_sec}):\n"

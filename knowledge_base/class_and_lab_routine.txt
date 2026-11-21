@@ -9,11 +9,11 @@
 
 | Day | 08.00 AM - 08.55 AM | 09.00 AM - 09.55 AM | 10.00 AM - 10.55 AM | 11.30 AM - 12.25 PM | 12.30 PM - 01.25 PM | 01.30 PM - 02.25 PM | 02.30 PM - 03.25 PM | 03.30 PM - 04.25 PM | 04.30 PM - 05.25 PM |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Sun** | CSE 3202 (MZH, MI) #EVEN# [311 - Network Lab] | CSE 3207 (GR) [307 - Embedded System Lab] | CSE 3205 (MI) [307 - Embedded System Lab] | CSE 3203 (FTZ) [307 - Embedded System Lab] | - | - | - | - | - |
-| **Mon** | CSE 3203 (FTZ) [408] | CSE 3205 (MI) [307 - Embedded System Lab] | CSE 3207 (GR) [307 - Embedded System Lab] | CSE 3201 (MZH) [307 - Embedded System Lab] | CSE 3200 (ASF, GC) [411 - Database Lab] | - | - | - | - |
-| **Tue** | CSE 3210 (AKZ, RH) #ODD# [402 - Microprocessor Lab] | CSE 3205 (MI) [304] | CSE 3201 (MZH) [304] | CSE 3209 (AKZ) [304] | - | - | - | - | - |
-| **Wed** | CSE 3204 (FTZ, RH) [411 - Database Lab] | CSE 3209 (AKZ) [304] | CSE 3203 (FTZ) [304] | CSE 3201 (MZH) [304] | - | - | - | - | - |
-| **Thu** | CSE 3209 (AKZ) [204] | CSE 3207 (GR) [204] | CSE 3206 (MI, RH) [311 - Network Lab] | - | - | - | - | - | - |
+| **Sun** | CSE 3202 (MZH, MI) [311 - Network Lab] | CSE 3202 (MZH, MI) [311 - Network Lab] | CSE 3202 (MZH, MI) [311 - Network Lab] | CSE 3207 (GR) [307 - Embedded System Lab] | CSE 3205 (MI) [307 - Embedded System Lab] | CSE 3203 (FTZ) [307 - Embedded System Lab] | - | - | - |
+| **Mon** | - | - | CSE 3203 (FTZ) [408] | CSE 3205 (MI) [307 - Embedded System Lab] | CSE 3207 (GR) [307 - Embedded System Lab] | CSE 3201 (MZH) [307 - Embedded System Lab] | CSE 3200 (ASF, GC) [411 - Database Lab] | CSE 3200 (ASF, GC) [411 - Database Lab] | CSE 3200 (ASF, GC) [411 - Database Lab] |
+| **Tue** | CSE 3210 (AKZ, RH) [402 - Microprocessor Lab] | CSE 3210 (AKZ, RH) [402 - Microprocessor Lab] | CSE 3210 (AKZ, RH) [402 - Microprocessor Lab] | CSE 3205 (MI) [304] | CSE 3201 (MZH) [304] | CSE 3209 (AKZ) [304] | - | - | - |
+| **Wed** | CSE 3204 (FTZ, RH) [411 - Database Lab] | CSE 3204 (FTZ, RH) [411 - Database Lab] | CSE 3204 (FTZ, RH) [411 - Database Lab] | CSE 3209 (AKZ) [304] | CSE 3203 (FTZ) [304] | CSE 3201 (MZH) [304] | - | - | - |
+| **Thu** | - | CSE 3209 (AKZ) [204] | CSE 3207 (GR) [204] | CSE 3206 (MI, RH) [311 - Network Lab] | CSE 3206 (MI, RH) [311 - Network Lab] | CSE 3206 (MI, RH) [311 - Network Lab] | - | - | - |
 
 ---
 
@@ -94,14 +94,13 @@
 **Level-Term:** 3-II | **Section:** B
 
 ## Class Schedule
-
 | Day | 08.00 AM - 08.55 AM | 09.00 AM - 09.55 AM | 10.00 AM - 10.55 AM | 11.30 AM - 12.25 PM | 12.30 PM - 01.25 PM | 01.30 PM - 02.25 PM | 02.30 PM - 03.25 PM | 03.30 PM - 04.25 PM | 04.30 PM - 05.25 PM |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Sun** | CSE 3202 (MZH, MI) #ODD# [311 - Network Lab] | CSE 3205 (MI) [407] | CSE 3209 (AKZ) [407] | CSE 3201 (MZH) [407] | CSE 3200 (GC, RH) [411 - Database Lab] | | | | |
-| **Mon** | CSE 3206 (MI, RH) [311 - Network Lab] | CSE 3203 (FTZ) [407] | CSE 3205 (MI) [407] | CSE 3207 (GR) [407] | | | | | |
-| **Tue** | CSE 3210 (AKZ, RH) #EVEN# [402 - Microprocessor Lab] | CSE 3203 (FTZ) [407] | CSE 3201 (MZH) [407] | | | | | | |
-| **Wed** | CSE 3205 (MI) [310] | CSE 3207 (GR) [310] | CSE 3201 (MZH) [407] | CSE 3209 (AKZ) [407] | | | | | |
-| **Thu** | CSE 3204 (FTZ, RH) [302 - Programming Lab] | CSE 3207 (GR) [407] | CSE 3203 (FTZ) [407] | CSE 3209 (AKZ) [407] | | | | | |
+| **Sun** | CSE 3202 (MZH, MI) [311 - Network Lab] | CSE 3202 (MZH, MI) [311 - Network Lab] | CSE 3202 (MZH, MI) [311 - Network Lab] | CSE 3205 (MI) [407] | CSE 3209 (AKZ) [407] | CSE 3201 (MZH) [407] | CSE 3200 (GC, RH) [411 - Database Lab] | CSE 3200 (GC, RH) [411 - Database Lab] | CSE 3200 (GC, RH) [411 - Database Lab] |
+| **Mon** | CSE 3206 (MI, RH) [311 - Network Lab] | CSE 3206 (MI, RH) [311 - Network Lab] | CSE 3206 (MI, RH) [311 - Network Lab] | CSE 3203 (FTZ) [407] | CSE 3205 (MI) [407] | CSE 3207 (GR) [407] | - | - | - |
+| **Tue** | CSE 3210 (AKZ, RH) [402 - Microprocessor Lab] | CSE 3210 (AKZ, RH) [402 - Microprocessor Lab] | CSE 3210 (AKZ, RH) [402 - Microprocessor Lab] | - | CSE 3203 (FTZ) [407] | CSE 3201 (MZH) [407] | - | - | - |
+| **Wed** | - | CSE 3205 (MI) [310] | CSE 3207 (GR) [310] | CSE 3201 (MZH) [407] | - | CSE 3209 (AKZ) [407] | - | - | - |
+| **Thu** | CSE 3204 (FTZ, RH) [302 - Programming Lab] | CSE 3204 (FTZ, RH) [302 - Programming Lab] | CSE 3204 (FTZ, RH) [302 - Programming Lab] | CSE 3207 (GR) [407] | CSE 3203 (FTZ) [407] | CSE 3209 (AKZ) [407] | - | - | - |
 
 ---
 

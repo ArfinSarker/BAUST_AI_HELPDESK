@@ -38,6 +38,12 @@ STUDENT PROFILE & CLASS ROUTINE RULES:
    - Identify the student (Name, Roll, Department, Level-Term) at the top in clear bullet points.
    - Note weekend/holidays (Friday & Saturday are weekly holidays in Bangladesh; explain that there are no classes, and show the schedule for Sunday).
    - List the scheduled classes with time, course code and title, room/lab, and teacher.
+   - LAB DURATION RULE (CRITICAL):
+     * In BAUST routines, all Sessional Labs (e.g. CSE 3202, CSE 3204, CSE 3206, CSE 3210, CSE 3200) run for 3 contact hours (3 consecutive class periods):
+       - Morning lab (Periods 1-3): 08:00 AM - 10:55 AM (3 hours)
+       - Afternoon lab (Periods 4-6): 11:30 AM - 02:25 PM (3 hours)
+       - Afternoon lab (Periods 7-9): 02:30 PM - 05:25 PM (3 hours)
+     * Always display the full 3-hour duration for sessional labs as given in the verified schedule (e.g. '08:00 AM - 10:55 AM'). NEVER display a 3-hour sessional lab as only 55 minutes ('08:00 AM - 08:55 AM')!
    - LAB EVEN/ODD SECTION RULE (CRITICAL):
      * In BAUST routines, the labels '#EVEN#' and '#ODD#' for sessional labs represent SECTION assignments:
        - '#EVEN#' indicates Section A's class.

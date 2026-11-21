@@ -259,6 +259,13 @@ def reload_vector_store():
                 else:
                     new_metadata = [{"source": "official_record"} for _ in new_docs]
 
+                # Ensure backward-compatible key parity: both 'source' and 'filename' are guaranteed
+                for m in new_metadata:
+                    if isinstance(m, dict):
+                        prov = m.get("source") or m.get("filename") or ""
+                        m["source"] = prov
+                        m["filename"] = prov
+
                 if os.path.exists(EMBED_PATH):
                     new_embeddings = np.load(EMBED_PATH)
 

@@ -739,11 +739,16 @@ def get_class_routine_content(dept: str = "CSE", level_term: str = "3-II", secti
     """
     routines = parse_class_routine_tables()
     sec_key = (section or "").upper()
+    block = ""
     if sec_key and sec_key in routines:
-        return routines[sec_key]["raw_block"]
-    if routines:
-        return "\n\n---\n\n".join(sec["raw_block"] for sec in routines.values())
-    return ""
+        block = routines[sec_key]["raw_block"]
+    elif routines:
+        block = "\n\n---\n\n".join(sec["raw_block"] for sec in routines.values())
+    if block:
+        # Strip confusing #EVEN# / #ODD# tokens from routine display text and normalize period times
+        block = re.sub(r'#(?:EVEN|ODD)#', '', block, flags=re.I)
+        block = re.sub(r'(\d{1,2})\.(\d{2})\s*(AM|PM)', r'\1:\2 \3', block)
+    return block
 
 
 ROUTINE_KEYWORDS = [
@@ -867,6 +872,11 @@ def resolve_student_or_routine_query(question: str, history: list = None) -> Opt
                         f"* Next Regular Academic Class Day: {temporal['next_class_en']} ({temporal['next_class_bn']})\n\n"
                         f"VERIFIED AUTHORITATIVE DAILY SCHEDULE FOR STUDENT:\n"
                         f"{schedule_block}\n\n"
+                        f"CRITICAL FORMATTING INSTRUCTIONS FOR AI ASSISTANT:\n"
+                        f"1. You MUST list the student's daily classes EXACTLY as listed in 'VERIFIED AUTHORITATIVE DAILY SCHEDULE FOR STUDENT' above.\n"
+                        f"2. Present the exact time for each period (e.g. `08:00 AM - 08:55 AM`, `09:00 AM - 09:55 AM`, etc.).\n"
+                        f"3. NEVER add any note saying a lab is for even or odd roll holders (e.g. NEVER write '(#EVEN# রোলধারীদের জন্য প্রযোজ্য)' or '(জোড় রোলধারীদের জন্য প্রযোজ্য)'). In BAUST, lab schedules are determined by Section (Section A or B), NOT roll parity.\n"
+                        f"4. For each class, show Course Code & Title, Room/Lab, and Faculty directly without adding any roll restriction notes.\n\n"
                         f"OFFICIAL BATCH CLASS & LAB ROUTINE (Department: {s['programme']}, {s['level']}, Section: {st_sec}):\n"
                         f"{routine_text}\n\n"
                         f"STUDENT EXAMINATION SEATPLAN ALLOCATION (REFERENCE ONLY - DO NOT OVERRIDE ROUTINE):\n"

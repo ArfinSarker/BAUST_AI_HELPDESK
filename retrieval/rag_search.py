@@ -1628,12 +1628,28 @@ def search_information(question: str, top_k: int = 4, history: list = None) -> s
             if any(re.search(p, q_low) for p in patterns):
                 queried_depts.add(dept_code)
 
+        dept_file_prefixes = {
+            "cse": ["cse_"],
+            "ce": ["ce_"],
+            "eee": ["eee_"],
+            "me": ["me_"],
+            "ipe": ["ipe_"],
+            "bba": ["fbs_", "bba_"],
+            "english": ["english_"],
+            "ict": ["ict_"]
+        }
+
+        def _matches_dept(file_source: str, d_code: str) -> bool:
+            prefixes = dept_file_prefixes.get(d_code, [f"{d_code}_"])
+            return any(p in file_source or f"_{d_code}." in file_source for p in prefixes)
+
         for idx in list(rrf_scores.keys()):
             meta = metadata[idx] if idx < len(metadata) else {}
-            src = meta.get("filename", "").lower()
+            # Resolves metadata-key mismatch: handles both 'source' and 'filename'
+            src = (meta.get("source") or meta.get("filename") or "").lower()
             if queried_depts:
-                matches_queried = any(f"{qd}_" in src or f"_{qd}." in src for qd in queried_depts)
-                belongs_to_other = any(f"{od}_" in src or f"_{od}." in src for od in set(DEPT_PATTERNS.keys()) - queried_depts)
+                matches_queried = any(_matches_dept(src, qd) for qd in queried_depts)
+                belongs_to_other = any(_matches_dept(src, od) for od in set(DEPT_PATTERNS.keys()) - queried_depts)
                 if matches_queried:
                     rrf_scores[idx] *= 2.5
                 elif belongs_to_other:

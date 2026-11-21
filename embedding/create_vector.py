@@ -562,6 +562,7 @@ def build_vector_store(
         for idx, chunk in enumerate(chunks):
             file_metadata.append({
                 "source": file_name,
+                "filename": file_name,
                 "chunk_id": idx,
                 "total_chunks": len(chunks),
                 "title": doc_meta.get("title", file_name),

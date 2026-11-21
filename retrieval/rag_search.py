@@ -679,17 +679,11 @@ def parse_class_routine_tables() -> dict:
                             t_initials = t_m.group(1).strip() if t_m else ''
                             t_full = ', '.join([teachers.get(ti.strip().upper(), ti.strip()) for ti in t_initials.split(',') if ti.strip()]) if t_initials else 'TBA'
 
-                            parity = 'ALL'
-                            note_odd = ""
-                            note_even = ""
+                            slot_tag = ""
                             if '#ODD#' in cell.upper():
-                                parity = 'ODD'
-                                note_odd = ""
-                                note_even = f"{code} ল্যাবটি শুধুমাত্র ODD রোলধারীদের জন্য (আপনার রোল EVEN হওয়ায় এই সময়ে আপনার কোনো ক্লাস নেই)"
+                                slot_tag = 'ODD'
                             elif '#EVEN#' in cell.upper():
-                                parity = 'EVEN'
-                                note_odd = f"{code} ল্যাবটি শুধুমাত্র EVEN রোলধারীদের জন্য (আপনার রোল ODD হওয়ায় এই সময়ে আপনার কোনো ক্লাস নেই)"
-                                note_even = ""
+                                slot_tag = 'EVEN'
 
                             days_map[day_key].append({
                                 'time': slot_time,
@@ -697,9 +691,7 @@ def parse_class_routine_tables() -> dict:
                                 'title': title,
                                 'room': room,
                                 'teacher': f"{t_initials} ({t_full})" if t_initials and t_full != t_initials else t_full,
-                                'parity': parity,
-                                'note_odd': note_odd,
-                                'note_even': note_even,
+                                'slot_tag': slot_tag,
                                 'raw': cell
                             })
 
@@ -840,23 +832,13 @@ def resolve_student_or_routine_query(question: str, history: list = None) -> Opt
                     if target_day in ["Friday", "Saturday"]:
                         sched_lines.append(f"📅 **সাপ্তাহিক ছুটি:** আজ {target_day_bn} বিশ্ববিদ্যালয় বন্ধ রয়েছে। কোনো অ্যাকাডেমিক ক্লাস নেই।")
                         next_items = get_student_daily_classes(temporal["next_class_en"], parity=s["parity"], dept=s["programme"], level_term=s["level_term"], section=st_sec)
-                        sched_lines.append(f"\n📌 **পরবর্তী ক্লাস ডে ({temporal['next_class_bn']} / {temporal['next_class_en']})-এর ক্লাসের সময়সূচি (রোল: `{s['roll']}`, সেকশন: {st_sec}, গ্রুপ: {s['parity']}):**")
+                        sched_lines.append(f"\n📌 **পরবর্তী ক্লাস ডে ({temporal['next_class_bn']} / {temporal['next_class_en']})-এর ক্লাসের সময়সূচি (রোল: `{s['roll']}`, সেকশন: {st_sec}):**")
                         for it in next_items:
-                            if it.get("parity") == "ALL" or it.get("parity") == s["parity"]:
-                                sched_lines.append(f"* `{it['time']}`: **{it['code']}** ({it['title']}) — রুম/ল্যাব: `{it['room']}`, শিক্ষক: {it['teacher']}")
-                            elif s["parity"] == "ODD" and it.get("note_odd"):
-                                sched_lines.append(f"* `{it['time']}`: *{it['note_odd']}*")
-                            elif s["parity"] == "EVEN" and it.get("note_even"):
-                                sched_lines.append(f"* `{it['time']}`: *{it['note_even']}*")
+                            sched_lines.append(f"* `{it['time']}`: **{it['code']}** ({it['title']}) — রুম/ল্যাব: `{it['room']}`, শিক্ষক: {it['teacher']}")
                     else:
-                        sched_lines.append(f"📌 **{target_day_bn} ({target_day})-এর ক্লাসের সময়সূচি (রোল: `{s['roll']}`, সেকশন: {st_sec}, গ্রুপ: {s['parity']}):**")
+                        sched_lines.append(f"📌 **{target_day_bn} ({target_day})-এর ক্লাসের সময়সূচি (রোল: `{s['roll']}`, সেকশন: {st_sec}):**")
                         for it in sched_items:
-                            if it.get("parity") == "ALL" or it.get("parity") == s["parity"]:
-                                sched_lines.append(f"* `{it['time']}`: **{it['code']}** ({it['title']}) — রুম/ল্যাব: `{it['room']}`, শিক্ষক: {it['teacher']}")
-                            elif s["parity"] == "ODD" and it.get("note_odd"):
-                                sched_lines.append(f"* `{it['time']}`: *{it['note_odd']}*")
-                            elif s["parity"] == "EVEN" and it.get("note_even"):
-                                sched_lines.append(f"* `{it['time']}`: *{it['note_even']}*")
+                            sched_lines.append(f"* `{it['time']}`: **{it['code']}** ({it['title']}) — রুম/ল্যাব: `{it['room']}`, শিক্ষক: {it['teacher']}")
 
                     schedule_block = "\n".join(sched_lines)
 
@@ -864,7 +846,7 @@ def resolve_student_or_routine_query(question: str, history: list = None) -> Opt
                         f"--- Document: Student Profile & Official Class & Lab Routine (Authoritative Source: class_and_lab_routine.txt) ---\n"
                         f"STUDENT IDENTITY:\n"
                         f"* Student Name: {s['name']}\n"
-                        f"* Student ID / Roll: {s['roll']} (Roll Parity / Group: {s['parity']})\n"
+                        f"* Student ID / Roll: {s['roll']}\n"
                         f"* Programme / Department: {s['programme']}\n"
                         f"* Academic Level & Term: {s['level']} (Level-Term Code: {s['level_term']}, Section: {st_sec})\n\n"
                         f"TEMPORAL CONTEXT (BANGLADESH TIME - UTC+6):\n"
@@ -939,13 +921,11 @@ def resolve_student_or_routine_query(question: str, history: list = None) -> Opt
                     next_items = get_student_daily_classes(temporal["next_class_en"], parity="ALL", section=target_sec)
                     sched_lines.append(f"\n📌 **পরবর্তী ক্লাস ডে ({temporal['next_class_bn']} / {temporal['next_class_en']})-এর ক্লাসের সময়সূচি (CSE 3-II, সেকশন: {target_sec}):**")
                     for it in next_items:
-                        parity_tag = f" [শুধুমাত্র {it['parity']} রোলধারীদের জন্য]" if it.get("parity") in ["ODD", "EVEN"] else ""
-                        sched_lines.append(f"* `{it['time']}`: **{it['code']}** ({it['title']}) — রুম/ল্যাব: `{it['room']}`, শিক্ষক: {it['teacher']}{parity_tag}")
+                        sched_lines.append(f"* `{it['time']}`: **{it['code']}** ({it['title']}) — রুম/ল্যাব: `{it['room']}`, শিক্ষক: {it['teacher']}")
                 else:
                     sched_lines.append(f"📌 **{target_day_bn} ({target_day})-এর ক্লাসের সময়সূচি (CSE 3-II, সেকশন: {target_sec}):**")
                     for it in sched_items:
-                        parity_tag = f" [শুধুমাত্র {it['parity']} রোলধারীদের জন্য]" if it.get("parity") in ["ODD", "EVEN"] else ""
-                        sched_lines.append(f"* `{it['time']}`: **{it['code']}** ({it['title']}) — রুম/ল্যাব: `{it['room']}`, শিক্ষক: {it['teacher']}{parity_tag}")
+                        sched_lines.append(f"* `{it['time']}`: **{it['code']}** ({it['title']}) — রুম/ল্যাব: `{it['room']}`, শিক্ষক: {it['teacher']}")
 
                 schedule_block = "\n".join(sched_lines)
 

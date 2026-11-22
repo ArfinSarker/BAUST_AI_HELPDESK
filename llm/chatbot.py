@@ -1465,12 +1465,11 @@ CRITICAL RULES (CONCISE, DIRECT, STRUCTURED, LANGUAGE ACCURATE):
             - Midday lab (Periods 4-6): `11:30 AM - 02:25 PM` (3 hours)
             - Afternoon lab (Periods 7-9): `02:30 PM - 05:25 PM` (3 hours)
           * Always display the full 3-hour duration for sessional labs as given in the verified schedule (e.g. `08:00 AM - 10:55 AM`). NEVER display a 3-hour sessional lab as only 55 minutes (`08:00 AM - 08:55 AM`)!
-          * In BAUST routines, the labels `#EVEN#` and `#ODD#` for sessional labs represent SECTION assignments:
-            - `#EVEN#` indicates Section A's class.
-            - `#ODD#` indicates Section B's class.
-          * These labels do NOT refer to student roll numbers! They are NOT for even/odd rolls! All students of Section A attend Section A's classes, and all students of Section B attend Section B's classes, regardless of whether their individual roll ends in an even or odd digit.
-          * NEVER state that a lab is only for even or odd roll holders! NEVER write "(বিঃদ্রঃ এটি #EVEN# ল্যাব, তাই জোড় রোলধারীদের জন্য প্রযোজ্য)" or similar!
-          * Present the scheduled class simply by its Course Code & Title, Room/Lab, and Teacher.
+          * In BAUST routines, the labels `#EVEN#` and `#ODD#` for sessional labs represent alternating bi-weekly lab group designations:
+            - For Section A: `CSE 3202` is an `#EVEN#` lab, and `CSE 3210` is an `#ODD#` lab.
+            - For Section B: `CSE 3202` is an `#ODD#` lab, and `CSE 3210` is an `#EVEN#` lab.
+          * Whenever a lab in the verified schedule has an `(#EVEN# ল্যাব)` or `(#ODD# ল্যাব)` label (e.g. `CSE 3202: Artificial Intelligence Sessional (#EVEN# ল্যাব)`), you MUST explicitly include this label in the response so the student clearly sees which lab is EVEN and which is ODD!
+          * NEVER state that students are excluded from the class (all students of that section attend this section routine). Present the scheduled class with its Course Code, Title, (#EVEN# / #ODD# tag if present), Room/Lab, and Teacher.
        5. **NEVER substitute a class routine question with only an exam seatplan!** Always provide their class routine first.
        6. **VERIFIED AUTHORITATIVE SCHEDULE (MANDATORY)**:
           * If the retrieved document contains a "VERIFIED AUTHORITATIVE DAILY SCHEDULE FOR STUDENT" or "VERIFIED AUTHORITATIVE DAILY SCHEDULE FOR BATCH", you MUST directly present that schedule!

@@ -757,8 +757,7 @@ def get_class_routine_content(dept: str = "CSE", level_term: str = "3-II", secti
     elif routines:
         block = "\n\n---\n\n".join(sec["raw_block"] for sec in routines.values())
     if block:
-        # Strip confusing #EVEN# / #ODD# tokens from routine display text and normalize period times
-        block = re.sub(r'#(?:EVEN|ODD)#', '', block, flags=re.I)
+        # Normalize period times
         block = re.sub(r'(\d{1,2})\.(\d{2})\s*(AM|PM)', r'\1:\2 \3', block)
     return block
 
@@ -896,11 +895,13 @@ def resolve_student_or_routine_query(question: str, history: list = None) -> Opt
                         next_items = get_student_daily_classes(temporal["next_class_en"], parity=s["parity"], dept=s["programme"], level_term=s["level_term"], section=st_sec)
                         sched_lines.append(f"\n📌 **পরবর্তী ক্লাস ডে ({temporal['next_class_bn']} / {temporal['next_class_en']})-এর ক্লাসের সময়সূচি (রোল: `{s['roll']}`, সেকশন: {st_sec}):**")
                         for it in next_items:
-                            sched_lines.append(f"* `{it['time']}`: **{it['code']}** ({it['title']}) — রুম/ল্যাব: `{it['room']}`, শিক্ষক: {it['teacher']}")
+                            tag_str = f" (#{it['slot_tag']}# ল্যাব)" if it.get('slot_tag') else ""
+                            sched_lines.append(f"* `{it['time']}`: **{it['code']}** ({it['title']}){tag_str} — রুম/ল্যাব: `{it['room']}`, শিক্ষক: {it['teacher']}")
                     else:
                         sched_lines.append(f"📌 **{target_day_bn} ({target_day})-এর ক্লাসের সময়সূচি (রোল: `{s['roll']}`, সেকশন: {st_sec}):**")
                         for it in sched_items:
-                            sched_lines.append(f"* `{it['time']}`: **{it['code']}** ({it['title']}) — রুম/ল্যাব: `{it['room']}`, শিক্ষক: {it['teacher']}")
+                            tag_str = f" (#{it['slot_tag']}# ল্যাব)" if it.get('slot_tag') else ""
+                            sched_lines.append(f"* `{it['time']}`: **{it['code']}** ({it['title']}){tag_str} — রুম/ল্যাব: `{it['room']}`, শিক্ষক: {it['teacher']}")
 
                     schedule_block = "\n".join(sched_lines)
 
@@ -921,8 +922,8 @@ def resolve_student_or_routine_query(question: str, history: list = None) -> Opt
                         f"CRITICAL FORMATTING INSTRUCTIONS FOR AI ASSISTANT:\n"
                         f"1. You MUST list the student's daily classes EXACTLY as listed in 'VERIFIED AUTHORITATIVE DAILY SCHEDULE FOR STUDENT' above.\n"
                         f"2. Present the exact time for each period (e.g. `08:00 AM - 10:55 AM` for 3-hour sessional labs, `11:30 AM - 12:25 PM`, etc.). In BAUST, sessional labs span 3 consecutive periods (3 hours).\n"
-                        f"3. NEVER add any note saying a lab is for even or odd roll holders (e.g. NEVER write '(#EVEN# রোলধারীদের জন্য প্রযোজ্য)' or '(জোড় রোলধারীদের জন্য প্রযোজ্য)'). In BAUST, lab schedules are determined by Section (Section A or B), NOT roll parity.\n"
-                        f"4. For each class, show Course Code & Title, Room/Lab, and Faculty directly without adding any roll restriction notes.\n\n"
+                        f"3. If a lab has an (#EVEN# ল্যাব) or (#ODD# ল্যাব) tag, you MUST explicitly include this label in the course details (e.g. `CSE 3202: Artificial Intelligence Sessional (#EVEN# ল্যাব)`).\n"
+                        f"4. For each class, show Course Code & Title, Room/Lab, and Faculty directly.\n\n"
                         f"OFFICIAL BATCH CLASS & LAB ROUTINE (Department: {s['programme']}, {s['level']}, Section: {st_sec}):\n"
                         f"{routine_text}\n\n"
                         f"STUDENT EXAMINATION SEATPLAN ALLOCATION (REFERENCE ONLY - DO NOT OVERRIDE ROUTINE):\n"
@@ -1013,11 +1014,13 @@ def resolve_student_or_routine_query(question: str, history: list = None) -> Opt
                     next_items = get_student_daily_classes(temporal["next_class_en"], parity="ALL", section=target_sec)
                     sched_lines.append(f"\n📌 **পরবর্তী ক্লাস ডে ({temporal['next_class_bn']} / {temporal['next_class_en']})-এর ক্লাসের সময়সূচি (CSE 3-II, সেকশন: {target_sec}):**")
                     for it in next_items:
-                        sched_lines.append(f"* `{it['time']}`: **{it['code']}** ({it['title']}) — রুম/ল্যাব: `{it['room']}`, শিক্ষক: {it['teacher']}")
+                        tag_str = f" (#{it['slot_tag']}# ল্যাব)" if it.get('slot_tag') else ""
+                        sched_lines.append(f"* `{it['time']}`: **{it['code']}** ({it['title']}){tag_str} — রুম/ল্যাব: `{it['room']}`, শিক্ষক: {it['teacher']}")
                 else:
                     sched_lines.append(f"📌 **{target_day_bn} ({target_day})-এর ক্লাসের সময়সূচি (CSE 3-II, সেকশন: {target_sec}):**")
                     for it in sched_items:
-                        sched_lines.append(f"* `{it['time']}`: **{it['code']}** ({it['title']}) — রুম/ল্যাব: `{it['room']}`, শিক্ষক: {it['teacher']}")
+                        tag_str = f" (#{it['slot_tag']}# ল্যাব)" if it.get('slot_tag') else ""
+                        sched_lines.append(f"* `{it['time']}`: **{it['code']}** ({it['title']}){tag_str} — রুম/ল্যাব: `{it['room']}`, শিক্ষক: {it['teacher']}")
 
                 schedule_block = "\n".join(sched_lines)
 

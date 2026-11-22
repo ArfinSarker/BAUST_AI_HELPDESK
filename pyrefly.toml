@@ -1,0 +1,8 @@
+project-includes = [
+    "**/*.py*",
+    "**/*.ipynb",
+]
+search-path = [
+    "venv/Lib/site-packages",
+    "."
+]

@@ -1,7 +1,7 @@
 {
   "model_name": "paraphrase-multilingual-MiniLM-L12-v2",
-  "total_documents": 37,
-  "total_chunks": 1109,
+  "total_documents": 39,
+  "total_chunks": 1146,
   "files": {
     "User_Learned_Facts.txt": {
       "hash": "a52e37d47caa063c567b985cbd9e22dd",
@@ -63,20 +63,30 @@
       "mtime": 1794075250.8522947,
       "chunk_count": 3
     },
+    "central_library_personnel.txt": {
+      "hash": "27197613dd684840a883365d4f0af819",
+      "mtime": 1795320956.8848457,
+      "chunk_count": 6
+    },
     "class_and_lab_routine.txt": {
       "hash": "794ef7058bca68cad61033b9be79da37",
       "mtime": 1795315668.18636,
       "chunk_count": 44
     },
     "cse_department_and_faculty.txt": {
-      "hash": "fb7f1cc4978690969ccc4df74c2de99c",
-      "mtime": 1794583503.4129882,
-      "chunk_count": 55
+      "hash": "57f667c5ecc3301b322c61d654f0ad73",
+      "mtime": 1795319376.7748306,
+      "chunk_count": 80
     },
     "cse_department_events_2026.txt": {
       "hash": "f978a94937c019fcbc7955d2d4e1888c",
       "mtime": 1794106341.8715098,
       "chunk_count": 1
+    },
+    "cse_dept_er_active_teracher_ke_ke.txt": {
+      "hash": "f3ce1f266cf91a4a3edaca816ec48a12",
+      "mtime": 1795319779.5473504,
+      "chunk_count": 6
     },
     "cse_midterm_seatplan_summer_2026.txt": {
       "hash": "face502bcc1e13c5e29e976e9404a5b0",

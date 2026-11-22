@@ -1427,7 +1427,7 @@ CRITICAL RULES (CONCISE, DIRECT, STRUCTURED, LANGUAGE ACCURATE):
 
 2. **PROPORTIONAL, STRUCTURED & TIDY (GUCHIYE ANSWER DAWA)**:
    - Always format with short markdown bullet points and bold field labels (e.g., `* **শিক্ষার্থীর নাম:** ...`, `* **সিট নম্বর (Seat No):** ...`).
-   - For key values (e.g. Seat Numbers like `C-206-19`, Exam Rooms like `Room 206`, Roll/Student IDs like `0802620102161056`, Exam Slots like `Slot-C`), wrap them in backticks (e.g. ` `C-206-19` `, ` `Room 206` `) so they render as distinct highlighted badges with eye-catching colors!
+   - For key values (e.g. Seat Numbers like `C-206-19`, Exam Rooms like `Room 206`, Roll/Student IDs like `0802620102161056`, Exam Slots like `Slot-C`, and Lab Badges like `(#EVEN# ল্যাব)` or `(#ODD# ল্যাব)`), wrap them in backticks (e.g. ` `C-206-19` `, ` `(#EVEN# ল্যাব)` `) so they render as distinct highlighted badges with eye-catching colors!
    - **Student Exam Seatplan, Name & Time Rule (CRITICAL)**:
      * When answering for a student's roll/ID or seatplan/exam question:
        The student's NAME MUST BE ON ITS OWN DEDICATED SEPARATE BULLET POINT at the very top:
@@ -1468,8 +1468,8 @@ CRITICAL RULES (CONCISE, DIRECT, STRUCTURED, LANGUAGE ACCURATE):
           * In BAUST routines, the labels `#EVEN#` and `#ODD#` for sessional labs represent alternating bi-weekly lab group designations:
             - For Section A: `CSE 3202` is an `#EVEN#` lab, and `CSE 3210` is an `#ODD#` lab.
             - For Section B: `CSE 3202` is an `#ODD#` lab, and `CSE 3210` is an `#EVEN#` lab.
-          * Whenever a lab in the verified schedule has an `(#EVEN# ল্যাব)` or `(#ODD# ল্যাব)` label (e.g. `CSE 3202: Artificial Intelligence Sessional (#EVEN# ল্যাব)`), you MUST explicitly include this label in the response so the student clearly sees which lab is EVEN and which is ODD!
-          * NEVER state that students are excluded from the class (all students of that section attend this section routine). Present the scheduled class with its Course Code, Title, (#EVEN# / #ODD# tag if present), Room/Lab, and Teacher.
+          * Whenever a lab in the verified schedule has an `(#EVEN# ল্যাব)` or `(#ODD# ল্যাব)` label (e.g. `CSE 3202: Artificial Intelligence Sessional `(#EVEN# ল্যাব)``), you MUST wrap the label in backticks (e.g. ` `(#EVEN# ল্যাব)` ` or ` `(#ODD# ল্যাব)` `) so it renders as a prominent highlighted badge!
+          * NEVER state that students are excluded from the class (all students of that section attend this section routine). Present the scheduled class with its Course Code, Title, highlighted `(#EVEN# / #ODD#)` badge, Room/Lab, and Teacher.
        5. **NEVER substitute a class routine question with only an exam seatplan!** Always provide their class routine first.
        6. **VERIFIED AUTHORITATIVE SCHEDULE (MANDATORY)**:
           * If the retrieved document contains a "VERIFIED AUTHORITATIVE DAILY SCHEDULE FOR STUDENT" or "VERIFIED AUTHORITATIVE DAILY SCHEDULE FOR BATCH", you MUST directly present that schedule!

@@ -3,8 +3,9 @@
 # Bangladesh Army University of Science and Technology (BAUST), Saidpur
 # =========================================================================
 
-# --- Web Framework & API Layer ---
+# --- Web Framework & Production WSGI Layer ---
 Flask==3.1.3
+gunicorn>=21.2.0
 python-dotenv==1.2.3
 requests==2.34.2
 Markdown==3.10.3
@@ -19,8 +20,11 @@ sentence-transformers==6.1.0
 huggingface_hub==1.32.0
 numpy==2.5.3
 
-# --- Document Processing & PDF Ingestion ---
+# --- Document Processing & OCR/PDF Ingestion ---
 pypdf==6.19.0
+pymupdf>=1.24.0
+pdfplumber>=0.11.0
+Pillow>=10.0.0
 
 # --- Terminal Styling & Telemetry ---
 colorama==0.4.6

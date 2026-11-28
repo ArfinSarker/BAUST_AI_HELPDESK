@@ -1,11 +1,10 @@
 import sys
 import os
 
-# Auto-redirect to project virtual environment if run with global python
-_venv_python = os.path.join(os.path.dirname(os.path.abspath(__file__)), "venv", "Scripts", "python.exe")
-if os.path.exists(_venv_python) and os.path.abspath(sys.executable).lower() != os.path.abspath(_venv_python).lower():
-    import subprocess
-    sys.exit(subprocess.call([_venv_python] + sys.argv))
+# Ensure project venv site-packages are accessible if run via matching python version
+_venv_site = os.path.join(os.path.dirname(os.path.abspath(__file__)), "venv", "Lib", "site-packages")
+if os.path.exists(_venv_site) and _venv_site not in sys.path and sys.version_info[:2] == (3, 12):
+    sys.path.insert(0, _venv_site)
 
 os.environ["OMP_NUM_THREADS"] = "1"
 os.environ["MKL_NUM_THREADS"] = "1"
@@ -1344,6 +1343,12 @@ def admin_update_metadata():
 
 
 if __name__ == "__main__":
+    # Auto-redirect to project virtual environment if run directly with global python
+    _venv_python = os.path.join(os.path.dirname(os.path.abspath(__file__)), "venv", "Scripts", "python.exe")
+    if os.path.exists(_venv_python) and os.path.abspath(sys.executable).lower() != os.path.abspath(_venv_python).lower():
+        import subprocess
+        sys.exit(subprocess.call([_venv_python, os.path.abspath(__file__)] + sys.argv[1:]))
+
     port = int(os.environ.get("PORT", 5000))
     logger.info("=" * 60)
     logger.info(f"  [2/2] BAUST AI HELPDESK SERVER RUNNING SUCCESSFULLY!")
